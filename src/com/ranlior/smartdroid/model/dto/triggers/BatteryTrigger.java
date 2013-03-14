@@ -32,18 +32,6 @@ public class BatteryTrigger extends Trigger {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.ranlior.smartdroid.model.dto.triggers.Trigger#isSatisfaied()
-	 */
-	@Override
-	// FIXME: needs to be implemented
-	public boolean isSatisfaied() {
-		// Loggers
-		Log.d(TAG, "isSatisfaied()");
-		
-		return false;
-	}
-
-	/* (non-Javadoc)
 	 * @see com.ranlior.smartdroid.model.dto.triggers.Trigger#register()
 	 */
 	@Override
@@ -52,8 +40,18 @@ public class BatteryTrigger extends Trigger {
 		Log.d(TAG, "register()");
 		
 		// Registering a battery broadcast receiver
-		IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-		Intent batteryStatus = mContext.registerReceiver(null, ifilter);
+		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+		Intent batteryStatus = mContext.registerReceiver(null, intentFilter);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.ranlior.smartdroid.model.dto.triggers.Trigger#unregister()
+	 */
+	public void unregister() {
+		// Loggers
+		Log.d(TAG, "unregister()");
+		
+		// FIXME: implement
 	}
 
 }

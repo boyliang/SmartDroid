@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.MainActivity;
 
@@ -18,6 +20,7 @@ import com.ranlior.smartdroid.activities.MainActivity;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
+@DatabaseTable(tableName = "NotificationActions")
 public class NotificationAction extends Action {
 	
 	/**
@@ -28,11 +31,13 @@ public class NotificationAction extends Action {
 	/**
 	 * Holds the notification's title.
 	 */
+	@DatabaseField
 	private String title = null;
 	
 	/**
 	 * Holds the notification's text.
 	 */
+	@DatabaseField
 	private String text = null;
 	
 	/**
@@ -47,6 +52,7 @@ public class NotificationAction extends Action {
 	 * @see	android.app.Notification
 	 * 
 	 */
+	@DatabaseField
 	private int defaults;
 
 	/**
@@ -56,8 +62,18 @@ public class NotificationAction extends Action {
 	 * @see	android.app.Notification
 	 * 
 	 */
+	@DatabaseField
 	private int flags;
 
+	
+	/**
+	 * Default constructor.
+	 * ORMLite needs a no-arg constructor.
+	 *  
+	 */
+	public NotificationAction() {
+		super();
+	}
 	
 	/**
 	 * Minimal constructor.

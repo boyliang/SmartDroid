@@ -28,6 +28,21 @@ public class Rule {
 	private long mId = -1L;
 	
 	/**
+	 * Holds the rule's name.
+	 */
+	private String name = null;
+	
+	/**
+	 * Holds the rule's description.
+	 */
+	private String description = null;
+	
+	/**
+	 * Holds the rule's satisfaction status.
+	 */
+	private boolean isSatisfied = false;
+	
+	/**
 	 * Holds all the triggers of the rule. 
 	 */
 	private List<Trigger> triggers = null;
@@ -67,6 +82,34 @@ public class Rule {
 	}
 
 	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
 	 * @return the triggers
 	 */
 	public List<Trigger> getTriggers() {
@@ -95,17 +138,33 @@ public class Rule {
 	}
 	
 	/**
-	 * Checks that all the riggers in this rule satisfied.
+	 * Checks that all the triggers in this rule satisfied.
 	 */
 	public boolean isSatisfied() {
-		boolean isSatisfied = true;
+		setSatisfied(true);
 		for (Trigger trigger: triggers) {
-			if (!trigger.isSatisfaied()) {
-				isSatisfied = false;
+			if (!trigger.isSatisfied()) {
+				setSatisfied(false);
 				break;
 			}
 		}
 		return isSatisfied;
+	}
+
+	/**
+	 * @param isSatisfied the isSatisfied to set
+	 */
+	public void setSatisfied(boolean isSatisfied) {
+		this.isSatisfied = isSatisfied;
+	}
+
+	/**
+	 * Registers all triggers.
+	 */
+	public void register() {
+		for (Trigger trigger : triggers) {
+			trigger.register();
+		}
 	}
 	
 	/**

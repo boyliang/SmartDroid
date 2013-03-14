@@ -23,6 +23,11 @@ public abstract class Trigger {
 	private long mId = -1L;
 	
 	/**
+	 * Holds the trigger's satisfaction status.
+	 */
+	private boolean isSatisfied = false;
+	
+	/**
 	 * Holds the trigger's name.
 	 */
 	private String name = null;
@@ -88,18 +93,25 @@ public abstract class Trigger {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+	/**
+	 * @return the isSatisfied
+	 */
+	public boolean isSatisfied() {
+		return isSatisfied;
+	}
+
+	/**
+	 * @param isSatisfied the isSatisfied to set
+	 */
+	public void setSatisfied(boolean isSatisfied) {
+		this.isSatisfied = isSatisfied;
+	}
+
 	/**
 	 * Registers the trigger to the system.
 	 * Every derived class should implemenet this method.
 	 * This is where the trigger registration logic implementation.
 	 */
 	public abstract void register();
-
-	/**
-	 * Checks the trigger satisfactory.
-	 * Every derived class should implemenet this method.
-	 * This is where the trigger stisfactory logic implementation.
-	 */
-	public abstract boolean isSatisfaied();
 }

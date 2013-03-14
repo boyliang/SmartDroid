@@ -3,6 +3,8 @@
  */
 package com.ranlior.smartdroid.model.dto.actions;
 
+import com.j256.ormlite.field.DatabaseField;
+
 import android.content.Context;
 
 /**
@@ -15,24 +17,35 @@ public abstract class Action {
 	/**
 	 * Holds the context that instantiate this action.
 	 */
-	protected final Context mContext;
+	protected Context mContext = null;
 	
 	/**
 	 * Holds the action's identifier.
 	 */
+	@DatabaseField(generatedId=true)
 	private long id = -1L;
 	
 	/**
 	 * Holds the action's name.
 	 */
+	@DatabaseField(canBeNull=false)
 	private String name = null;
 	
 	/**
 	 * Holds the action's description.
 	 */
+	@DatabaseField(canBeNull=false)
 	private String description = null;
 	
 
+	/**
+	 * Default constractor.
+	 * ORMLite needs a no-arg constructor.
+	 */
+	protected Action() {
+		super();
+	}
+	
 	/**
 	 * Full constructor.
 	 * 

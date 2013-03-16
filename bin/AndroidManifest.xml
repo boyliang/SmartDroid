@@ -16,6 +16,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         
+        <!-- Services -->
+        <service android:name=".services.SmartService"
+            android:process=":SmartService" />
+                
         <!-- Activities -->
         <activity
             android:name=".activities.MainActivity"
@@ -25,8 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <!-- Services -->
         
         <!-- BroadcastReceivers -->
 		<receiver android:name=".broadcastreceivers.BatteryReceiver">

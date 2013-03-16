@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import com.ranlior.smartdroid.model.dto.rules.Rule;
 import com.ranlior.smartdroid.model.dto.triggers.BatteryTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.SensorTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
+import com.ranlior.smartdroid.services.SmartService;
 
 public class MainActivity extends Activity {
 
@@ -27,6 +29,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		startService(new Intent(this, SmartService.class));
 		
 		Rule rule = new Rule(this, "rule", "bsdf");
 		

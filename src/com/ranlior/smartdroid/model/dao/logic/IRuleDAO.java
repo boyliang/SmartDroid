@@ -24,16 +24,16 @@ public interface IRuleDAO {
 	/**
 	 * Returns a specific rule by given rule's id.
 	 * 
-	 * @param ruleId		Long represents the rule's id
-	 * @return				Rule
+	 * @param ruleId	Long represents the rule's id
+	 * @return			Rule
 	 */
 	public Rule get(long ruleId);
 	
 	/**
 	 * Inserts a rule.
 	 * 
-	 * @param rule		Rule the rule to insert
-	 * @return			Rule the rule just inserted
+	 * @param rule	Rule the rule to insert
+	 * @return		Rule the rule just inserted
 	 */
 	public Rule Insert(Rule rule);
 	
@@ -47,8 +47,8 @@ public interface IRuleDAO {
 	/**
 	 * Deletes a specific rule by given rule's id.
 	 * 
-	 * @param ruleId		Long represents the rule's id
+	 * @param rule	Rule the rule to delete
 	 */
-	public void Delete(long ruleId);
+	public void Delete(Rule rule);
 
 }

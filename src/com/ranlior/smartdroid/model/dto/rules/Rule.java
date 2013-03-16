@@ -3,10 +3,13 @@
  */
 package com.ranlior.smartdroid.model.dto.rules;
 
-import java.util.List;
+import java.util.Collection;
 
 import android.content.Context;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
@@ -15,70 +18,83 @@ import com.ranlior.smartdroid.model.dto.triggers.Trigger;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
+@DatabaseTable(tableName="rules")
 public class Rule {
 	
 	/**
 	 * Holds the context that instantiate this action.
 	 */
-	protected final Context mContext;
+	protected Context mContext = null;
 	
 	/**
 	 * Holds the rule's identifier.
 	 */
-	private long mId = -1L;
+	@DatabaseField(generatedId=true)
+	private long id = -1L;
 	
 	/**
 	 * Holds the rule's name.
 	 */
+	@DatabaseField(canBeNull=false)
 	private String name = null;
 	
 	/**
 	 * Holds the rule's description.
 	 */
+	@DatabaseField(canBeNull=false)
 	private String description = null;
 	
 	/**
 	 * Holds the rule's satisfaction status.
 	 */
+	@DatabaseField(canBeNull=false)
 	private boolean isSatisfied = false;
 	
 	/**
 	 * Holds all the triggers of the rule. 
 	 */
-	private List<Trigger> triggers = null;
+	@ForeignCollectionField
+	private Collection<Trigger> triggers = null;
 	
 	/**
 	 * Holds all the actions of the rule.
 	 */
-	private List<Action> actions = null;
-	
+	@ForeignCollectionField
+	private Collection<Action> actions = null;
+
+	/**
+	 * Default constructor.
+	 */
+	protected Rule() {
+		super();
+	}
 
 	/**
 	 * Full constructor.
 	 * 
 	 * @param context
-	 * @param triggers
-	 * @param actions
+	 * @param name
+	 * @param description
 	 */
-	public Rule(Context context, List<Trigger> triggers, List<Action> actions) {
+	public Rule(Context context, String name, String description) {
 		super();
 		this.mContext = context;
-		this.triggers = triggers;
-		this.actions = actions;
+		this.name = name;
+		this.description = description;
 	}
 
 	/**
-	 * @return the mId
+	 * @return the id
 	 */
-	public long getmId() {
-		return mId;
+	public long getId() {
+		return id;
 	}
 
 	/**
-	 * @param mId the mId to set
+	 * @param id the id to set
 	 */
-	public void setmId(long mId) {
-		this.mId = mId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	/**
@@ -112,28 +128,28 @@ public class Rule {
 	/**
 	 * @return the triggers
 	 */
-	public List<Trigger> getTriggers() {
+	public Collection<Trigger> getTriggers() {
 		return triggers;
 	}
 
 	/**
 	 * @param triggers the triggers to set
 	 */
-	public void setTriggers(List<Trigger> triggers) {
+	public void setTriggers(Collection<Trigger> triggers) {
 		this.triggers = triggers;
 	}
 
 	/**
 	 * @return the actions
 	 */
-	public List<Action> getActions() {
+	public Collection<Action> getActions() {
 		return actions;
 	}
 
 	/**
 	 * @param actions the actions to set
 	 */
-	public void setActions(List<Action> actions) {
+	public void setActions(Collection<Action> actions) {
 		this.actions = actions;
 	}
 	

@@ -3,6 +3,9 @@
  */
 package com.ranlior.smartdroid.model.dto.triggers;
 
+import com.j256.ormlite.table.DatabaseTable;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -16,6 +19,7 @@ import android.util.Log;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
+@DatabaseTable(tableName="SensorTriggers")
 public class SensorTrigger extends Trigger {
 
 	/**
@@ -26,32 +30,36 @@ public class SensorTrigger extends Trigger {
 	/**
 	 * Holds the sensor manager.
 	 */
-	private final SensorManager sensorManager;
+	private SensorManager sensorManager = null;
 	
 	/**
 	 * Holds the sensor.
 	 */
-	private final Sensor sensor;
+	private Sensor sensor = null;
 
 	/**
 	 * Holds the sensor event listener.
 	 */
-	private final SensorEventListener listener;
+	private SensorEventListener listener = null;
 	
 	/**
-	 * Holds the satisfaction flag.
+	 * Default constructor.
+	 * ORMLite needs a no-arg constructor.
 	 */
-	private boolean isSetisfied = false;
+	protected SensorTrigger() {
+		super();
+	}
 
 	/**
 	 * Minimal constructor.
 	 * 
-	 * @param context
-	 * @param name
-	 * @param description
+	 * @param context		Context the context instantiating this action
+	 * @param rule			Rule represents trigger's rule
+	 * @param name			String represents trigger's name
+	 * @param description	String represents trigger's description
 	 */
-	public SensorTrigger(Context context, String name, String description, int sensorType, float... sensorValues) {
-		super(context, name, description);
+	public SensorTrigger(Context context, Rule rule, String name, String description, int sensorType, float... sensorValues) {
+		super(context, rule, name, description);
 		
 		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		sensor = sensorManager.getDefaultSensor(sensorType);

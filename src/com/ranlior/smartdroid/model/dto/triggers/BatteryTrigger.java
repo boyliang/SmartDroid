@@ -3,6 +3,9 @@
  */
 package com.ranlior.smartdroid.model.dto.triggers;
 
+import com.j256.ormlite.table.DatabaseTable;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -13,6 +16,7 @@ import android.util.Log;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
+@DatabaseTable(tableName="BatteryTriggers")
 public class BatteryTrigger extends Trigger {
 
 	/**
@@ -21,14 +25,23 @@ public class BatteryTrigger extends Trigger {
 	private static final String TAG = "BatteryTrigger";
 
 	/**
+	 * Default constructor.
+	 * ORMLite needs a no-arg constructor.
+	 */
+	protected BatteryTrigger() {
+		super();
+	}
+
+	/**
 	 * Minimal constructor.
 	 * 
 	 * @param context		Context the context instantiating this action
+	 * @param rule			Rule represents trigger's rule
 	 * @param name			String represents trigger's name
 	 * @param description	String represents trigger's description
 	 */
-	public BatteryTrigger(Context context, String name, String description) {
-		super(context, name, description);
+	public BatteryTrigger(Context context, Rule rule, String name, String description) {
+		super(context, rule, name, description);
 	}
 
 	/* (non-Javadoc)
@@ -41,7 +54,7 @@ public class BatteryTrigger extends Trigger {
 		
 		// Registering a battery broadcast receiver
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-		Intent batteryStatus = mContext.registerReceiver(null, intentFilter);
+		mContext.registerReceiver(null, intentFilter);
 	}
 	
 	/* (non-Javadoc)

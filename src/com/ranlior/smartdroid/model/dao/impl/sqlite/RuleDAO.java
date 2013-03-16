@@ -3,12 +3,15 @@
  */
 package com.ranlior.smartdroid.model.dao.impl.sqlite;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.j256.ormlite.dao.Dao;
 import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
+import com.ranlior.smartdroid.model.database.DatabaseManager;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
@@ -24,10 +27,10 @@ public class RuleDAO implements IRuleDAO {
 	private static final String TAG = "RuleDAO";
 	
 	/**
-	 * Holds the invoking context.
+	 * Holds the rule dao.
 	 */
-	private final Context context;
-	
+	private Dao<Rule, Long> ruleDao = null;
+
 	/**
 	 * Full constructor.
 	 * 
@@ -39,7 +42,13 @@ public class RuleDAO implements IRuleDAO {
 		// Logger
 		Log.d(TAG, "RuleDAO(Context context)");
 		
-		this.context = context;
+		// Creates the requested action derived class dao
+		DatabaseManager databaseManager = DatabaseManager.getInstance(context);
+		try {
+			ruleDao = databaseManager.getDatabaseHelper().getDao(Rule.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -47,8 +56,18 @@ public class RuleDAO implements IRuleDAO {
 	 */
 	@Override
 	public List<Rule> list() {
-		// TODO Auto-generated method stub
-		return null;
+		// Logger
+		Log.d(TAG, "list()");
+		
+		List<Rule> ruleList = null;
+		
+		try {
+			ruleList = ruleDao.queryForAll();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return ruleList;
 	}
 
 	/* (non-Javadoc)
@@ -56,8 +75,18 @@ public class RuleDAO implements IRuleDAO {
 	 */
 	@Override
 	public Rule get(long ruleId) {
-		// TODO Auto-generated method stub
-		return null;
+		// Logger
+		Log.d(TAG, "get(long ruleId: "+ ruleId +")");
+		
+		Rule rule = null;
+		
+		try {
+			ruleDao.queryForId(ruleId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return rule;
 	}
 
 	/* (non-Javadoc)
@@ -65,8 +94,16 @@ public class RuleDAO implements IRuleDAO {
 	 */
 	@Override
 	public Rule Insert(Rule rule) {
-		// TODO Auto-generated method stub
-		return null;
+		// Logger
+		Log.d(TAG, "Insert(Rule rule)");
+		
+		try {
+			rule.setId( ruleDao.create(rule) );
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return rule;
 	}
 
 	/* (non-Javadoc)
@@ -74,17 +111,29 @@ public class RuleDAO implements IRuleDAO {
 	 */
 	@Override
 	public void Update(Rule rule) {
-		// TODO Auto-generated method stub
+		// Logger
+		Log.d(TAG, "Update(Rule rule)");
 		
+		try {
+			ruleDao.update(rule);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/* (non-Javadoc)
 	 * @see com.ranlior.smartdroid.model.dao.logic.IRuleDAO#Delete(long)
 	 */
 	@Override
-	public void Delete(long ruleId) {
-		// TODO Auto-generated method stub
+	public void Delete(Rule rule) {
+		// Logger
+		Log.d(TAG, "Delete(Rule rule)");
 		
+		try {
+			ruleDao.delete(rule);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

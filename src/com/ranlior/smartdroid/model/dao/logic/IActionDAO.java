@@ -19,9 +19,9 @@ public interface IActionDAO {
 	/**
 	 * Returns all the actions.
 	 * 
-	 * @return	Cursor list of all the actions
+	 * @return	List of all the actions
 	 */
-	public Cursor list();
+	public List<Action> list();
 	
 	/**
 	 * Returns a specific action by given action's id.
@@ -49,8 +49,8 @@ public interface IActionDAO {
 	/**
 	 * Deletes a specific action by given action's id.
 	 * 
-	 * @param actionId		Long represents the action's id
+	 * @param action	Action the action to delete
 	 */
-	public void Delete(long actionId);
+	public void Delete(Action action);
 
 }

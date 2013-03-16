@@ -47,8 +47,8 @@ public interface ITriggerDAO {
 	/**
 	 * Deletes a specific trigger by given trigger's id.
 	 * 
-	 * @param triggerId		Long represents the trigger's id
+	 * @param trigger	Trigger the trigger to delete
 	 */
-	public void Delete(long triggerId);
+	public void Delete(Trigger trigger);
 
 }

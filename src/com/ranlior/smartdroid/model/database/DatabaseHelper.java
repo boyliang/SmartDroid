@@ -13,6 +13,10 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
+import com.ranlior.smartdroid.model.dto.actions.StartAppAction;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
+import com.ranlior.smartdroid.model.dto.triggers.BatteryTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.SensorTrigger;
 
 /**
  * @author Ran Haveshush
@@ -34,7 +38,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	/**
 	 * The database version.
 	 */
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 5;
 
 	/**
 	 * Minimal constructor.
@@ -52,14 +56,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
 		// Logs that the database is being creating
-		Log.d(TAG, "Creating database name:" + DATABASE_NAME + "version: " + DATABASE_VERSION);
+		Log.w(TAG, "Creating database name:" + DATABASE_NAME + "version: " + DATABASE_VERSION);
 		
-		try {
-			// Creates actions tables
-			TableUtils.createTable(connectionSource, NotificationAction.class);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		createTables();
 	}
 
 	/* (non-Javadoc)
@@ -72,12 +71,45 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		// Logs that the database is being upgraded
 		Log.w(TAG, "Upgrading database name: " + DATABASE_NAME + " from version "
 				+ oldVersion + " to " + newVersion + ", which will destroy all old data");
-		
+
+		dropTables();
+		// Recreates database
+		onCreate(database, connectionSource);
+	}
+	
+	/**
+	 * Create tables for Ormlite annotated classes.
+	 */
+	// TODO: Creates tables for annotated classes
+	private void createTables() {
 		try {
+			// Creates rules table
+			TableUtils.createTable(connectionSource, Rule.class);
+			// Creates triggers tables
+			TableUtils.createTable(connectionSource, BatteryTrigger.class);
+			TableUtils.createTable(connectionSource, SensorTrigger.class);
+			// Creates actions tables
+			TableUtils.createTable(connectionSource, NotificationAction.class);
+			TableUtils.createTable(connectionSource, StartAppAction.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Drops tables for Ormlite annotated classes.
+	 */
+	// TODO: Drops tables for annotated classes
+	private void dropTables() {
+		try {
+			// Drops rules table
+			TableUtils.dropTable(connectionSource, Rule.class, true);
+			// Drops triggers tables
+			TableUtils.dropTable(connectionSource, BatteryTrigger.class, true);
+			TableUtils.dropTable(connectionSource, SensorTrigger.class, true);
 			// Drops actions tables
 			TableUtils.dropTable(connectionSource, NotificationAction.class, true);
-			// Recreates database
-			onCreate(database, connectionSource);
+			TableUtils.dropTable(connectionSource, StartAppAction.class, true);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

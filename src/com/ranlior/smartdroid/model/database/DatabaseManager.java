@@ -6,7 +6,8 @@ package com.ranlior.smartdroid.model.database;
 import android.content.Context;
 
 /**
- * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
+ * @author Ran Haveshush
+ * Email: ran.haveshush.shenkar@gmail.com
  * 
  */
 public class DatabaseManager {
@@ -21,6 +22,7 @@ public class DatabaseManager {
 
 	public static DatabaseManager getInstance(Context context) {
 		if (instance == null) {
+			// FIXME: check if synchronized is needed
 			synchronized (DatabaseManager.class) {
 				if (instance == null) {
 					instance = new DatabaseManager(context);

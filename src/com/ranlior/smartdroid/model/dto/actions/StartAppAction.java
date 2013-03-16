@@ -3,6 +3,10 @@
  */
 package com.ranlior.smartdroid.model.dto.actions;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -12,6 +16,7 @@ import android.util.Log;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
+@DatabaseTable(tableName="StartAppActions")
 public class StartAppAction extends Action {
 	
 	/**
@@ -22,31 +27,42 @@ public class StartAppAction extends Action {
 	/**
 	 * Holds the app's name.
 	 */
+	@DatabaseField
 	private String appName = null;
 	
+
+	/**
+	 * Default constructor.
+	 * ORMLite needs a no-arg constructor.
+	 */
+	protected StartAppAction() {
+		super();
+	}
 
 	/**
 	 * Minimal constractor.
 	 * 
 	 * @param context		Context the context instantiating this action
+	 * @param rule			Rule represents action's rule
 	 * @param name			String represents action's name
 	 * @param description	String represents action's description
 	 */
-	public StartAppAction(Context context, String name, String description) {
-		super(context, name, description);
+	public StartAppAction(Context context, Rule rule, String name, String description) {
+		super(context, rule, name, description);
 	}
 
 	/**
 	 * Full constractor.
 	 * 
 	 * @param context		Context the context instantiating this action
+	 * @param rule			Rule represents action's rule
 	 * @param name			String represents action's name
 	 * @param description	String represents action's description
 	 * @param appName		String represents app's name
 	 */
-	public StartAppAction(Context context, String name, String description,
+	public StartAppAction(Context context, Rule rule, String name, String description,
 			String appName) {
-		super(context, name, description);
+		super(context, rule, name, description);
 		this.appName = appName;
 	}
 

@@ -14,13 +14,14 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.MainActivity;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
  * @author Ran Haveshush
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
-@DatabaseTable(tableName = "NotificationActions")
+@DatabaseTable(tableName="NotificationActions")
 public class NotificationAction extends Action {
 	
 	/**
@@ -69,9 +70,8 @@ public class NotificationAction extends Action {
 	/**
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
-	 *  
 	 */
-	public NotificationAction() {
+	protected NotificationAction() {
 		super();
 	}
 	
@@ -79,26 +79,28 @@ public class NotificationAction extends Action {
 	 * Minimal constructor.
 	 * 
 	 * @param context		Context the context instantiating this action
+	 * @param rule			Rule represents action's rule
 	 * @param name			String represents action's name
 	 * @param description	String represents action's description
 	 */
-	public NotificationAction(Context context, String name, String description) {
-		super(context, name, description);
+	public NotificationAction(Context context, Rule rule, String name, String description) {
+		super(context, rule, name, description);
 	}
 
 	/**
 	 * Full constructor.
 	 * 
 	 * @param context		Context the context instantiating this action
+	 * @param rule			Rule represents action's rule
 	 * @param name			String represents action's name
 	 * @param description	String represents action's description
 	 * @param title			String represents notification's title
 	 * @param text			String represents notification's text
 	 * @param flags			Integer represents notification's flags
 	 */
-	public NotificationAction(Context context, String name, String description,
+	public NotificationAction(Context context, Rule rule, String name, String description,
 			String title, String text, int defaults, int flags) {
-		super(context, name, description);
+		super(context, rule, name, description);
 		this.title = title;
 		this.text = text;
 		this.defaults = defaults;

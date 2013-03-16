@@ -11,6 +11,8 @@ import com.ranlior.smartdroid.model.dao.impl.sqlite.TriggerDAO;
 import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
 import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
 import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
+import com.ranlior.smartdroid.model.dto.actions.Action;
+import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 /**
  * @author Ran Haveshush
@@ -18,43 +20,29 @@ import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
  *
  */
 public class SmartSqliteDAOFactory extends SmartDAOFactory {
-	
-	/**
-	 * Holds the context which invoked this dao.
-	 */
-	private Context context = null;
-	
-	/**
-	 * Full constructor.
-	 * 
-	 * @param context
-	 */
-	public SmartSqliteDAOFactory(Context context) {
-		this.context = context;
-	}
 
 	/* (non-Javadoc)
-	 * @see com.ranlior.smartdroid.model.dao.SmartDAOFactory#getRulesDAO()
+	 * @see com.ranlior.smartdroid.model.dao.SmartDAOFactory#getRuleDAO(android.content.Context)
 	 */
 	@Override
-	public IRuleDAO getRulesDAO() {
+	public IRuleDAO getRuleDAO(Context context) {
 		return new RuleDAO(context);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.ranlior.smartdroid.model.dao.SmartDAOFactory#getTriggerDAO()
+	 * @see com.ranlior.smartdroid.model.dao.SmartDAOFactory#getTriggerDAO(android.content.Context, java.lang.Class)
 	 */
 	@Override
-	public ITriggerDAO getTriggerDAO() {
-		return new TriggerDAO(context);
+	public ITriggerDAO getTriggerDAO(Context context, Class<? extends Trigger> triggerDerivedClass) {
+		return new TriggerDAO(context, triggerDerivedClass);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.ranlior.smartdroid.model.dao.SmartDAOFactory#getActionDAO()
+	 * @see com.ranlior.smartdroid.model.dao.SmartDAOFactory#getActionDAO(android.content.Context, java.lang.Class)
 	 */
 	@Override
-	public IActionDAO getActionDAO() {
-		return new ActionDAO(context);
+	public IActionDAO getActionDAO(Context context, Class<? extends Action> actionDerivedClass) {
+		return new ActionDAO(context, actionDerivedClass);
 	}
 
 }

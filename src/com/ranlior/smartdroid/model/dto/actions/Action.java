@@ -4,6 +4,7 @@
 package com.ranlior.smartdroid.model.dto.actions;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 import android.content.Context;
 
@@ -18,6 +19,12 @@ public abstract class Action {
 	 * Holds the context that instantiate this action.
 	 */
 	protected Context mContext = null;
+	
+	/**
+	 * Needed for Ormlite (many to one) relation.
+	 */
+	@DatabaseField(columnName="rule_id", foreign=true, foreignAutoRefresh=true, canBeNull=false)
+	private Rule rule = null;
 	
 	/**
 	 * Holds the action's identifier.
@@ -50,14 +57,30 @@ public abstract class Action {
 	 * Full constructor.
 	 * 
 	 * @param context
+	 * @param rule
 	 * @param name
 	 * @param description
 	 */
-	public Action(Context context, String name, String description) {
+	public Action(Context context, Rule rule, String name, String description) {
 		super();
 		this.mContext = context;
+		this.rule = rule;
 		this.name = name;
 		this.description = description;
+	}
+
+	/**
+	 * @return the rule
+	 */
+	public Rule getRule() {
+		return rule;
+	}
+
+	/**
+	 * @param rule the rule to set
+	 */
+	public void setRule(Rule rule) {
+		this.rule = rule;
 	}
 
 	/**

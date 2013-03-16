@@ -17,8 +17,8 @@
         android:theme="@style/AppTheme" >
         
         <!-- Services -->
-        <service android:name=".services.SmartService"
-            android:process=":SmartService" />
+        <service android:name=".services.SmartService" />
+            <!-- android:process=":SmartService" --> 
                 
         <!-- Activities -->
         <activity

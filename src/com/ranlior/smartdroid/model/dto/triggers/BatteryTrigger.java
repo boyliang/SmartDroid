@@ -52,6 +52,8 @@ public class BatteryTrigger extends Trigger {
 		// Loggers
 		Log.d(TAG, "register()");
 		
+		// FIXME: Implment persist the current state of the trigger.
+		
 		// Registering a battery broadcast receiver
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 		mContext.registerReceiver(null, intentFilter);

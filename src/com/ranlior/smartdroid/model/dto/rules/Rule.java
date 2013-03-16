@@ -3,6 +3,7 @@
  */
 package com.ranlior.smartdroid.model.dto.rules;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import android.content.Context;
@@ -81,6 +82,8 @@ public class Rule {
 		this.mContext = context;
 		this.name = name;
 		this.description = description;
+		this.triggers = new ArrayList<Trigger>();
+		this.actions = new ArrayList<Action>();
 	}
 
 	/**

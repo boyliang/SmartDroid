@@ -4,9 +4,16 @@
 package com.ranlior.smartdroid.services;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+
+import com.ranlior.smartdroid.events.RequestContextEvent;
+import com.ranlior.smartdroid.events.SendContextEvent;
+import com.ranlior.smartdroid.utilities.BusProvider;
+import com.squareup.otto.Produce;
+import com.squareup.otto.Subscribe;
 
 /**
  * @author Ran Haveshush
@@ -44,6 +51,8 @@ public class SmartService extends Service {
 		// Logger
 		Log.d(TAG, "onStartCommand(Intent intent, int flags, int startId)");
 		
+		BusProvider.getInstance().register(this);
+		
 		return START_STICKY;
 	}
 
@@ -53,6 +62,27 @@ public class SmartService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		
+		// Logger
+		Log.d(TAG, "onDestroy()");
+		
+		BusProvider.getInstance().unregister(this);
+	}
+	
+	@Produce
+	public SendContextEvent sendContextEvent(Context context) {
+		// Logger
+		Log.d(TAG, "sendContextEvent(Context context)");
+		
+		return new SendContextEvent(context);
+	}
+	
+	@Subscribe
+	public void subContextEvent(RequestContextEvent event) {
+		// Logger
+		Log.d(TAG, "subContextEvent(RequestContextEvent event)");
+		
+		BusProvider.getInstance().post(sendContextEvent(this));
 	}
 	
 }

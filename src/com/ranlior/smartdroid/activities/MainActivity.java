@@ -1,29 +1,36 @@
 package com.ranlior.smartdroid.activities;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
 import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.events.RequestContextEvent;
+import com.ranlior.smartdroid.events.SendContextEvent;
 import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
 import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
 import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
 import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
-import com.ranlior.smartdroid.model.dto.actions.StartAppAction;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 import com.ranlior.smartdroid.model.dto.triggers.BatteryTrigger;
-import com.ranlior.smartdroid.model.dto.triggers.SensorTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 import com.ranlior.smartdroid.services.SmartService;
+import com.ranlior.smartdroid.utilities.BusProvider;
+import com.squareup.otto.Produce;
+import com.squareup.otto.Subscribe;
 
 public class MainActivity extends Activity {
+
+	private static final String TAG = "MainActivity";
+	private Trigger batteryTrigger = null;
+	private Context mServiceContext = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,26 +48,20 @@ public class MainActivity extends Activity {
 		
 		rule = ruleDAO.Insert(rule);
 		
-		Trigger batteryTrigger = new BatteryTrigger(this, rule, "ACDC", "Notify when plug or unplag device to power");
-		// FIXME: think of change impl to object fromto
-		Trigger sensorTrigger = new SensorTrigger(this, rule, "Accelerometer", "Bla Bla", Sensor.TYPE_ACCELEROMETER, new float[] {10.0f, 5.5f});
+		BusProvider.getInstance().post(requestServiceContext());
 		
+		batteryTrigger  = new BatteryTrigger(mServiceContext, rule, "isCharged", "Battery charged notification");
+		rule.getTriggers().add(batteryTrigger);
+
 		// Gets the battery triggers dao
 		ITriggerDAO batteryTriggerDAO = SmartDAOFactory
 			.getFactory(SmartDAOFactory.SQLITE)
 			.getTriggerDAO(this, BatteryTrigger.class);
 		
-		batteryTrigger = batteryTriggerDAO.Insert(batteryTrigger);
+		batteryTriggerDAO.Insert(batteryTrigger);
 
-		// Gets the sensors triggers dao
-		ITriggerDAO sensorTriggerDAO = SmartDAOFactory
-			.getFactory(SmartDAOFactory.SQLITE)
-			.getTriggerDAO(this, SensorTrigger.class);
-		
-		sensorTrigger = sensorTriggerDAO.Insert(sensorTrigger);
-		
-		Action notificationAction = new NotificationAction(this, rule, "Notifiy", "Bal Bla", "Notified", "Na Na", 0, 0);
-		Action startAppAction = new StartAppAction(this, rule, "start app action", "na", "facebook");
+		Action notificationAction = new NotificationAction(this, rule, "isCharged", "Battery charged notification", "Charged", "Text", 0, 0);
+//		Action startAppAction = new StartAppAction(this, rule, "start app action", "na", "facebook");
 		
 		// Gets the notification actions dao
 		IActionDAO notificationActionDAO = SmartDAOFactory
@@ -68,17 +69,17 @@ public class MainActivity extends Activity {
 				.getActionDAO(this, NotificationAction.class);
 		
 		notificationActionDAO.Insert(notificationAction);
+		rule.getActions().add(notificationAction);
 		
-		// Gets the notification actions dao
-		IActionDAO startAppActionDAO = SmartDAOFactory
-				.getFactory(SmartDAOFactory.SQLITE)
-				.getActionDAO(this, StartAppAction.class);
+//		// Gets the notification actions dao
+//		IActionDAO startAppActionDAO = SmartDAOFactory
+//				.getFactory(SmartDAOFactory.SQLITE)
+//				.getActionDAO(this, StartAppAction.class);
+//		
+//		startAppActionDAO.Insert(startAppAction);
 		
-		startAppActionDAO.Insert(startAppAction);
+		rule.register();
 		
-		// Gets the rules list from db
-		List<Rule> rules = ruleDAO.list();
-		Collection<Action> actions = rules.get(0).getActions();
 	}
 
 	@Override
@@ -87,5 +88,46 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		// Logger
+		Log.d(TAG , "onResume()");
+		
+		BusProvider.getInstance().register(this);
+	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		// Logger
+		Log.d(TAG, "onPause()");
+		
+		BusProvider.getInstance().unregister(this);
+	}
+
+	@Produce
+	public RequestContextEvent requestServiceContext() {
+		// Logger
+		Log.d(TAG, "requestServiceContext()");
+		
+		return new RequestContextEvent();
+	}
+	
+	@Subscribe
+	public void getContextEvent(SendContextEvent event) {
+		// Logger
+		Log.d(TAG, "getContextEvent(SendContextEvent event)");
+		
+		mServiceContext  = event.getContext();
+	}
 }

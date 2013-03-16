@@ -299,7 +299,7 @@ int id abs__textButton 0x7f040016
 int id abs__title 0x7f04001e
 int id abs__titleDivider 0x7f04001f
 int id abs__up 0x7f04000b
-int id action_settings 0x7f040036
+int id action_settings 0x7f040037
 int id disableHome 0x7f040009
 int id edit_query 0x7f04002a
 int id homeAsUp 0x7f040006
@@ -312,6 +312,7 @@ int id showHome 0x7f040005
 int id showTitle 0x7f040007
 int id tabMode 0x7f040003
 int id terrain 0x7f040012
+int id tv_hello 0x7f040036
 int id useLogo 0x7f040004
 int id wrap_content 0x7f040000
 int integer abs__max_action_buttons 0x7f080000

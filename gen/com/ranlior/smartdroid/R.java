@@ -1085,7 +1085,7 @@ containing a value of this type.
         public static final int abs__title=0x7f04001e;
         public static final int abs__titleDivider=0x7f04001f;
         public static final int abs__up=0x7f04000b;
-        public static final int action_settings=0x7f040036;
+        public static final int action_settings=0x7f040037;
         public static final int disableHome=0x7f040009;
         public static final int edit_query=0x7f04002a;
         public static final int homeAsUp=0x7f040006;
@@ -1098,6 +1098,7 @@ containing a value of this type.
         public static final int showTitle=0x7f040007;
         public static final int tabMode=0x7f040003;
         public static final int terrain=0x7f040012;
+        public static final int tv_hello=0x7f040036;
         public static final int useLogo=0x7f040004;
         public static final int wrap_content=0x7f040000;
     }

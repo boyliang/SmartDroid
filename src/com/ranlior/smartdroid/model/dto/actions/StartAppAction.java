@@ -16,7 +16,7 @@ import android.util.Log;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
-@DatabaseTable(tableName="StartAppActions")
+@DatabaseTable(tableName="start_app_actions")
 public class StartAppAction extends Action {
 	
 	/**

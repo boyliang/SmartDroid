@@ -4,55 +4,58 @@
 package com.ranlior.smartdroid.model.dto.actions;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 import android.content.Context;
 
 /**
  * @author Ran Haveshush
- * Email:  ran.haveshush.shenkar@gmail.com
- *
+ * Email: ran.haveshush.shenkar@gmail.com
+ * 
  */
-public abstract class Action {
-	
+@DatabaseTable(tableName = "actions")
+public class Action {
+
 	/**
 	 * Holds the context that instantiate this action.
 	 */
 	protected Context mContext = null;
-	
+
 	/**
 	 * Needed for Ormlite (many to one) relation.
 	 */
-	@DatabaseField(columnName="rule_id", foreign=true, foreignAutoRefresh=true, canBeNull=false)
+	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_RULE_ID, foreign = true, foreignAutoRefresh = true)
 	private Rule rule = null;
-	
+
 	/**
 	 * Holds the action's identifier.
 	 */
-	@DatabaseField(generatedId=true)
+	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_ID, generatedId = true)
 	private long id = -1L;
-	
+
 	/**
 	 * Holds the action's name.
 	 */
-	@DatabaseField(canBeNull=false)
+	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_NAME, canBeNull = false)
 	private String name = null;
-	
+
 	/**
 	 * Holds the action's description.
 	 */
-	@DatabaseField(canBeNull=false)
+	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_DESCRIPTION, canBeNull = false)
 	private String description = null;
-	
 
+	
 	/**
-	 * Default constractor.
-	 * ORMLite needs a no-arg constructor.
+	 * Default constructor.
+	 * Ormlite require default constructor.
 	 */
-	protected Action() {
+	public Action() {
 		super();
 	}
-	
+
 	/**
 	 * Full constructor.
 	 * 
@@ -77,7 +80,8 @@ public abstract class Action {
 	}
 
 	/**
-	 * @param rule the rule to set
+	 * @param rule
+	 *            the rule to set
 	 */
 	public void setRule(Rule rule) {
 		this.rule = rule;
@@ -91,7 +95,8 @@ public abstract class Action {
 	}
 
 	/**
-	 * @param id the identifier to set
+	 * @param id
+	 *            the identifier to set
 	 */
 	public void setId(long id) {
 		this.id = id;
@@ -105,7 +110,8 @@ public abstract class Action {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -119,17 +125,17 @@ public abstract class Action {
 	}
 
 	/**
-	 * @param description the description to set
+	 * @param description
+	 *            the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	/**
-	 * Performs the action.
-	 * Every derived class should implemenet this method.
+	 * Performs the action. Every derived class should implemenet this method.
 	 * This is where the action logic implemeneted.
 	 */
-	public abstract void perform();
+	public void perform() {};
 
 }

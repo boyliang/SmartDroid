@@ -19,7 +19,7 @@ import android.util.Log;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
-@DatabaseTable(tableName="SensorTriggers")
+@DatabaseTable(tableName="sensor_triggers")
 public class SensorTrigger extends Trigger {
 
 	/**

@@ -375,6 +375,7 @@ public final class SmartDroid {
 		 * Column name trigger's rule id.
 		 * 
 		 * <P>Type: INTEGER</P>
+		 * <P>Constraint: FOREIGN KEY</p>
 		 * <P>Constraint: NOT NULL</p>
 		 */
 		public static final String COLUMN_NAME_RULE_ID = "rule_id";		
@@ -570,6 +571,7 @@ public final class SmartDroid {
 		 * Column name action's rule id.
 		 * 
 		 * <P>Type: INTEGER</P>
+		 * <P>Constraint: FOREIGN KEY</p>
 		 * <P>Constraint: NOT NULL</p>
 		 */
 		public static final String COLUMN_NAME_RULE_ID = "rule_id";

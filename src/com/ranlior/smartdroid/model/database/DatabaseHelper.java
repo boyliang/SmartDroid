@@ -12,11 +12,13 @@ import android.util.Log;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
 import com.ranlior.smartdroid.model.dto.actions.StartAppAction;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 import com.ranlior.smartdroid.model.dto.triggers.BatteryTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.SensorTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 /**
  * @author Ran Haveshush
@@ -38,7 +40,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	/**
 	 * The database version.
 	 */
-	public static final int DATABASE_VERSION = 5;
+	public static final int DATABASE_VERSION = 14;
 
 	/**
 	 * Minimal constructor.
@@ -86,9 +88,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			// Creates rules table
 			TableUtils.createTable(connectionSource, Rule.class);
 			// Creates triggers tables
+			TableUtils.createTable(connectionSource, Trigger.class);
 			TableUtils.createTable(connectionSource, BatteryTrigger.class);
 			TableUtils.createTable(connectionSource, SensorTrigger.class);
 			// Creates actions tables
+			TableUtils.createTable(connectionSource, Action.class);
 			TableUtils.createTable(connectionSource, NotificationAction.class);
 			TableUtils.createTable(connectionSource, StartAppAction.class);
 		} catch (SQLException e) {

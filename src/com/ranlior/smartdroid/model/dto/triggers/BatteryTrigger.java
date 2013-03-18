@@ -16,7 +16,7 @@ import android.util.Log;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
-@DatabaseTable(tableName="BatteryTriggers")
+@DatabaseTable(tableName="battery_triggers")
 public class BatteryTrigger extends Trigger {
 
 	/**

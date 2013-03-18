@@ -81,7 +81,7 @@ public class RuleDAO implements IRuleDAO {
 		Rule rule = null;
 		
 		try {
-			ruleDao.queryForId(ruleId);
+			rule = ruleDao.queryForId(ruleId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -21,7 +21,7 @@ import com.ranlior.smartdroid.model.dto.rules.Rule;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
-@DatabaseTable(tableName="NotificationActions")
+@DatabaseTable(tableName="notification_actions")
 public class NotificationAction extends Action {
 	
 	/**

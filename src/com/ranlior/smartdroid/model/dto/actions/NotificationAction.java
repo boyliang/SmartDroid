@@ -84,7 +84,7 @@ public class NotificationAction extends Action {
 	 * @param description	String represents action's description
 	 */
 	public NotificationAction(Context context, Rule rule, String name, String description) {
-		super(context, rule, name, description);
+		super(context, rule, NotificationAction.class.getSimpleName(), name, description);
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class NotificationAction extends Action {
 	 */
 	public NotificationAction(Context context, Rule rule, String name, String description,
 			String title, String text, int defaults, int flags) {
-		super(context, rule, name, description);
+		super(context, rule, NotificationAction.class.getSimpleName(), name, description);
 		this.title = title;
 		this.text = text;
 		this.defaults = defaults;
@@ -173,19 +173,19 @@ public class NotificationAction extends Action {
 		// Logger
 		Log.d(TAG, "perform()");
 
-		Intent intent = new Intent(mContext, MainActivity.class);
+		Intent intent = new Intent(context, MainActivity.class);
 		
 		PendingIntent pendingIntent = PendingIntent.getActivity(
-				mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+				context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		
 		// Constructs the notification
 		Notification notification = new Notification(R.drawable.ic_launcher, title, System.currentTimeMillis());
-		notification.setLatestEventInfo(mContext, title, text, pendingIntent);
+		notification.setLatestEventInfo(context, title, text, pendingIntent);
 		notification.defaults |= defaults;
 		notification.flags |= flags;
 		
 		NotificationManager notificationManager = 
-				(NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.notify((int)getId(), notification);
 	}
 

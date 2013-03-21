@@ -21,7 +21,7 @@ public class Action {
 	/**
 	 * Holds the context that instantiate this action.
 	 */
-	protected Context mContext = null;
+	protected Context context = null;
 
 	/**
 	 * Needed for Ormlite (many to one) relation.
@@ -34,6 +34,12 @@ public class Action {
 	 */
 	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_ID, generatedId = true)
 	private long id = -1L;
+	
+	/**
+	 * Holds the action's class name.
+	 */
+	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_CLASS_NAME, canBeNull = false)	
+	private String className = null;
 
 	/**
 	 * Holds the action's name.
@@ -64,12 +70,27 @@ public class Action {
 	 * @param name
 	 * @param description
 	 */
-	public Action(Context context, Rule rule, String name, String description) {
+	public Action(Context context, Rule rule, String className, String name, String description) {
 		super();
-		this.mContext = context;
+		this.context = context;
 		this.rule = rule;
+		this.className = className;
 		this.name = name;
 		this.description = description;
+	}
+	
+	/**
+	 * @return the context
+	 */
+	public Context getContext() {
+		return context;
+	}
+
+	/**
+	 * @param context the context to set
+	 */
+	public void setContext(Context context) {
+		this.context = context;
 	}
 
 	/**
@@ -100,6 +121,20 @@ public class Action {
 	 */
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the className
+	 */
+	public String getClassName() {
+		return className;
+	}
+
+	/**
+	 * @param className the className to set
+	 */
+	public void setClassName(String className) {
+		this.className = className;
 	}
 
 	/**

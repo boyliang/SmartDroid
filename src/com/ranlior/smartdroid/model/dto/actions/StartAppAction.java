@@ -48,7 +48,7 @@ public class StartAppAction extends Action {
 	 * @param description	String represents action's description
 	 */
 	public StartAppAction(Context context, Rule rule, String name, String description) {
-		super(context, rule, name, description);
+		super(context, rule, StartAppAction.class.getSimpleName(), name, description);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class StartAppAction extends Action {
 	 */
 	public StartAppAction(Context context, Rule rule, String name, String description,
 			String appName) {
-		super(context, rule, name, description);
+		super(context, rule, StartAppAction.class.getSimpleName(), name, description);
 		this.appName = appName;
 	}
 
@@ -90,7 +90,7 @@ public class StartAppAction extends Action {
 		
 		// Launches the choosen application
 		Intent intent = new Intent(appName + ".intent.action.Launch");
-		mContext.startActivity(intent);
+		context.startActivity(intent);
 	}
 
 }

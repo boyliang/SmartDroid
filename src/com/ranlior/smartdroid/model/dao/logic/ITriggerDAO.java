@@ -3,7 +3,7 @@
  */
 package com.ranlior.smartdroid.model.dao.logic;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
@@ -15,11 +15,11 @@ import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 public interface ITriggerDAO {
 	
 	/**
-	 * Returns all the triggers.
+	 * Returns all the triggers of a given rule.
 	 * 
-	 * @return	List of all the triggers
+	 * @return	Collection of all the triggers of a rule
 	 */
-	public List<Trigger> list();
+	public Collection<Trigger> list(long ruleId);
 	
 	/**
 	 * Returns a specific trigger by given trigger's id.

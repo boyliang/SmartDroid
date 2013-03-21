@@ -16,12 +16,12 @@ import com.ranlior.smartdroid.model.dto.rules.Rule;
  * 
  */
 @DatabaseTable(tableName = "triggers")
-public class Trigger {
+public class Trigger implements Comparable<Trigger>{
 
 	/**
 	 * Holds the context that instantiate this action.
 	 */
-	protected Context mContext = null;
+	protected Context context = null;
 
 	/**
 	 * Needed for Ormlite (many to one) relation.
@@ -34,6 +34,12 @@ public class Trigger {
 	 */
 	@DatabaseField(columnName = SmartDroid.Triggers.COLUMN_NAME_ID, generatedId = true)
 	private long id = -1L;
+	
+	/**
+	 * Holds the trigger's class name.
+	 */
+	@DatabaseField(columnName = SmartDroid.Triggers.COLUMN_NAME_CLASS_NAME, canBeNull = false)	
+	private String className = null;
 
 	/**
 	 * Holds the trigger's name.
@@ -69,17 +75,34 @@ public class Trigger {
 	 *            Context the context instantiating this action
 	 * @param rule
 	 *            Rule represents trigger's rule
+	 * @param className
+	 * 			  String represents trigger's class name
 	 * @param name
 	 *            String represents trigger's name
 	 * @param description
 	 *            String represents trigger's description
 	 */
-	public Trigger(Context context, Rule rule, String name, String description) {
+	public Trigger(Context context, Rule rule, String className, String name, String description) {
 		super();
-		this.mContext = context;
+		this.context = context;
 		this.rule = rule;
+		this.className = className;
 		this.name = name;
 		this.description = description;
+	}
+
+	/**
+	 * @return the context
+	 */
+	public Context getContext() {
+		return context;
+	}
+
+	/**
+	 * @param context the context to set
+	 */
+	public void setContext(Context context) {
+		this.context = context;
 	}
 
 	/**
@@ -110,6 +133,20 @@ public class Trigger {
 	 */
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	/**
+	 * @return the className
+	 */
+	public String getClassName() {
+		return className;
+	}
+
+	/**
+	 * @param className the className to set
+	 */
+	public void setClassName(String className) {
+		this.className = className;
 	}
 
 	/**
@@ -162,5 +199,17 @@ public class Trigger {
 	 * implemenet this method. This is where the trigger registration logic
 	 * implementation.
 	 */
-	public void register() {};
+	public void register() {}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(Trigger another) {
+		if (another == null) {
+			return 1;
+		} else {
+			return (int) (id - another.getId());
+		}
+	};
 }

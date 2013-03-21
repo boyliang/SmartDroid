@@ -3,20 +3,18 @@
  */
 package com.ranlior.smartdroid.model.dto.rules;
 
-import java.sql.SQLException;
+import java.util.Collection;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.j256.ormlite.dao.CloseableIterator;
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.ranlior.smartdroid.config.SmartDroid;
-import com.ranlior.smartdroid.model.database.DatabaseHelper;
-import com.ranlior.smartdroid.model.database.DatabaseManager;
+import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
+import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
+import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
@@ -61,18 +59,24 @@ public class Rule {
 	 */
 	@DatabaseField(columnName = SmartDroid.Rules.COLUMN_NAME_IS_SATISFIED, canBeNull = false)
 	private boolean isSatisfied = false;
+	
+	/**
+	 * Holds the rule's not satisfied triggers count.
+	 */
+	@DatabaseField(columnName = SmartDroid.Rules.COLUMN_NAME_NOT_SATISFIED_TRIGGERS_COUNT, canBeNull = false)
+	private int notSatisfiedTriggersCount = 0;
 
 	/**
 	 * Holds all the triggers of the rule.
 	 */
 	@ForeignCollectionField
-	private ForeignCollection<Trigger> triggers = null;
+	private Collection<Trigger> triggers = null;
 
 	/**
 	 * Holds all the actions of the rule.
 	 */
 	@ForeignCollectionField
-	private ForeignCollection<Action> actions = null;
+	private Collection<Action> actions = null;
 
 	/**
 	 * Default constructor.
@@ -157,69 +161,23 @@ public class Rule {
 	/**
 	 * @return the triggers
 	 */
-	public ForeignCollection<Trigger> getTriggers() {
-		DatabaseManager databaseManager = DatabaseManager.getInstance(context);
-		DatabaseHelper databaseHelper = databaseManager.getDatabaseHelper();
-		SQLiteDatabase db = databaseHelper.getReadableDatabase();
-		db.beginTransaction();
+	public Collection<Trigger> getTriggers() {
+		ITriggerDAO triggerDAO = SmartDAOFactory
+				.getFactory(SmartDAOFactory.SQLITE)
+				.getTriggerDAO(context);
 		
-		CloseableIterator<Trigger> triggersIt = triggers.closeableIterator();
-		try {
-			Log.d(TAG , "TRIGGERS:");
-			while (triggersIt.hasNext()) {
-				Trigger trigger = triggersIt.next();
-				Log.d(TAG , "Trigger Name: " + trigger.getName());
-			}
-			triggersIt.close();
-			db.setTransactionSuccessful();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			db.endTransaction();
-		}
-		return triggers;
-	}
-
-	/**
-	 * @param triggers
-	 *            the triggers to set
-	 */
-	public void setTriggers(ForeignCollection<Trigger> triggers) {
-		this.triggers = triggers;
+		return triggerDAO.list(this.getId());
 	}
 
 	/**
 	 * @return the actions
 	 */
-	public ForeignCollection<Action> getActions() {
-		DatabaseManager databaseManager = DatabaseManager.getInstance(context);
-		DatabaseHelper databaseHelper = databaseManager.getDatabaseHelper();
-		SQLiteDatabase db = databaseHelper.getReadableDatabase();
-		db.beginTransaction();
+	public Collection<Action> getActions() {
+		IActionDAO actionDAO = SmartDAOFactory
+				.getFactory(SmartDAOFactory.SQLITE)
+				.getActionDAO(context);
 		
-		CloseableIterator<Action> actionsIt = actions.closeableIterator();
-		try {
-			Log.d(TAG , "ACTIONS:");
-			while (actionsIt.hasNext()) {
-				Action action = actionsIt.next();
-				Log.d(TAG , "Action Name: " + action.getName());
-			}
-			actionsIt.close();
-			db.setTransactionSuccessful();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			db.endTransaction();
-		}
-		return actions;
-	}
-
-	/**
-	 * @param actions
-	 *            the actions to set
-	 */
-	public void setActions(ForeignCollection<Action> actions) {
-		this.actions = actions;
+		return actionDAO.list(this.getId());
 	}
 
 	/**
@@ -243,11 +201,41 @@ public class Rule {
 	public void setSatisfied(boolean isSatisfied) {
 		this.isSatisfied = isSatisfied;
 	}
+	
+	/**
+	 * @return the notSatisfiedTriggersCount
+	 */
+	public int getNotSatisfiedTriggersCount() {
+		return notSatisfiedTriggersCount;
+	}
+
+	/**
+	 * Increment not satisfied triggers counter.
+	 */
+	public void incNotSatisfiedTriggerCount() {
+		++this.notSatisfiedTriggersCount;
+		
+		// Logger
+		Log.d(TAG, "incNotSatisfiedTriggerCount(): " + this.notSatisfiedTriggersCount);
+	}
+	
+	/**
+	 * Decrement not satisfied triggers counter.
+	 */
+	public void decNotSatisfiedTriggerCount() {
+		--this.notSatisfiedTriggersCount;
+		
+		// Logger
+		Log.d(TAG, "decNotSatisfiedTriggerCount(): " + this.notSatisfiedTriggersCount);
+	}
 
 	/**
 	 * Registers all triggers.
 	 */
 	public void register() {
+		// Logger
+		Log.d(TAG, "register()");
+		
 		for (Trigger trigger : triggers) {
 			trigger.register();
 		}
@@ -257,6 +245,9 @@ public class Rule {
 	 * Performs all the action in this rule.
 	 */
 	public void perform() {
+		// Logger
+		Log.d(TAG, "perform()");
+		
 		for (Action action : actions) {
 			action.perform();
 		}

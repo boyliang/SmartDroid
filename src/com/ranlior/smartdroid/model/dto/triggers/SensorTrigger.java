@@ -3,9 +3,6 @@
  */
 package com.ranlior.smartdroid.model.dto.triggers;
 
-import com.j256.ormlite.table.DatabaseTable;
-import com.ranlior.smartdroid.model.dto.rules.Rule;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -13,6 +10,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
+
+import com.j256.ormlite.table.DatabaseTable;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
  * @author Ran Haveshush
@@ -59,7 +59,7 @@ public class SensorTrigger extends Trigger {
 	 * @param description	String represents trigger's description
 	 */
 	public SensorTrigger(Context context, Rule rule, String name, String description, int sensorType, float... sensorValues) {
-		super(context, rule, name, description);
+		super(context, rule,  SensorTrigger.class.getSimpleName(), name, description);
 		
 		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		sensor = sensorManager.getDefaultSensor(sensorType);

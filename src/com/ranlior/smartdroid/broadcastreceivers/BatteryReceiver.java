@@ -8,12 +8,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.BatteryManager;
 
+import com.ranlior.smartdroid.events.ReceiverResponseEvent;
+import com.ranlior.smartdroid.model.dto.triggers.BatteryTrigger;
+import com.ranlior.smartdroid.utilities.BusProvider;
+import com.squareup.otto.Produce;
+
 /**
  * @author Ran Haveshush
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
 public class BatteryReceiver extends BroadcastReceiver{
+	
+	/**
+	 * Holds the broadcast reciver register trigger.
+	 */
+	private BatteryTrigger batteryTrigger = null;
 
 	/* (non-Javadoc)
 	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
@@ -27,6 +37,28 @@ public class BatteryReceiver extends BroadcastReceiver{
 		int chargePlug = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
 		boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
 		boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
+		
+		int wantedPowerState = batteryTrigger.getWantedPowerState();
+		if (BatteryManager.BATTERY_PLUGGED_AC == wantedPowerState) {
+			// FIXME: later
+			batteryTrigger.setSatisfied(true);
+			BusProvider.getInstance().post(produceReceiverResponseEvent());
+		}
 	}
 
+	/**
+	 * Full constructor.s
+	 * 
+	 * @param trigger
+	 */
+	public BatteryReceiver(BatteryTrigger batteryTrigger) {
+		super();
+		this.batteryTrigger = batteryTrigger;
+	}
+	
+	@Produce
+	public ReceiverResponseEvent produceReceiverResponseEvent() {
+		return new ReceiverResponseEvent(batteryTrigger);
+	}
+	
 }

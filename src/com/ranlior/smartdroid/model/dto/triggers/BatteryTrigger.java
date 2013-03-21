@@ -3,13 +3,15 @@
  */
 package com.ranlior.smartdroid.model.dto.triggers;
 
-import com.j256.ormlite.table.DatabaseTable;
-import com.ranlior.smartdroid.model.dto.rules.Rule;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
+
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import com.ranlior.smartdroid.broadcastreceivers.BatteryReceiver;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
  * @author Ran Haveshush
@@ -23,6 +25,13 @@ public class BatteryTrigger extends Trigger {
 	 * Holds logger's tag.
 	 */
 	private static final String TAG = "BatteryTrigger";
+	
+	/**
+	 * Holds the trigger wanted ac power state.
+	 */
+	@DatabaseField(canBeNull=false)
+	private int wantedPowerState = -1;
+	
 
 	/**
 	 * Default constructor.
@@ -40,8 +49,23 @@ public class BatteryTrigger extends Trigger {
 	 * @param name			String represents trigger's name
 	 * @param description	String represents trigger's description
 	 */
-	public BatteryTrigger(Context context, Rule rule, String name, String description) {
-		super(context, rule, name, description);
+	public BatteryTrigger(Context context, Rule rule, String name, String description, int wantedPowerState) {
+		super(context, rule, BatteryTrigger.class.getSimpleName(), name, description);
+		this.wantedPowerState = wantedPowerState;
+	}
+
+	/**
+	 * @return the wantedPowerState
+	 */
+	public int getWantedPowerState() {
+		return wantedPowerState;
+	}
+
+	/**
+	 * @param wantedPowerState the wantedPowerState to set
+	 */
+	public void setWantedPowerState(int wantedPowerState) {
+		this.wantedPowerState = wantedPowerState;
 	}
 
 	/* (non-Javadoc)
@@ -54,7 +78,7 @@ public class BatteryTrigger extends Trigger {
 		
 		// Registering a battery broadcast receiver
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-		mContext.registerReceiver(null, intentFilter);
+		context.registerReceiver(new BatteryReceiver(BatteryTrigger.this), intentFilter);
 	}
 	
 	/* (non-Javadoc)

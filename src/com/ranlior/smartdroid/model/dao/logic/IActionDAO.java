@@ -17,11 +17,11 @@ import com.ranlior.smartdroid.model.dto.actions.Action;
 public interface IActionDAO {
 	
 	/**
-	 * Returns all the actions.
+	 * Returns all the actions of a given rule.
 	 * 
-	 * @return	List of all the actions
+	 * @return	Collection of all the actions of a rule
 	 */
-	public List<Action> list();
+	public List<Action> list(long ruleId);
 	
 	/**
 	 * Returns a specific action by given action's id.

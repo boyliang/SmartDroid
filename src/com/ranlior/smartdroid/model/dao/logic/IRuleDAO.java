@@ -35,20 +35,20 @@ public interface IRuleDAO {
 	 * @param rule	Rule the rule to insert
 	 * @return		Rule the rule just inserted
 	 */
-	public Rule Insert(Rule rule);
+	public Rule insert(Rule rule);
 	
 	/**
 	 * Updates a rule.
 	 * 
 	 * @param rule	Rule the rule to update
 	 */
-	public void Update(Rule rule);
+	public void update(Rule rule);
 	
 	/**
 	 * Deletes a specific rule by given rule's id.
 	 * 
 	 * @param rule	Rule the rule to delete
 	 */
-	public void Delete(Rule rule);
+	public void delete(Rule rule);
 
 }

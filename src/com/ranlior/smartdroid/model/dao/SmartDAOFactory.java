@@ -8,8 +8,6 @@ import android.content.Context;
 import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
 import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
 import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
-import com.ranlior.smartdroid.model.dto.actions.Action;
-import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 /**
  * @author Ran Haveshush
@@ -37,14 +35,14 @@ public abstract class SmartDAOFactory {
 	 * @param triggerDerivedClass
 	 * @return
 	 */
-	public abstract ITriggerDAO getTriggerDAO(Context context, Class<? extends Trigger> triggerDerivedClass);
+	public abstract ITriggerDAO getTriggerDAO(Context context);
 	
 	/**
 	 * @param context
 	 * @param actionDerivedClass
 	 * @return
 	 */
-	public abstract IActionDAO getActionDAO(Context context, Class<? extends Action> actionDerivedClass);
+	public abstract IActionDAO getActionDAO(Context context);
 	
 	/**
 	 * Returns the requested dao factory by given constant representing

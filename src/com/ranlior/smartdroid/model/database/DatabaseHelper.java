@@ -40,7 +40,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	/**
 	 * The database version.
 	 */
-	public static final int DATABASE_VERSION = 14;
+	public static final int DATABASE_VERSION = 19;
 
 	/**
 	 * Minimal constructor.
@@ -109,9 +109,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			// Drops rules table
 			TableUtils.dropTable(connectionSource, Rule.class, true);
 			// Drops triggers tables
+			TableUtils.dropTable(connectionSource, Trigger.class, true);
 			TableUtils.dropTable(connectionSource, BatteryTrigger.class, true);
 			TableUtils.dropTable(connectionSource, SensorTrigger.class, true);
 			// Drops actions tables
+			TableUtils.dropTable(connectionSource, Action.class, true);
 			TableUtils.dropTable(connectionSource, NotificationAction.class, true);
 			TableUtils.dropTable(connectionSource, StartAppAction.class, true);
 		} catch (SQLException e) {

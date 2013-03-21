@@ -12,6 +12,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
 import com.ranlior.smartdroid.model.database.DatabaseManager;
 import com.ranlior.smartdroid.model.dto.actions.Action;
@@ -27,6 +28,11 @@ public class ActionDAO implements IActionDAO {
 	 * Holds the logger's tag.
 	 */
 	private static final String TAG = "ActionDAO";
+
+	/**
+	 * Holds the action base class name.
+	 */
+	private static final String ACTION_CLASS_NAME = "Action";
 	
 	/**
 	 * Holds the map to the action derived daos.
@@ -36,57 +42,46 @@ public class ActionDAO implements IActionDAO {
 			new HashMap<String, Dao<Action, Long>>();
 	
 	/**
-	 * Holds the action derived class name.
+	 * Holds the invoking context.
 	 */
-	private final String actionDerivedClassName;
+	private Context context = null;
+	
 	
 	/**
 	 * Full constructor.
 	 * 
 	 * @param context
 	 */
-	public ActionDAO(Context context,  Class<? extends Action> actionDerivedClass) {
+	public ActionDAO(Context context) {
 		super();
 		
 		// Logger
 		Log.d(TAG, "ActionDAO(Context context)");
 		
-		// Gets the action derived class name from the class obj
-		actionDerivedClassName = actionDerivedClass.getSimpleName();
-		// Gets the action derived class dao from the trigger daos map by key class name
-		Dao<Action, Long> actionDao = actionDerivedDAOsMap.get(actionDerivedClassName);
-		// If the action derived class dao not exists
-		if (actionDao == null) {
-			// Creates the requested action derived class dao
-			DatabaseManager databaseManager = DatabaseManager.getInstance(context);
-			try {
-				actionDao = databaseManager.getDatabaseHelper().getDao(actionDerivedClass);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			// Inserts the just created dao to the action derived class daos map
-			actionDerivedDAOsMap.put(actionDerivedClassName, actionDao);
-		}
+		this.context = context;
+		mapActionDao(context, Action.class);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.ranlior.smartdroid.model.dao.logic.IActionDAO#list()
+	 * @see com.ranlior.smartdroid.model.dao.logic.IActionDAO#list(long)
 	 */
 	@Override
-	public List<Action> list() {
+	public List<Action> list(long ruleId) {
 		// Logger
-		Log.d(TAG, "list()");
+		Log.d(TAG, "list(long ruleId)");
 		
-		Dao<Action, Long> actionDao = actionDerivedDAOsMap.get(actionDerivedClassName);
-		List<Action> actionList = null;
+		List<Action> baseActionList = null;
+		Dao<Action, Long> baseActionDao = actionDerivedDAOsMap.get(ACTION_CLASS_NAME);
 		
 		try {
-			actionList = actionDao.queryForAll();
+			Map<String, Object> filedValues = new HashMap<String, Object>();
+			filedValues.put(SmartDroid.Actions.COLUMN_NAME_RULE_ID, ruleId);
+			baseActionList = baseActionDao.queryForFieldValues(filedValues);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return actionList;
+		return baseActionList;
 	}
 
 	/* (non-Javadoc)
@@ -97,11 +92,15 @@ public class ActionDAO implements IActionDAO {
 		// Logger
 		Log.d(TAG, "get(long actionId: "+ actionId +")");
 		
-		Dao<Action, Long> actionDao = actionDerivedDAOsMap.get(actionDerivedClassName);
 		Action action = null;
+		Dao<Action, Long> baseActionDao = actionDerivedDAOsMap.get(ACTION_CLASS_NAME);
 		
 		try {
-			action = actionDao.queryForId(actionId);
+			Action baseAction = baseActionDao.queryForId(actionId);
+			if (baseAction != null) {
+				Dao<Action, Long> derivedActionDao = actionDerivedDAOsMap.get(baseAction.getClassName());
+				action = derivedActionDao.queryForId(actionId);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -117,10 +116,12 @@ public class ActionDAO implements IActionDAO {
 		// Logger
 		Log.d(TAG, "Insert(Action action)");
 		
-		Dao<Action, Long> actionDao = actionDerivedDAOsMap.get(actionDerivedClassName);
+		Dao<Action, Long> baseActionDao = actionDerivedDAOsMap.get(ACTION_CLASS_NAME);
+		Dao<Action, Long> derivedActionDao = mapActionDao(context, action.getClass());
 		
 		try {
-			action.setId( actionDao.create(action) );
+			action.setId( baseActionDao.create(action) );
+			derivedActionDao.create(action);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -136,10 +137,12 @@ public class ActionDAO implements IActionDAO {
 		// Logger
 		Log.d(TAG, "Update(Action action)");
 		
-		Dao<Action, Long> actionDao = actionDerivedDAOsMap.get(actionDerivedClassName);
+		Dao<Action, Long> baseActionDao = actionDerivedDAOsMap.get(ACTION_CLASS_NAME);
+		Dao<Action, Long> derivedActionDao = mapActionDao(context, action.getClass());
 		
 		try {
-			actionDao.update(action);
+			action.setId( baseActionDao.update(action) );
+			derivedActionDao.update(action);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -153,13 +156,37 @@ public class ActionDAO implements IActionDAO {
 		// Logger
 		Log.d(TAG, "Delete(Action action)");
 		
-		Dao<Action, Long> actionDao = actionDerivedDAOsMap.get(actionDerivedClassName);
+		Dao<Action, Long> baseActionDao = actionDerivedDAOsMap.get(ACTION_CLASS_NAME);
+		Dao<Action, Long> derivedActionDao = actionDerivedDAOsMap.get(action.getClassName());
 		
 		try {
-			actionDao.delete(action);
+			baseActionDao.delete(action);
+			derivedActionDao.delete(action);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * @param context
+	 * @param actionDerivedClass
+	 */
+	private Dao<Action, Long> mapActionDao(Context context, Class<? extends Action> actionDerivedClass) {
+		// Gets the action derived class name from the action daos map by key class name
+		Dao<Action, Long> derivedAactionDao = actionDerivedDAOsMap.get(actionDerivedClass.getSimpleName());
+		// If the action derived class dao not exists
+		if (derivedAactionDao == null) {
+			// Creates the requested action derived class dao
+			DatabaseManager databaseManager = DatabaseManager.getInstance(context);
+			try {
+				derivedAactionDao = databaseManager.getDatabaseHelper().getDao(actionDerivedClass);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			// Inserts the just created dao to the action derived class daos map
+			actionDerivedDAOsMap.put(actionDerivedClass.getSimpleName(), derivedAactionDao);
+		}
+		return derivedAactionDao;
 	}
 
 }

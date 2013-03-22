@@ -3,7 +3,8 @@ package com.ranlior.smartdroid.activities;
 import java.util.Collection;
 
 import android.app.Activity;
-import android.os.BatteryManager;
+import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -15,8 +16,9 @@ import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
-import com.ranlior.smartdroid.model.dto.triggers.BatteryTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
+import com.ranlior.smartdroid.services.SmartService;
 
 public class MainActivity extends Activity {
 
@@ -30,9 +32,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// startService(new Intent(this, SmartService.class));
+		startService(new Intent(this, SmartService.class));
 
-		Rule rule = new Rule(this, "rule", "bsdf");
+		Rule rule = new Rule(this, "name", "desc");
 
 		// Gets the rules dao
 		IRuleDAO ruleDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE)
@@ -44,14 +46,13 @@ public class MainActivity extends Activity {
 		ITriggerDAO triggerDAO = SmartDAOFactory.getFactory(
 				SmartDAOFactory.SQLITE).getTriggerDAO(this);
 
-		Trigger batteryTrigger = new BatteryTrigger(this, rule, "ACDC",
-				"Notify when plug or unplag device to power",
-				BatteryManager.BATTERY_PLUGGED_AC);
+		Trigger ringerModeTrigger = new RingerModeTrigger(this, rule, "name", "desc",
+				AudioManager.RINGER_MODE_NORMAL);
 
-		batteryTrigger = triggerDAO.Insert(batteryTrigger);
+		ringerModeTrigger = triggerDAO.Insert(ringerModeTrigger);
 
 		Action notificationAction = new NotificationAction(this, rule,
-				"Notifiy", "Bal Bla", "Notified", "Na Na", 0, 0);
+				"name", "desc", "title", "text", 0, 0);
 
 		// Gets the notification actions dao
 		IActionDAO actionDAO = SmartDAOFactory.getFactory(

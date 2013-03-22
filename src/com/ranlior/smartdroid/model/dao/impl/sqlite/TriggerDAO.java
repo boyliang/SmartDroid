@@ -4,6 +4,7 @@
 package com.ranlior.smartdroid.model.dao.impl.sqlite;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -14,8 +15,11 @@ import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.ranlior.smartdroid.config.SmartDroid;
+import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
+import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
 import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
 import com.ranlior.smartdroid.model.database.DatabaseManager;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 /**
@@ -34,6 +38,16 @@ public class TriggerDAO implements ITriggerDAO {
 	 * Holds the trigger base class name.
 	 */
 	private static final String TRIGGER_CLASS_NAME = "Trigger";
+	
+	/**
+	 * Holds the increment constant.
+	 */
+	private static final int INC_NOT_SATISFIED_TRIGGERS_COUNT = 0;
+	
+	/**
+	 * Holds the decrement constant.
+	 */
+	private static final int DEC_NOT_SATISFIED_TRIGGERS_COUNT = 1;
 	
 	/**
 	 * Holds the map to the trigger derived daos.
@@ -73,15 +87,26 @@ public class TriggerDAO implements ITriggerDAO {
 		List<Trigger> baseTriggerList = null;
 		Dao<Trigger, Long> baseTriggerDao = triggerDerivedDAOsMap.get(TRIGGER_CLASS_NAME);
 		
+		Trigger derivedTrigger = null;
+		List<Trigger> derivedTriggerList = new ArrayList<Trigger>();
+		Dao<Trigger, Long> derivedTriggerDao = null;
+		
 		try {
 			Map<String, Object> filedValues = new HashMap<String, Object>();
 			filedValues.put(SmartDroid.Triggers.COLUMN_NAME_RULE_ID, ruleId);
 			baseTriggerList = baseTriggerDao.queryForFieldValues(filedValues);
+			// Gets the concrette derived triggers
+			for (Trigger trigger : baseTriggerList) {
+				derivedTriggerDao = triggerDerivedDAOsMap.get(trigger.getClassName());
+				derivedTrigger = derivedTriggerDao.queryForId(trigger.getId());
+				derivedTrigger.setContext(context);
+				derivedTriggerList.add(derivedTrigger);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return baseTriggerList;
+		return derivedTriggerList;
 	}
 
 	/* (non-Javadoc)
@@ -97,6 +122,7 @@ public class TriggerDAO implements ITriggerDAO {
 		
 		try {
 			Trigger baseTrigger = (Trigger) baseTriggerDao.queryForId(triggerId);
+			// Gets the concrette derived trigger
 			if (baseTrigger != null) {
 				Dao<Trigger, Long> derivedTriggerDao = triggerDerivedDAOsMap.get(baseTrigger.getClassName());
 				trigger = derivedTriggerDao.queryForId(triggerId);
@@ -123,6 +149,7 @@ public class TriggerDAO implements ITriggerDAO {
 		try {
 			trigger.setId( baseTriggerDao.create(trigger) );
 			derivedTriggerDao.create(trigger);
+			updateRuleNotSatisfiedTriggersCount(trigger, INC_NOT_SATISFIED_TRIGGERS_COUNT);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -143,6 +170,18 @@ public class TriggerDAO implements ITriggerDAO {
 		Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, trigger.getClass());
 		
 		try {
+			Trigger persistedTrigger = get(trigger.getId());
+			boolean isPersistedTriggerSatisfied = persistedTrigger.isSatisfied();
+			boolean isUpdatedTriggerSatisfied = trigger.isSatisfied();
+			if (isPersistedTriggerSatisfied != isUpdatedTriggerSatisfied) {
+				// If updated trigger become satisfied, update rule
+				if (isUpdatedTriggerSatisfied) {
+					updateRuleNotSatisfiedTriggersCount(trigger, DEC_NOT_SATISFIED_TRIGGERS_COUNT);
+				// If updated trigger become not satisfied, update rule
+				} else {
+					updateRuleNotSatisfiedTriggersCount(trigger, INC_NOT_SATISFIED_TRIGGERS_COUNT);
+				}
+			}
 			baseTriggerDao.update(trigger);
 			derivedTriggerDao.update(trigger);
 		} catch (SQLException e) {
@@ -165,6 +204,7 @@ public class TriggerDAO implements ITriggerDAO {
 		try {
 			baseTriggerDao.delete(trigger);
 			derivedTriggerDao.delete(trigger);
+			updateRuleNotSatisfiedTriggersCount(trigger, DEC_NOT_SATISFIED_TRIGGERS_COUNT);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -190,6 +230,30 @@ public class TriggerDAO implements ITriggerDAO {
 			triggerDerivedDAOsMap.put(triggerDerivedClass.getSimpleName(), derivedTriggerDao);
 		}
 		return derivedTriggerDao;
+	}
+	
+	/**
+	 * Increments or decrements rule's not satisfied triggers counter.
+	 * 
+	 * @param trigger
+	 */
+	private void updateRuleNotSatisfiedTriggersCount(Trigger trigger, int op) {
+		IRuleDAO ruleDao = SmartDAOFactory
+				.getFactory(SmartDAOFactory.SQLITE)
+				.getRuleDAO(context);
+		
+		Rule rule = trigger.getRule();
+		switch (op) {
+		case INC_NOT_SATISFIED_TRIGGERS_COUNT:
+			rule.incNotSatisfiedTriggerCount();
+			break;
+		case DEC_NOT_SATISFIED_TRIGGERS_COUNT:
+			rule.decNotSatisfiedTriggerCount();
+			break;
+		default:
+			break;
+		}
+		ruleDao.update(rule);
 	}
 
 }

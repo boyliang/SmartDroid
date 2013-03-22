@@ -4,6 +4,7 @@
 package com.ranlior.smartdroid.model.dao.impl.sqlite;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,15 +74,26 @@ public class ActionDAO implements IActionDAO {
 		List<Action> baseActionList = null;
 		Dao<Action, Long> baseActionDao = actionDerivedDAOsMap.get(ACTION_CLASS_NAME);
 		
+		Action derivedAction = null;
+		List<Action> derivedActionList = new ArrayList<Action>();
+		Dao<Action, Long> derivedActionDao = null;
+		
 		try {
 			Map<String, Object> filedValues = new HashMap<String, Object>();
 			filedValues.put(SmartDroid.Actions.COLUMN_NAME_RULE_ID, ruleId);
 			baseActionList = baseActionDao.queryForFieldValues(filedValues);
+			// Gets the concrette derived actions
+			for (Action action : baseActionList) {
+				derivedActionDao = actionDerivedDAOsMap.get(action.getClassName());
+				derivedAction = derivedActionDao.queryForId(action.getId());
+				derivedAction.setContext(context);
+				derivedActionList.add(derivedAction);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return baseActionList;
+		return derivedActionList;
 	}
 
 	/* (non-Javadoc)
@@ -97,6 +109,7 @@ public class ActionDAO implements IActionDAO {
 		
 		try {
 			Action baseAction = baseActionDao.queryForId(actionId);
+			// Gets the concrette derived action
 			if (baseAction != null) {
 				Dao<Action, Long> derivedActionDao = actionDerivedDAOsMap.get(baseAction.getClassName());
 				action = derivedActionDao.queryForId(actionId);

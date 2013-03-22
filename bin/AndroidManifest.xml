@@ -44,6 +44,12 @@
 			</intent-filter>
 		</receiver>
 		
+		<receiver android:name=".broadcastreceivers.RingerModeReceiver">
+			<intent-filter>
+			    <action android:name="android.media.RINGER_MODE_CHANGED"/>
+			</intent-filter>
+		</receiver>
+		
 		<!-- ContentProviders -->
 		
     </application>

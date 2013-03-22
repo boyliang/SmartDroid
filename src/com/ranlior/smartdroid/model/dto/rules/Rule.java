@@ -166,7 +166,7 @@ public class Rule {
 				.getFactory(SmartDAOFactory.SQLITE)
 				.getTriggerDAO(context);
 		
-		return triggerDAO.list(this.getId());
+		return triggers = triggerDAO.list(this.getId());
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class Rule {
 				.getFactory(SmartDAOFactory.SQLITE)
 				.getActionDAO(context);
 		
-		return actionDAO.list(this.getId());
+		return actions = actionDAO.list(this.getId());
 	}
 
 	/**

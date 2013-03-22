@@ -16,6 +16,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * @author Ran Haveshush
@@ -69,7 +70,7 @@ public class SmartService extends Service {
 	public void receiverResponseEventHandler(ReceiverResponseEvent event) {
 		// Logger
 		Log.d(TAG, "receiverResponseEventHandler(ReceiverResponseEvent event)");
-
+		
 		IRuleDAO ruleDAO = SmartDAOFactory
 				.getFactory(SmartDAOFactory.SQLITE)
 				.getRuleDAO(getApplicationContext());
@@ -79,6 +80,10 @@ public class SmartService extends Service {
 				.getTriggerDAO(getApplicationContext());
 		
 		Trigger trigger = event.getTrigger();
+		
+		// Logger
+		Toast.makeText(this, trigger.getClassName() + " " + trigger.getId(), Toast.LENGTH_SHORT).show();
+		
 		triggerDAO.Update(trigger);
 		
 		Rule rule = trigger.getRule();

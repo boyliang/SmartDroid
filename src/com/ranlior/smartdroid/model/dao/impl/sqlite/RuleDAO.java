@@ -90,7 +90,8 @@ public class RuleDAO implements IRuleDAO {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.ranlior.smartdroid.model.dao.logic.IRuleDAO#Insert(com.ranlior.smartdroid.model.dto.rules.Rule)
+	 * @see com.ranlior.smartdroid.model.dao.logic
+	 * .IRuleDAO#insert(com.ranlior.smartdroid.model.dto.rules.Rule)
 	 */
 	@Override
 	public Rule insert(Rule rule) {
@@ -107,7 +108,8 @@ public class RuleDAO implements IRuleDAO {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.ranlior.smartdroid.model.dao.logic.IRuleDAO#Update(com.ranlior.smartdroid.model.dto.rules.Rule)
+	 * @see com.ranlior.smartdroid.model.dao.logic
+	 * .IRuleDAO#update(com.ranlior.smartdroid.model.dto.rules.Rule)
 	 */
 	@Override
 	public void update(Rule rule) {
@@ -122,7 +124,8 @@ public class RuleDAO implements IRuleDAO {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.ranlior.smartdroid.model.dao.logic.IRuleDAO#Delete(long)
+	 * @see com.ranlior.smartdroid.model.dao.logic
+	 * .IRuleDAO#delete(com.ranlior.smartdroid.model.dto.rules.Rule)
 	 */
 	@Override
 	public void delete(Rule rule) {

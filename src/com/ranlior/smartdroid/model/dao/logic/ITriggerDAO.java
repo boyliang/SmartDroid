@@ -5,6 +5,7 @@ package com.ranlior.smartdroid.model.dao.logic;
 
 import java.util.Collection;
 
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 /**
@@ -35,20 +36,29 @@ public interface ITriggerDAO {
 	 * @param trigger	Trigger the trigger to insert
 	 * @return			Trigger the trigger just inserted
 	 */
-	public Trigger Insert(Trigger trigger);
+	public Trigger insert(Trigger trigger);
 	
 	/**
 	 * Updates a trigger.
 	 * 
 	 * @param trigger	Trigger the trigger to update
 	 */
-	public void Update(Trigger trigger);
+	public void update(Trigger trigger);
 	
 	/**
 	 * Deletes a specific trigger by given trigger's id.
 	 * 
 	 * @param trigger	Trigger the trigger to delete
 	 */
-	public void Delete(Trigger trigger);
+	public void delete(Trigger trigger);
+	
+	/**
+	 * Returns a query builder to query,
+	 * The base trigger table or the derived triggers tables.
+	 * 
+	 * @param trigger	Trigger the base or derived trigger's table to query
+	 * @return			QueryBuilder for the specific requested table
+	 */
+	public QueryBuilder<Trigger, Long> query(Trigger trigger);
 
 }

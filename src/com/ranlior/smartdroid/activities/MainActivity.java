@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 		Trigger ringerModeTrigger = new RingerModeTrigger(this, rule, "name", "desc",
 				AudioManager.RINGER_MODE_NORMAL);
 
-		ringerModeTrigger = triggerDAO.Insert(ringerModeTrigger);
+		ringerModeTrigger = triggerDAO.insert(ringerModeTrigger);
 
 		Action notificationAction = new NotificationAction(this, rule,
 				"name", "desc", "title", "text", 0, 0);
@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
 		IActionDAO actionDAO = SmartDAOFactory.getFactory(
 				SmartDAOFactory.SQLITE).getActionDAO(this);
 
-		actionDAO.Insert(notificationAction);
+		actionDAO.insert(notificationAction);
 
 		Collection<Trigger> triggers = rule.getTriggers();
 		Collection<Action> actions = rule.getActions();

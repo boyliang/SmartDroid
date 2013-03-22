@@ -14,6 +14,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
 import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
@@ -139,9 +140,9 @@ public class TriggerDAO implements ITriggerDAO {
 	 * .ITriggerDAO#Insert(com.ranlior.smartdroid.model.dto.triggers.Trigger)
 	 */
 	@Override
-	public Trigger Insert(Trigger trigger) {
+	public Trigger insert(Trigger trigger) {
 		// Logger
-		Log.d(TAG, "Insert(Trigger trigger)");
+		Log.d(TAG, "insert(Trigger trigger)");
 		
 		Dao<Trigger, Long> baseTriggerDao = triggerDerivedDAOsMap.get(TRIGGER_CLASS_NAME);
 		Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, trigger.getClass());
@@ -162,9 +163,9 @@ public class TriggerDAO implements ITriggerDAO {
 	 * .ITriggerDAO#Update(com.ranlior.smartdroid.model.dto.triggers.Trigger)
 	 */
 	@Override
-	public void Update(Trigger trigger) {
+	public void update(Trigger trigger) {
 		// Logger
-		Log.d(TAG, "Update(Trigger trigger)");
+		Log.d(TAG, "update(Trigger trigger)");
 		
 		Dao<Trigger, Long> baseTriggerDao = triggerDerivedDAOsMap.get(TRIGGER_CLASS_NAME);
 		Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, trigger.getClass());
@@ -194,9 +195,9 @@ public class TriggerDAO implements ITriggerDAO {
 	 * .ITriggerDAO#Delete(com.ranlior.smartdroid.model.dto.triggers.Trigger)
 	 */
 	@Override
-	public void Delete(Trigger trigger) {
+	public void delete(Trigger trigger) {
 		// Logger
-		Log.d(TAG, "Delete(Trigger trigger)");
+		Log.d(TAG, "delete(Trigger trigger)");
 		
 		Dao<Trigger, Long> baseTriggerDao = triggerDerivedDAOsMap.get(TRIGGER_CLASS_NAME);
 		Dao<Trigger, Long> derivedTriggerDao = triggerDerivedDAOsMap.get(trigger.getClassName());
@@ -208,6 +209,20 @@ public class TriggerDAO implements ITriggerDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.ranlior.smartdroid.model.dao.logic
+	 * .ITriggerDAO#query(com.ranlior.smartdroid.model.dto.triggers.Trigger)
+	 */
+	@Override
+	public QueryBuilder<Trigger, Long> query(Trigger trigger) {
+		// Logger
+		Log.d(TAG, "query(Trigger trigger)");
+		
+		Dao<Trigger, Long> derivedTriggerDao = triggerDerivedDAOsMap.get(trigger.getClassName());
+		
+		return derivedTriggerDao.queryBuilder();
 	}
 	
 	/**

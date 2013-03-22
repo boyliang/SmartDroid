@@ -122,12 +122,13 @@ public class ActionDAO implements IActionDAO {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.ranlior.smartdroid.model.dao.logic.IActionDAO#Insert(com.ranlior.smartdroid.model.dto.actions.Action)
+	 * @see com.ranlior.smartdroid.model.dao.logic
+	 * .IActionDAO#insert(com.ranlior.smartdroid.model.dto.actions.Action)
 	 */
 	@Override
-	public Action Insert(Action action) {
+	public Action insert(Action action) {
 		// Logger
-		Log.d(TAG, "Insert(Action action)");
+		Log.d(TAG, "insert(Action action)");
 		
 		Dao<Action, Long> baseActionDao = actionDerivedDAOsMap.get(ACTION_CLASS_NAME);
 		Dao<Action, Long> derivedActionDao = mapActionDao(context, action.getClass());
@@ -143,12 +144,13 @@ public class ActionDAO implements IActionDAO {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.ranlior.smartdroid.model.dao.logic.IActionDAO#Update(com.ranlior.smartdroid.model.dto.actions.Action)
+	 * @see com.ranlior.smartdroid.model.dao.logic
+	 * .IActionDAO#update(com.ranlior.smartdroid.model.dto.actions.Action)
 	 */
 	@Override
-	public void Update(Action action) {
+	public void update(Action action) {
 		// Logger
-		Log.d(TAG, "Update(Action action)");
+		Log.d(TAG, "update(Action action)");
 		
 		Dao<Action, Long> baseActionDao = actionDerivedDAOsMap.get(ACTION_CLASS_NAME);
 		Dao<Action, Long> derivedActionDao = mapActionDao(context, action.getClass());
@@ -162,12 +164,13 @@ public class ActionDAO implements IActionDAO {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.ranlior.smartdroid.model.dao.logic.IActionDAO#Delete(com.ranlior.smartdroid.model.dto.actions.Action)
+	 * @see com.ranlior.smartdroid.model.dao.logic
+	 * .IActionDAO#delete(com.ranlior.smartdroid.model.dto.actions.Action)
 	 */
 	@Override
-	public void Delete(Action action) {
+	public void delete(Action action) {
 		// Logger
-		Log.d(TAG, "Delete(Action action)");
+		Log.d(TAG, "delete(Action action)");
 		
 		Dao<Action, Long> baseActionDao = actionDerivedDAOsMap.get(ACTION_CLASS_NAME);
 		Dao<Action, Long> derivedActionDao = actionDerivedDAOsMap.get(action.getClassName());

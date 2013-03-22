@@ -84,7 +84,7 @@ public class SmartService extends Service {
 		// Logger
 		Toast.makeText(this, trigger.getClassName() + " " + trigger.getId(), Toast.LENGTH_SHORT).show();
 		
-		triggerDAO.Update(trigger);
+		triggerDAO.update(trigger);
 		
 		Rule rule = trigger.getRule();
 		rule.decNotSatisfiedTriggerCount();		

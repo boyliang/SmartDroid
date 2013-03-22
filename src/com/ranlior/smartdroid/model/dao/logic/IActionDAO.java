@@ -5,8 +5,6 @@ package com.ranlior.smartdroid.model.dao.logic;
 
 import java.util.List;
 
-import android.database.Cursor;
-
 import com.ranlior.smartdroid.model.dto.actions.Action;
 
 /**
@@ -37,20 +35,20 @@ public interface IActionDAO {
 	 * @param action	Action the action to insert
 	 * @return			Action the action just inserted
 	 */
-	public Action Insert(Action action);
+	public Action insert(Action action);
 	
 	/**
 	 * Updates a action.
 	 * 
 	 * @param action	Action the action to update
 	 */
-	public void Update(Action action);
+	public void update(Action action);
 	
 	/**
 	 * Deletes a specific action by given action's id.
 	 * 
 	 * @param action	Action the action to delete
 	 */
-	public void Delete(Action action);
+	public void delete(Action action);
 
 }

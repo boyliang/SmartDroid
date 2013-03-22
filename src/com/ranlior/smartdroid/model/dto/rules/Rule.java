@@ -215,6 +215,9 @@ public class Rule {
 	public void incNotSatisfiedTriggerCount() {
 		++this.notSatisfiedTriggersCount;
 		
+		// If any trigger not satisfied, the rule not statisfied
+		this.isSatisfied = false;
+
 		// Logger
 		Log.d(TAG, "incNotSatisfiedTriggerCount(): " + this.notSatisfiedTriggersCount);
 	}
@@ -225,6 +228,10 @@ public class Rule {
 	public void decNotSatisfiedTriggerCount() {
 		--this.notSatisfiedTriggersCount;
 		
+		// If all the trigger are satisfied, the rule statisfied
+		if (notSatisfiedTriggersCount == 0) {
+			isSatisfied = true;
+		}
 		// Logger
 		Log.d(TAG, "decNotSatisfiedTriggerCount(): " + this.notSatisfiedTriggersCount);
 	}

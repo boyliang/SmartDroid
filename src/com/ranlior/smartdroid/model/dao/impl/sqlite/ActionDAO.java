@@ -173,7 +173,7 @@ public class ActionDAO implements IActionDAO {
 		Log.d(TAG, "delete(Action action)");
 		
 		Dao<Action, Long> baseActionDao = actionDerivedDAOsMap.get(ACTION_CLASS_NAME);
-		Dao<Action, Long> derivedActionDao = actionDerivedDAOsMap.get(action.getClassName());
+		Dao<Action, Long> derivedActionDao = mapActionDao(context, action.getClass());
 		
 		try {
 			baseActionDao.delete(action);

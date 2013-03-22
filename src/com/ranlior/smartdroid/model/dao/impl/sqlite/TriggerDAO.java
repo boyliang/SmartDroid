@@ -200,7 +200,7 @@ public class TriggerDAO implements ITriggerDAO {
 		Log.d(TAG, "delete(Trigger trigger)");
 		
 		Dao<Trigger, Long> baseTriggerDao = triggerDerivedDAOsMap.get(TRIGGER_CLASS_NAME);
-		Dao<Trigger, Long> derivedTriggerDao = triggerDerivedDAOsMap.get(trigger.getClassName());
+		Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, trigger.getClass());
 		
 		try {
 			baseTriggerDao.delete(trigger);
@@ -220,7 +220,7 @@ public class TriggerDAO implements ITriggerDAO {
 		// Logger
 		Log.d(TAG, "query(Trigger trigger)");
 		
-		Dao<Trigger, Long> derivedTriggerDao = triggerDerivedDAOsMap.get(trigger.getClassName());
+		Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, trigger.getClass());
 		
 		return derivedTriggerDao.queryBuilder();
 	}

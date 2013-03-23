@@ -56,9 +56,9 @@ public interface ITriggerDAO {
 	 * Returns a query builder to query,
 	 * The base trigger table or the derived triggers tables.
 	 * 
-	 * @param trigger	Trigger the base or derived trigger's table to query
+	 * @param trigger	Trigger class the base or derived trigger's table to query
 	 * @return			QueryBuilder for the specific requested table
 	 */
-	public QueryBuilder<Trigger, Long> query(Trigger trigger);
+	public QueryBuilder<Trigger, Long> queryBuilder(Class<? extends Trigger> triggerDerivedClass);
 
 }

@@ -213,14 +213,14 @@ public class TriggerDAO implements ITriggerDAO {
 	
 	/* (non-Javadoc)
 	 * @see com.ranlior.smartdroid.model.dao.logic
-	 * .ITriggerDAO#query(com.ranlior.smartdroid.model.dto.triggers.Trigger)
+	 * .ITriggerDAO#queryBuilder(java.lang.Class)
 	 */
 	@Override
-	public QueryBuilder<Trigger, Long> query(Trigger trigger) {
+	public QueryBuilder<Trigger, Long> queryBuilder(Class<? extends Trigger> triggerDerivedClass) {
 		// Logger
-		Log.d(TAG, "query(Trigger trigger)");
+		Log.d(TAG, "queryBuilder(Class<? extends Trigger> triggerDerivedClass)");
 		
-		Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, trigger.getClass());
+		Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, triggerDerivedClass);
 		
 		return derivedTriggerDao.queryBuilder();
 	}

@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
@@ -28,7 +29,7 @@ public class RingerModeTrigger extends Trigger {
 	/**
 	 * Holds the trigger wanted ringer mode.
 	 */
-	@DatabaseField(canBeNull=false)
+	@DatabaseField(columnName = SmartDroid.RingerModeTriggers.COLUMN_NAME_WANTED_RINGER_MODE, canBeNull = false)
 	private int wantedRingerMode = 0;
 	
 

@@ -89,10 +89,9 @@ public class SmartService extends Service {
 		Rule rule = trigger.getRule();
 		rule.decNotSatisfiedTriggerCount();		
 		
-		if (rule.getNotSatisfiedTriggersCount() == 0) {
+		if (rule.isSatisfied()) {
 			// Logger
 			Log.d(TAG, "THE RULE IS SATISFIED");
-			rule.setSatisfied(true);
 			rule.perform();
 		}
 		

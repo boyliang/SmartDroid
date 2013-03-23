@@ -6,10 +6,12 @@ package com.ranlior.smartdroid.model.dto.triggers;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.ranlior.smartdroid.broadcastreceivers.RingerModeReceiver;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
@@ -77,13 +79,8 @@ public class RingerModeTrigger extends Trigger {
 		Log.d(TAG, "register()");
 		
 		// Registering a battery broadcast receiver
-//		IntentFilter intentFilter = new IntentFilter("android.media.RINGER_MODE_CHANGED");
-//		context.registerReceiver(new RingerModeReceiver(RingerModeTrigger.this), intentFilter);
-		Intent intent = new Intent("android.media.RINGER_MODE_CHANGED");
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(
-				context, ((Long)getId()).intValue(),
-				intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		
+		IntentFilter intentFilter = new IntentFilter("android.media.RINGER_MODE_CHANGED");
+		context.registerReceiver(new RingerModeReceiver(), intentFilter);
 	}
 	
 	/* (non-Javadoc)
@@ -93,7 +90,8 @@ public class RingerModeTrigger extends Trigger {
 		// Loggers
 		Log.d(TAG, "unregister()");
 		
-		// FIXME: implement
+		// FIXME: check if implementation is right
+		context.unregisterReceiver(new RingerModeReceiver());
 	}
 
 }

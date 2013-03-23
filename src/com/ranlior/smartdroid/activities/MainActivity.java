@@ -1,7 +1,5 @@
 package com.ranlior.smartdroid.activities;
 
-import java.util.Collection;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -50,20 +48,15 @@ public class MainActivity extends Activity {
 				AudioManager.RINGER_MODE_NORMAL);
 
 		ringerModeTrigger = triggerDAO.insert(ringerModeTrigger);
-
-		Action notificationAction = new NotificationAction(this, rule,
-				"name", "desc", "title", "text", 0, 0);
-
+		
 		// Gets the notification actions dao
 		IActionDAO actionDAO = SmartDAOFactory.getFactory(
 				SmartDAOFactory.SQLITE).getActionDAO(this);
 
-		actionDAO.insert(notificationAction);
+		Action notificationAction = new NotificationAction(this, rule,
+				"name", "desc", "title", "text", 0, 0);
 
-		Collection<Trigger> triggers = rule.getTriggers();
-		Collection<Action> actions = rule.getActions();
-		
-		ruleDAO.update(rule);
+		actionDAO.insert(notificationAction);
 		
 		rule.register();
 	}

@@ -184,29 +184,7 @@ public class Rule {
 	 * Checks that all the triggers in this rule satisfied.
 	 */
 	public boolean isSatisfied() {
-		setSatisfied(true);
-		for (Trigger trigger : triggers) {
-			if (!trigger.isSatisfied()) {
-				setSatisfied(false);
-				break;
-			}
-		}
 		return isSatisfied;
-	}
-
-	/**
-	 * @param isSatisfied
-	 *            the isSatisfied to set
-	 */
-	public void setSatisfied(boolean isSatisfied) {
-		this.isSatisfied = isSatisfied;
-	}
-	
-	/**
-	 * @return the notSatisfiedTriggersCount
-	 */
-	public int getNotSatisfiedTriggersCount() {
-		return notSatisfiedTriggersCount;
 	}
 
 	/**
@@ -242,7 +220,7 @@ public class Rule {
 	public void register() {
 		// Logger
 		Log.d(TAG, "register()");
-		
+		getTriggers();
 		for (Trigger trigger : triggers) {
 			trigger.register();
 		}
@@ -254,7 +232,7 @@ public class Rule {
 	public void perform() {
 		// Logger
 		Log.d(TAG, "perform()");
-		
+		getActions();
 		for (Action action : actions) {
 			action.perform();
 		}

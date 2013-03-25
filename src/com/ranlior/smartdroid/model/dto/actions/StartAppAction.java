@@ -7,8 +7,10 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 /**
@@ -88,9 +90,14 @@ public class StartAppAction extends Action {
 		// Logger
 		Log.d(TAG, "perform()");
 		
-		// Launches the choosen application
-		Intent intent = new Intent(appName + ".intent.action.Launch");
-		context.startActivity(intent);
+		try {
+			// Launches the choosen application
+			PackageManager packageManager = context.getPackageManager();
+			Intent intent = packageManager.getLaunchIntentForPackage("com.android.contacts");
+			context.startActivity(intent);
+		} catch (ActivityNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

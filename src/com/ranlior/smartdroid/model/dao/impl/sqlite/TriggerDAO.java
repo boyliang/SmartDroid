@@ -90,7 +90,6 @@ public class TriggerDAO implements ITriggerDAO {
 		
 		Trigger derivedTrigger = null;
 		List<Trigger> derivedTriggerList = new ArrayList<Trigger>();
-		Dao<Trigger, Long> derivedTriggerDao = null;
 		
 		try {
 			Map<String, Object> filedValues = new HashMap<String, Object>();
@@ -98,9 +97,7 @@ public class TriggerDAO implements ITriggerDAO {
 			baseTriggerList = baseTriggerDao.queryForFieldValues(filedValues);
 			// Gets the concrette derived triggers
 			for (Trigger trigger : baseTriggerList) {
-				derivedTriggerDao = triggerDerivedDAOsMap.get(trigger.getClassName());
-				derivedTrigger = derivedTriggerDao.queryForId(trigger.getId());
-				derivedTrigger.setContext(context);
+				derivedTrigger = get(trigger.getId());
 				derivedTriggerList.add(derivedTrigger);
 			}
 		} catch (SQLException e) {
@@ -122,13 +119,18 @@ public class TriggerDAO implements ITriggerDAO {
 		Dao<Trigger, Long> baseTriggerDao = triggerDerivedDAOsMap.get(TRIGGER_CLASS_NAME);
 		
 		try {
-			Trigger baseTrigger = (Trigger) baseTriggerDao.queryForId(triggerId);
+			Trigger baseTrigger = baseTriggerDao.queryForId(triggerId);
 			// Gets the concrette derived trigger
 			if (baseTrigger != null) {
-				Dao<Trigger, Long> derivedTriggerDao = triggerDerivedDAOsMap.get(baseTrigger.getClassName());
+				String className = SmartDroid.Triggers.PACKAGE + "." + baseTrigger.getClassName();
+				Class<? extends Trigger> derivedClass = (Class<? extends Trigger>) Class.forName(className);
+				Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, derivedClass);
 				trigger = derivedTriggerDao.queryForId(triggerId);
+				trigger.setContext(context);
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		
@@ -150,6 +152,7 @@ public class TriggerDAO implements ITriggerDAO {
 		try {
 			trigger.setId( baseTriggerDao.create(trigger) );
 			derivedTriggerDao.create(trigger);
+			
 			updateRuleNotSatisfiedTriggersCount(trigger, INC_NOT_SATISFIED_TRIGGERS_COUNT);
 		} catch (SQLException e) {
 			e.printStackTrace();

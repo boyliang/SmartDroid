@@ -3,16 +3,13 @@
  */
 package com.ranlior.smartdroid.broadcastreceivers;
 
-import com.ranlior.smartdroid.events.ReceiverResponseEvent;
-import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
-import com.ranlior.smartdroid.utilities.BusProvider;
-import com.squareup.otto.Produce;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.util.Log;
+
+import com.ranlior.smartdroid.services.BroadcastReceivedIntentService;
 
 /**
  * @author Ran Haveshush
@@ -26,44 +23,19 @@ public class RingerModeReceiver extends BroadcastReceiver {
 	 */
 	private static final String TAG = "RingerModeReceiver";
 	
-	/**
-	 * Holds the broadcast reciver register trigger.
-	 */
-	private RingerModeTrigger ringerModeTrigger = null;
-	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// Logger
 		Log.d(TAG, "onReceive(Context context, Intent intent)");
+		
+		Context appCtx = context.getApplicationContext();
+
+		Intent serviceIntent = new Intent(appCtx, BroadcastReceivedIntentService.class);
+		serviceIntent.putExtra("triggerName", "RingerModeTrigger");
 
 		int ringerMode = intent.getIntExtra(AudioManager.EXTRA_RINGER_MODE, -1);
-		int wantedRingerMode = ringerModeTrigger.getWantedRingerMode();
-		
-		if (ringerMode == wantedRingerMode) {
-			ringerModeTrigger.setSatisfied(true);
-			BusProvider.getInstance().post(produceReceiverResponseEvent());
-		}
-	}
+		serviceIntent.putExtra("ringerMode", ringerMode);
 
-	/**
-	 * Default constructor.
-	 */
-	public RingerModeReceiver() {
-		super();
-	}
-
-	/**
-	 * Full constructor.
-	 * 
-	 * @param ringerModeTrigger
-	 */
-	public RingerModeReceiver(RingerModeTrigger ringerModeTrigger) {
-		super();
-		this.ringerModeTrigger = ringerModeTrigger;
-	}
-	
-	@Produce
-	public ReceiverResponseEvent produceReceiverResponseEvent() {
-		return new ReceiverResponseEvent(ringerModeTrigger);
+		appCtx.startService(serviceIntent);
 	}
 }

@@ -142,6 +142,11 @@ public final class SmartDroid {
 		 */
 		public static final String TABLE_NAME_RULES = "rules";
 		
+		/**
+		 * Holds the rules package.
+		 */
+		public static final String PACKAGE = SmartDroid.PACKAGE + ".model.dto.rules";
+		
 		/*
          * Column definitions.
          */
@@ -223,6 +228,11 @@ public final class SmartDroid {
 		 * The triggers table name offered by this provider.
 		 */
 		public static final String TABLE_NAME_TRIGGERS = "triggers";
+		
+		/**
+		 * Holds the triggers package.
+		 */
+		public static final String PACKAGE = SmartDroid.PACKAGE + ".model.dto.triggers";
 		
 		/*
          * Column definitions.
@@ -314,6 +324,11 @@ public final class SmartDroid {
 		 * The actions table name offered by this provider.
 		 */
 		public static final String TABLE_NAME_ACTIONS = "actions";
+		
+		/**
+		 * Holds the actions package.
+		 */
+		public static final String PACKAGE = SmartDroid.PACKAGE + ".model.dto.actions";
 		
 		/*
          * Column definitions.

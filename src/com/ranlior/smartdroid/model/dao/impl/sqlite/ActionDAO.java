@@ -76,7 +76,6 @@ public class ActionDAO implements IActionDAO {
 		
 		Action derivedAction = null;
 		List<Action> derivedActionList = new ArrayList<Action>();
-		Dao<Action, Long> derivedActionDao = null;
 		
 		try {
 			Map<String, Object> filedValues = new HashMap<String, Object>();
@@ -84,9 +83,7 @@ public class ActionDAO implements IActionDAO {
 			baseActionList = baseActionDao.queryForFieldValues(filedValues);
 			// Gets the concrette derived actions
 			for (Action action : baseActionList) {
-				derivedActionDao = actionDerivedDAOsMap.get(action.getClassName());
-				derivedAction = derivedActionDao.queryForId(action.getId());
-				derivedAction.setContext(context);
+				derivedAction = get(action.getId());
 				derivedActionList.add(derivedAction);
 			}
 		} catch (SQLException e) {
@@ -111,10 +108,15 @@ public class ActionDAO implements IActionDAO {
 			Action baseAction = baseActionDao.queryForId(actionId);
 			// Gets the concrette derived action
 			if (baseAction != null) {
-				Dao<Action, Long> derivedActionDao = actionDerivedDAOsMap.get(baseAction.getClassName());
+				String className = SmartDroid.Actions.PACKAGE + "." + baseAction.getClassName();
+				Class<? extends Action> clazz = (Class<? extends Action>) Class.forName(className);
+				Dao<Action, Long> derivedActionDao = mapActionDao(context, clazz);
 				action = derivedActionDao.queryForId(actionId);
+				action.setContext(context);
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		

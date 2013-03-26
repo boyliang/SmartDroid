@@ -8,10 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.BatteryManager;
 
-import com.ranlior.smartdroid.events.ReceiverResponseEvent;
 import com.ranlior.smartdroid.model.dto.triggers.BatteryTrigger;
-import com.ranlior.smartdroid.utilities.BusProvider;
-import com.squareup.otto.Produce;
 
 /**
  * @author Ran Haveshush
@@ -42,7 +39,6 @@ public class BatteryReceiver extends BroadcastReceiver{
 		if (BatteryManager.BATTERY_PLUGGED_AC == wantedPowerState) {
 			// FIXME: later
 			batteryTrigger.setSatisfied(true);
-			BusProvider.getInstance().post(produceReceiverResponseEvent());
 		}
 	}
 
@@ -54,11 +50,6 @@ public class BatteryReceiver extends BroadcastReceiver{
 	public BatteryReceiver(BatteryTrigger batteryTrigger) {
 		super();
 		this.batteryTrigger = batteryTrigger;
-	}
-	
-	@Produce
-	public ReceiverResponseEvent produceReceiverResponseEvent() {
-		return new ReceiverResponseEvent(batteryTrigger);
 	}
 	
 }

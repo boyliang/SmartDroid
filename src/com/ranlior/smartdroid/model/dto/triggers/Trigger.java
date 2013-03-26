@@ -16,7 +16,7 @@ import com.ranlior.smartdroid.model.dto.rules.Rule;
  * 
  */
 @DatabaseTable(tableName = "triggers")
-public class Trigger implements Comparable<Trigger>{
+public class Trigger implements Comparable<Trigger> {
 
 	/**
 	 * Holds the context that instantiate this action.
@@ -200,6 +200,11 @@ public class Trigger implements Comparable<Trigger>{
 	 * implementation.
 	 */
 	public void register() {}
+	
+	/**
+	 * 
+	 */
+	public void unregister() {}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)

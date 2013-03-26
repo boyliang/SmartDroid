@@ -18,7 +18,7 @@ public final class SmartDroid {
 	/**
 	 * App's package.
 	 */
-	public static final String PACKAGE = "com.ranlior.smartdroid";
+	public static final String APP_PACKAGE = "com.ranlior.smartdroid";
 	
 	/**
 	 * Preferences.
@@ -56,7 +56,7 @@ public final class SmartDroid {
 		 * Action to get a location reminder broadcast.
 		 */
 		// FIXME: Example only.
-		public static final String ACTION_LOCATION_REMINDER_BROADCAST = PACKAGE + ".ACTION_LOCATION_REMINDER_BROADCAST";
+		public static final String ACTION_LOCATION_REMINDER_BROADCAST = APP_PACKAGE + ".ACTION_LOCATION_REMINDER_BROADCAST";
 		
 	}
 	
@@ -71,13 +71,13 @@ public final class SmartDroid {
 		
 		// This class cannot be instantiated
 		private Extra() {}
-		
+
 		/**
-		 * Extra key for task's client id.
-		 * <P>Type: long</P>
+		 * Extra key for intent action string.
+		 *  
+		 * <P>Type: String</P>
 		 */
-		// FIXME: Example only.
-		public static final String EXTRA_TASK_CLIENT_ID = PACKAGE + ".EXTRA_TASK_CLIENT_ID";
+		public static final String EXTRA_ACTION = APP_PACKAGE + ".EXTRA_ACTION";
 		
 	}
 	
@@ -98,7 +98,7 @@ public final class SmartDroid {
 		 * <P>Type: int</P>
 		 */
 		// FIXME: Example only.
-		public static final String ARG_ACCOUNT_PICKER_DIALOG_TITLE = PACKAGE + ".ARG_ACCOUT_PICKER_DIALOG_TITLE";
+		public static final String ARG_ACCOUNT_PICKER_DIALOG_TITLE = APP_PACKAGE + ".ARG_ACCOUT_PICKER_DIALOG_TITLE";
 	}
 	
 	/*
@@ -122,7 +122,7 @@ public final class SmartDroid {
 		/**
 		 * The authority.
 		 */
-		public static final String AUTHORITY = PACKAGE + ".contentproviders.SmartProvider";
+		public static final String AUTHORITY = APP_PACKAGE + ".contentproviders.SmartProvider";
 		
 	}
 	
@@ -145,7 +145,7 @@ public final class SmartDroid {
 		/**
 		 * Holds the rules package.
 		 */
-		public static final String PACKAGE = SmartDroid.PACKAGE + ".model.dto.rules";
+		public static final String PACKAGE = SmartDroid.APP_PACKAGE + ".model.dto.rules";
 		
 		/*
          * Column definitions.
@@ -232,7 +232,7 @@ public final class SmartDroid {
 		/**
 		 * Holds the triggers package.
 		 */
-		public static final String PACKAGE = SmartDroid.PACKAGE + ".model.dto.triggers";
+		public static final String PACKAGE = SmartDroid.APP_PACKAGE + ".model.dto.triggers";
 		
 		/*
          * Column definitions.
@@ -328,7 +328,7 @@ public final class SmartDroid {
 		/**
 		 * Holds the actions package.
 		 */
-		public static final String PACKAGE = SmartDroid.PACKAGE + ".model.dto.actions";
+		public static final String PACKAGE = SmartDroid.APP_PACKAGE + ".model.dto.actions";
 		
 		/*
          * Column definitions.

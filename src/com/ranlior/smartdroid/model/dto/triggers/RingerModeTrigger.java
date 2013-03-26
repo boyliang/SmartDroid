@@ -3,14 +3,22 @@
  */
 package com.ranlior.smartdroid.model.dto.triggers;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import android.content.Context;
 import android.content.IntentFilter;
+import android.media.AudioManager;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.table.DatabaseTable;
-import com.ranlior.smartdroid.broadcastreceivers.RingerModeReceiver;
+import com.ranlior.smartdroid.broadcastreceivers.SysEventReceiver;
 import com.ranlior.smartdroid.config.SmartDroid;
+import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
+import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
@@ -78,18 +86,55 @@ public class RingerModeTrigger extends Trigger {
 		
 		// Registering a battery broadcast receiver
 		IntentFilter intentFilter = new IntentFilter("android.media.RINGER_MODE_CHANGED");
-		context.registerReceiver(new RingerModeReceiver(), intentFilter);
+		context.registerReceiver(new SysEventReceiver(), intentFilter);
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.ranlior.smartdroid.model.dto.triggers.Trigger#unregister()
 	 */
+	@Override
 	public void unregister() {
 		// Loggers
 		Log.d(TAG, "unregister()");
 		
 		// FIXME: check if implementation is right
-		context.unregisterReceiver(new RingerModeReceiver());
+		context.unregisterReceiver(new SysEventReceiver());
+	}
+	
+	public static void handle(Context appCtx, Bundle stateExtras) {
+		// Loggers
+		Log.d(TAG, "handle()");
+		
+		List<Trigger> triggers = null;
+
+		int ringerMode = stateExtras.getInt(AudioManager.EXTRA_RINGER_MODE, -1);
+
+		ITriggerDAO triggerDAO = SmartDAOFactory
+				.getFactory(SmartDAOFactory.SQLITE)
+				.getTriggerDAO(appCtx);
+
+		QueryBuilder<Trigger, Long> queryBuilder = triggerDAO.queryBuilder(RingerModeTrigger.class);
+		
+		try {
+	       triggers = queryBuilder.query();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+		for (Trigger trigger : triggers) {
+			RingerModeTrigger ringerModeTrigger = (RingerModeTrigger) trigger;
+			if (ringerModeTrigger.getWantedRingerMode() == ringerMode) {
+				ringerModeTrigger.setSatisfied(true);
+			} else {
+				ringerModeTrigger.setSatisfied(false);
+			}
+			triggerDAO.update(ringerModeTrigger);
+			Rule rule = ringerModeTrigger.getRule();
+			if (rule.isSatisfied()) {
+				rule.setContext(appCtx);
+				rule.perform();
+			}
+		}
 	}
 
 }

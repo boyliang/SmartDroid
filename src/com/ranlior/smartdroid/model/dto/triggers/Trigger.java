@@ -32,8 +32,8 @@ public class Trigger implements Comparable<Trigger> {
 	/**
 	 * Holds the trigger's identifier.
 	 */
-	@DatabaseField(columnName = SmartDroid.Triggers.COLUMN_NAME_ID, generatedId = true)
-	private long id = -1L;
+	@DatabaseField(columnName = SmartDroid.Triggers.COLUMN_NAME_ID, generatedId = true, allowGeneratedIdInsert = true)
+	private Long id = null;
 	
 	/**
 	 * Holds the trigger's class name.
@@ -160,7 +160,7 @@ public class Trigger implements Comparable<Trigger> {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
+	protected void setName(String name) {
 		this.name = name;
 	}
 
@@ -175,7 +175,7 @@ public class Trigger implements Comparable<Trigger> {
 	 * @param description
 	 *            the description to set
 	 */
-	public void setDescription(String description) {
+	protected void setDescription(String description) {
 		this.description = description;
 	}
 

@@ -21,7 +21,7 @@ import com.ranlior.smartdroid.model.dto.rules.Rule;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
-@DatabaseTable(tableName="notification_actions")
+@DatabaseTable(tableName = "notification_actions")
 public class NotificationAction extends Action {
 	
 	/**
@@ -30,15 +30,74 @@ public class NotificationAction extends Action {
 	private static final String TAG = "NotificationAction";
 	
 	/**
+	 * The action's name. 
+	 */
+	private static final String NAME = "Notification";
+	
+	/**
+	 * The action's description.
+	 */
+	private static final String DESCRIPTION = "Fires a notification";
+	
+	/*
+	 * Table definition.
+	 */
+	
+	/**
+	 * The table name.
+	 */
+	private static final String TABLE_NAME = "notification_actions";
+	
+	/*
+	 * Columns definitions.
+	 */
+	
+	/**
+	 * Column name notification title.
+	 * 
+	 * <P>Type: STRING</P>
+	 * <P>Constraint: NOT NULL</p>
+	 */
+	private static final String COLUMN_NAME_TITLE = "title";
+	
+	/**
+	 * Column name notification text.
+	 * 
+	 * <P>Type: STRING</P>
+	 * <P>Constraint: NOT NULL</p>
+	 */
+	private static final String COLUMN_NAME_TEXT = "text";
+	
+	/**
+	 * Column name notification defaults.
+	 * 
+	 * <P>Type: INTEGER</P>
+	 * <P>Constraint: NOT NULL</p>
+	 */
+	private static final String COLUMN_NAME_DEFAULTS = "defaults";
+	
+	/**
+	 * Column name notification flags.
+	 * 
+	 * <P>Type: INTEGER</P>
+	 * <P>Constraint: NOT NULL</p>
+	 */
+	private static final String COLUMN_NAME_FLAGS = "flags";
+	
+	/*
+	 * Instance variables.
+	 */
+	
+	/**
 	 * Holds the notification's title.
 	 */
-	@DatabaseField
+	@DatabaseField(columnName = NotificationAction.COLUMN_NAME_TITLE, canBeNull = false)
 	private String title = null;
 	
 	/**
 	 * Holds the notification's text.
 	 */
-	@DatabaseField
+	@DatabaseField(columnName = NotificationAction.COLUMN_NAME_TEXT, canBeNull = false)
 	private String text = null;
 	
 	/**
@@ -53,7 +112,7 @@ public class NotificationAction extends Action {
 	 * @see	android.app.Notification
 	 * 
 	 */
-	@DatabaseField
+	@DatabaseField(columnName = NotificationAction.COLUMN_NAME_DEFAULTS, canBeNull = false)
 	private int defaults;
 
 	/**
@@ -63,7 +122,7 @@ public class NotificationAction extends Action {
 	 * @see	android.app.Notification
 	 * 
 	 */
-	@DatabaseField
+	@DatabaseField(columnName = NotificationAction.COLUMN_NAME_FLAGS, canBeNull = false)
 	private int flags;
 
 	
@@ -73,18 +132,6 @@ public class NotificationAction extends Action {
 	 */
 	protected NotificationAction() {
 		super();
-	}
-	
-	/**
-	 * Minimal constructor.
-	 * 
-	 * @param context		Context the context instantiating this action
-	 * @param rule			Rule represents action's rule
-	 * @param name			String represents action's name
-	 * @param description	String represents action's description
-	 */
-	public NotificationAction(Context context, Rule rule, String name, String description) {
-		super(context, rule, NotificationAction.class.getSimpleName(), name, description);
 	}
 
 	/**
@@ -98,9 +145,8 @@ public class NotificationAction extends Action {
 	 * @param text			String represents notification's text
 	 * @param flags			Integer represents notification's flags
 	 */
-	public NotificationAction(Context context, Rule rule, String name, String description,
-			String title, String text, int defaults, int flags) {
-		super(context, rule, NotificationAction.class.getSimpleName(), name, description);
+	public NotificationAction(Context context, Rule rule, String title, String text, int defaults, int flags) {
+		super(context, rule, NotificationAction.class.getSimpleName(), NAME, DESCRIPTION);
 		this.title = title;
 		this.text = text;
 		this.defaults = defaults;

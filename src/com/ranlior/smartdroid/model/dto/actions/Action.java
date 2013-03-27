@@ -32,8 +32,8 @@ public class Action {
 	/**
 	 * Holds the action's identifier.
 	 */
-	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_ID, generatedId = true)
-	private long id = -1L;
+	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_ID, generatedId = true, allowGeneratedIdInsert = true)
+	private Long id = null;
 	
 	/**
 	 * Holds the action's class name.
@@ -148,7 +148,7 @@ public class Action {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
+	protected void setName(String name) {
 		this.name = name;
 	}
 
@@ -163,7 +163,7 @@ public class Action {
 	 * @param description
 	 *            the description to set
 	 */
-	public void setDescription(String description) {
+	protected void setDescription(String description) {
 		this.description = description;
 	}
 

@@ -136,7 +136,7 @@ public class ActionDAO implements IActionDAO {
 		Dao<Action, Long> derivedActionDao = mapActionDao(context, action.getClass());
 		
 		try {
-			action.setId( baseActionDao.create(action) );
+			baseActionDao.create(action);
 			derivedActionDao.create(action);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -158,7 +158,7 @@ public class ActionDAO implements IActionDAO {
 		Dao<Action, Long> derivedActionDao = mapActionDao(context, action.getClass());
 		
 		try {
-			action.setId( baseActionDao.update(action) );
+			baseActionDao.update(action);
 			derivedActionDao.update(action);
 		} catch (SQLException e) {
 			e.printStackTrace();

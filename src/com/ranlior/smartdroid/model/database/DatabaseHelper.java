@@ -16,7 +16,8 @@ import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
 import com.ranlior.smartdroid.model.dto.actions.StartAppAction;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
-import com.ranlior.smartdroid.model.dto.triggers.BatteryTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.SensorTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
@@ -90,7 +91,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, Rule.class);
 			// Creates triggers tables
 			TableUtils.createTable(connectionSource, Trigger.class);
-			TableUtils.createTable(connectionSource, BatteryTrigger.class);
+			TableUtils.createTable(connectionSource, BatteryPluggedTrigger.class);
+			TableUtils.createTable(connectionSource, BootCompletedTrigger.class);
 			TableUtils.createTable(connectionSource, RingerModeTrigger.class);
 			TableUtils.createTable(connectionSource, SensorTrigger.class);
 			// Creates actions tables
@@ -112,7 +114,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, Rule.class, true);
 			// Drops triggers tables
 			TableUtils.dropTable(connectionSource, Trigger.class, true);
-			TableUtils.dropTable(connectionSource, BatteryTrigger.class, true);
+			TableUtils.dropTable(connectionSource, BatteryPluggedTrigger.class, true);
+			TableUtils.dropTable(connectionSource, BootCompletedTrigger.class, true);
 			TableUtils.dropTable(connectionSource, RingerModeTrigger.class, true);
 			TableUtils.dropTable(connectionSource, SensorTrigger.class, true);
 			// Drops actions tables

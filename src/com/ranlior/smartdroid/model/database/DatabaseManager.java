@@ -22,7 +22,6 @@ public class DatabaseManager {
 
 	public static DatabaseManager getInstance(Context context) {
 		if (instance == null) {
-			// FIXME: check if synchronized is needed
 			synchronized (DatabaseManager.class) {
 				if (instance == null) {
 					instance = new DatabaseManager(context);

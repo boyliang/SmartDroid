@@ -377,35 +377,5 @@ public final class SmartDroid {
 		public static final String COLUMN_NAME_RULE_ID = "rule_id";
         
 	}
-	
-	/**
-	 * Ringer mode triggers table contract
-	 * 
-	 * @author Ran Haveshush
-	 * Email:  ran.haveshush.shenkar@gmail.com
-	 *
-	 */
-	public static final class RingerModeTriggers implements BaseColumns {
-		
-		// This class cannot be instantiated
-		private RingerModeTriggers() {}
-		
-		/**
-		 * The ringer mode triggers table name offered by this provider.
-		 */
-		public static final String TABLE_NAME_ACTIONS = "ringer_mode_triggers";
-		
-		/*
-         * Column definitions.
-         */
-		
-		/**
-		 * Column name ringer mode trigger's wanted ringer mode.
-		 * 
-		 * <P>Type: INTEGER</P>
-		 * <P>Constraint: NOT NULL</p>
-		 */
-		public static final String COLUMN_NAME_WANTED_RINGER_MODE = "wantedRingerMode";
-	}
 
 }

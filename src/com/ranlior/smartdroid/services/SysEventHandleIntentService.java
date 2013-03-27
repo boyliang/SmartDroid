@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.ranlior.smartdroid.config.SmartDroid;
+import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
 
 /**
@@ -48,6 +50,12 @@ public class SysEventHandleIntentService extends IntentService {
 		 */
 		if ("android.media.RINGER_MODE_CHANGED".equals(action)) {
 			RingerModeTrigger.handle(appCtx, stateExtras);
+		} else if ("android.intent.action.BOOT_COMPLETED".equals(action)) {
+			BootCompletedTrigger.handle(appCtx, stateExtras);
+		} else if ("android.intent.action.ACTION_POWER_CONNECTED".equals(action)) {
+			BatteryPluggedTrigger.handle(appCtx, stateExtras);
+		} else if ("android.intent.action.ACTION_POWER_DISCONNECTED".equals(action)) {
+			BatteryPluggedTrigger.handle(appCtx, stateExtras);
 		}
 	}
 

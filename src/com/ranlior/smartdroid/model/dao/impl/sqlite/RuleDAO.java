@@ -99,7 +99,7 @@ public class RuleDAO implements IRuleDAO {
 		Log.d(TAG, "insert(Rule rule)");
 		
 		try {
-			rule.setId( ruleDao.create(rule) );
+			ruleDao.create(rule);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

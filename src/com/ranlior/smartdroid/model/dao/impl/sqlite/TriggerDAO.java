@@ -150,9 +150,8 @@ public class TriggerDAO implements ITriggerDAO {
 		Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, trigger.getClass());
 		
 		try {
-			trigger.setId( baseTriggerDao.create(trigger) );
+			baseTriggerDao.create(trigger);
 			derivedTriggerDao.create(trigger);
-			
 			updateRuleNotSatisfiedTriggersCount(trigger, INC_NOT_SATISFIED_TRIGGERS_COUNT);
 		} catch (SQLException e) {
 			e.printStackTrace();

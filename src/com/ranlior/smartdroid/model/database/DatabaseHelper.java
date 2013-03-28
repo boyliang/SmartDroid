@@ -13,6 +13,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.ranlior.smartdroid.model.dto.actions.Action;
+import com.ranlior.smartdroid.model.dto.actions.ModifyRingerModeAction;
 import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
 import com.ranlior.smartdroid.model.dto.actions.ModifyVolumeAction;
 import com.ranlior.smartdroid.model.dto.actions.StartAppAction;
@@ -98,8 +99,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, SensorTrigger.class);
 			// Creates actions tables
 			TableUtils.createTable(connectionSource, Action.class);
-			TableUtils.createTable(connectionSource, NotificationAction.class);
+			TableUtils.createTable(connectionSource, ModifyRingerModeAction.class);
 			TableUtils.createTable(connectionSource, ModifyVolumeAction.class);
+			TableUtils.createTable(connectionSource, NotificationAction.class);
 			TableUtils.createTable(connectionSource, StartAppAction.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -122,8 +124,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, SensorTrigger.class, true);
 			// Drops actions tables
 			TableUtils.dropTable(connectionSource, Action.class, true);
-			TableUtils.dropTable(connectionSource, NotificationAction.class, true);
+			TableUtils.dropTable(connectionSource, ModifyRingerModeAction.class, true);
 			TableUtils.dropTable(connectionSource, ModifyVolumeAction.class, true);
+			TableUtils.dropTable(connectionSource, NotificationAction.class, true);
 			TableUtils.dropTable(connectionSource, StartAppAction.class, true);
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -14,8 +14,8 @@ import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
 import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
 import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
 import com.ranlior.smartdroid.model.dto.actions.Action;
+import com.ranlior.smartdroid.model.dto.actions.ModifyVolumeAction;
 import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
-import com.ranlior.smartdroid.model.dto.actions.StartAppAction;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
 		ITriggerDAO triggerDAO = SmartDAOFactory.getFactory(
 				SmartDAOFactory.SQLITE).getTriggerDAO(appCtx);
 
-		Trigger ringerModeTrigger = new RingerModeTrigger(appCtx, rule1, AudioManager.RINGER_MODE_NORMAL);
+		Trigger ringerModeTrigger = new RingerModeTrigger(appCtx, rule1, AudioManager.RINGER_MODE_SILENT);
 		triggerDAO.insert(ringerModeTrigger);
 		
 		Trigger bootCompletedTrigger = new BootCompletedTrigger(appCtx, rule2);
@@ -65,8 +65,8 @@ public class MainActivity extends Activity {
 		IActionDAO actionDAO = SmartDAOFactory.getFactory(
 				SmartDAOFactory.SQLITE).getActionDAO(appCtx);
 
-		Action startAppAction = new StartAppAction(appCtx, rule1, "com.android.contacts");
-		actionDAO.insert(startAppAction);
+		Action modifyVolumeAction = new ModifyVolumeAction(appCtx, rule1, AudioManager.STREAM_ALARM, 0, 0);
+		actionDAO.insert(modifyVolumeAction);
 		
 		Action notifyBootCompleted = new NotificationAction(
 				appCtx, rule2, "Boot Completed", "Boot completed triggered",

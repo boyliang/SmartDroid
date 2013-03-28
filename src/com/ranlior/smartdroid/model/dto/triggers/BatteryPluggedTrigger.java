@@ -23,6 +23,8 @@ import com.ranlior.smartdroid.model.dto.rules.Rule;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
+// FIXME: Fix this trigger can't diff between plugged states (ac, usb, wireless)
+// only diff between connected and disconnected.
 @DatabaseTable(tableName = "battery_plugged_triggers")
 public class BatteryPluggedTrigger extends Trigger {
 

@@ -14,6 +14,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
+import com.ranlior.smartdroid.model.dto.actions.ModifyVolumeAction;
 import com.ranlior.smartdroid.model.dto.actions.StartAppAction;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
@@ -98,6 +99,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			// Creates actions tables
 			TableUtils.createTable(connectionSource, Action.class);
 			TableUtils.createTable(connectionSource, NotificationAction.class);
+			TableUtils.createTable(connectionSource, ModifyVolumeAction.class);
 			TableUtils.createTable(connectionSource, StartAppAction.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -121,6 +123,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			// Drops actions tables
 			TableUtils.dropTable(connectionSource, Action.class, true);
 			TableUtils.dropTable(connectionSource, NotificationAction.class, true);
+			TableUtils.dropTable(connectionSource, ModifyVolumeAction.class, true);
 			TableUtils.dropTable(connectionSource, StartAppAction.class, true);
 		} catch (SQLException e) {
 			e.printStackTrace();

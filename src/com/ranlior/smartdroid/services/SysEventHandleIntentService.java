@@ -6,11 +6,11 @@ package com.ranlior.smartdroid.services;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.ranlior.smartdroid.config.SmartDroid;
+import com.ranlior.smartdroid.model.dto.triggers.BatteryLevelTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.LocationProximityTrigger;
@@ -54,6 +54,12 @@ public class SysEventHandleIntentService extends IntentService {
 			RingerModeTrigger.handle(appCtx, stateExtras);
 		} else if ("android.intent.action.BOOT_COMPLETED".equals(action)) {
 			BootCompletedTrigger.handle(appCtx, stateExtras);
+		} else if ("android.intent.action.ACTION_BATTERY_LOW".equals(action)) {
+			stateExtras.putInt(SmartDroid.Extra.EXTRA_BATTERY_LEVEL, BatteryLevelTrigger.BATTERY_LEVEL_LOW);
+			BatteryLevelTrigger.handle(appCtx, stateExtras);
+		} else if ("android.intent.action.ACTION_BATTERY_OKAY".equals(action)) {
+			stateExtras.putInt(SmartDroid.Extra.EXTRA_BATTERY_LEVEL, BatteryLevelTrigger.BATTERY_LEVEL_OKAY);
+			BatteryLevelTrigger.handle(appCtx, stateExtras);
 		} else if ("android.intent.action.ACTION_POWER_CONNECTED".equals(action)) {
 			BatteryPluggedTrigger.handle(appCtx, stateExtras);
 		} else if ("android.intent.action.ACTION_POWER_DISCONNECTED".equals(action)) {

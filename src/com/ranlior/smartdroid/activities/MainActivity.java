@@ -1,10 +1,16 @@
 package com.ranlior.smartdroid.activities;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.app.Notification;
+import android.app.WallpaperManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 
 import com.ranlior.smartdroid.R;
@@ -56,7 +62,6 @@ public class MainActivity extends Activity {
 //		
 //		Trigger bootCompletedTrigger = new BootCompletedTrigger(appCtx, rule2);
 //		triggerDAO.insert(bootCompletedTrigger);
-		
 		Trigger locationProximityTrigger = new LocationProximityTrigger(appCtx, rule3, 32.062665, 34.862398, 500.0F, -1L);
 		triggerDAO.insert(locationProximityTrigger);
 		locationProximityTrigger.register();

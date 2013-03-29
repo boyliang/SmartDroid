@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
 
     <application
         android:allowBackup="true"
@@ -36,6 +37,8 @@
         <receiver android:name=".broadcastreceivers.SysEventReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_BATTERY_LOW"/>
+  				<action android:name="android.intent.action.ACTION_BATTERY_OKAY"/>
                 <action android:name="android.intent.action.POWER_CONNECTED" />
                 <action android:name="android.intent.action.POWER_DISCONNECTED" />
                 <action android:name="android.media.RINGER_MODE_CHANGED" />

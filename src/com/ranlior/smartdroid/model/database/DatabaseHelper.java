@@ -14,10 +14,12 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.actions.ModifyRingerModeAction;
-import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
 import com.ranlior.smartdroid.model.dto.actions.ModifyVolumeAction;
+import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
+import com.ranlior.smartdroid.model.dto.actions.SetWallpaperAction;
 import com.ranlior.smartdroid.model.dto.actions.StartAppAction;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
+import com.ranlior.smartdroid.model.dto.triggers.BatteryLevelTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.LocationProximityTrigger;
@@ -94,6 +96,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, Rule.class);
 			// Creates triggers tables
 			TableUtils.createTable(connectionSource, Trigger.class);
+			TableUtils.createTable(connectionSource, BatteryLevelTrigger.class);
 			TableUtils.createTable(connectionSource, BatteryPluggedTrigger.class);
 			TableUtils.createTable(connectionSource, BootCompletedTrigger.class);
 			TableUtils.createTable(connectionSource, LocationProximityTrigger.class);
@@ -104,6 +107,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, ModifyRingerModeAction.class);
 			TableUtils.createTable(connectionSource, ModifyVolumeAction.class);
 			TableUtils.createTable(connectionSource, NotificationAction.class);
+			TableUtils.createTable(connectionSource, SetWallpaperAction.class);
 			TableUtils.createTable(connectionSource, StartAppAction.class);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -120,6 +124,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, Rule.class, true);
 			// Drops triggers tables
 			TableUtils.dropTable(connectionSource, Trigger.class, true);
+			TableUtils.dropTable(connectionSource, BatteryLevelTrigger.class, true);
 			TableUtils.dropTable(connectionSource, BatteryPluggedTrigger.class, true);
 			TableUtils.dropTable(connectionSource, BootCompletedTrigger.class, true);
 			TableUtils.dropTable(connectionSource, LocationProximityTrigger.class, true);
@@ -130,6 +135,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, ModifyRingerModeAction.class, true);
 			TableUtils.dropTable(connectionSource, ModifyVolumeAction.class, true);
 			TableUtils.dropTable(connectionSource, NotificationAction.class, true);
+			TableUtils.dropTable(connectionSource, SetWallpaperAction.class, true);
 			TableUtils.dropTable(connectionSource, StartAppAction.class, true);
 		} catch (SQLException e) {
 			e.printStackTrace();

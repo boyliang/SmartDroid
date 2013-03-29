@@ -79,11 +79,18 @@ public final class SmartDroid {
 		public static final String EXTRA_ACTION = APP_PACKAGE + ".EXTRA_ACTION";
 		
 		/**
-		 * Extra key for intent trigger id string.
+		 * Extra key for intent trigger id long.
 		 *  
-		 * <P>Type: String</P>
+		 * <P>Type: REAL</P>
 		 */
 		public static final String EXTRA_TRIGGER_ID = APP_PACKAGE + ".EXTRA_TRIGGER_ID";
+		
+		/**
+		 * Extra key for intent battery level integer.
+		 *  
+		 * <P>Type: INTEGER</P>
+		 */
+		public static final String EXTRA_BATTERY_LEVEL = APP_PACKAGE + ".EXTRA_BATTERY_LEVEL";
 		
 	}
 	

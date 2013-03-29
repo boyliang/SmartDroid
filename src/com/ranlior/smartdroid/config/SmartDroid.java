@@ -53,10 +53,9 @@ public final class SmartDroid {
 		private Action() {}
 		
 		/**
-		 * Action to get a location reminder broadcast.
+		 * Action to get a location proximity alert broadcast.
 		 */
-		// FIXME: Example only.
-		public static final String ACTION_LOCATION_REMINDER_BROADCAST = APP_PACKAGE + ".ACTION_LOCATION_REMINDER_BROADCAST";
+		public static final String ACTION_LOCATION_PROXIMITY = APP_PACKAGE + ".ACTION_LOCATION_PROXIMITY";
 		
 	}
 	
@@ -78,6 +77,13 @@ public final class SmartDroid {
 		 * <P>Type: String</P>
 		 */
 		public static final String EXTRA_ACTION = APP_PACKAGE + ".EXTRA_ACTION";
+		
+		/**
+		 * Extra key for intent trigger id string.
+		 *  
+		 * <P>Type: String</P>
+		 */
+		public static final String EXTRA_TRIGGER_ID = APP_PACKAGE + ".EXTRA_TRIGGER_ID";
 		
 	}
 	

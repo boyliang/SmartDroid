@@ -6,12 +6,14 @@ package com.ranlior.smartdroid.services;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.LocationProximityTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
 
 /**
@@ -56,6 +58,8 @@ public class SysEventHandleIntentService extends IntentService {
 			BatteryPluggedTrigger.handle(appCtx, stateExtras);
 		} else if ("android.intent.action.ACTION_POWER_DISCONNECTED".equals(action)) {
 			BatteryPluggedTrigger.handle(appCtx, stateExtras);
+		} else if ("com.ranlior.smartdroid.ACTION_LOCATION_PROXIMITY".equals(action)) {
+			LocationProximityTrigger.handle(appCtx, stateExtras);
 		}
 	}
 

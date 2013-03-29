@@ -11,6 +11,7 @@
     <!-- Permissions -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -38,6 +39,8 @@
                 <action android:name="android.intent.action.POWER_CONNECTED" />
                 <action android:name="android.intent.action.POWER_DISCONNECTED" />
                 <action android:name="android.media.RINGER_MODE_CHANGED" />
+                
+                <action android:name="com.ranlior.smartdroid.ACTION_LOCATION_PROXIMITY" />
             </intent-filter>
         </receiver>
 		

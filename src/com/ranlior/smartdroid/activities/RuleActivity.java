@@ -2,10 +2,10 @@ package com.ranlior.smartdroid.activities;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
@@ -42,6 +42,10 @@ public class RuleActivity extends SherlockListActivity {
 	        //This uses the imported MenuItem from ActionBarSherlock
 	        Log.d(TAG, "Got click: " + item.getTitle().toString());
 	        
+	        if(item.getTitle().toString().equals("Add Rule")) {
+	        	Intent intent = new Intent(this, AddRuleActivity.class);
+	        	startActivity(intent);
+	        }
 	        
 	        return true;
 	    }

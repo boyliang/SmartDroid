@@ -160,7 +160,7 @@ public class Trigger implements Comparable<Trigger> {
 	 * @param name
 	 *            the name to set
 	 */
-	protected void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -175,7 +175,7 @@ public class Trigger implements Comparable<Trigger> {
 	 * @param description
 	 *            the description to set
 	 */
-	protected void setDescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 

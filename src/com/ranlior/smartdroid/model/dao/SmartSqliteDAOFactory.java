@@ -11,7 +11,6 @@ import com.ranlior.smartdroid.model.dao.impl.sqlite.TriggerDAO;
 import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
 import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
 import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
-import com.ranlior.smartdroid.model.dto.actions.Action;
 
 /**
  * @author Ran Haveshush

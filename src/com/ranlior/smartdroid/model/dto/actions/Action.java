@@ -3,12 +3,12 @@
  */
 package com.ranlior.smartdroid.model.dto.actions;
 
+import android.content.Context;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
-
-import android.content.Context;
 
 /**
  * @author Ran Haveshush
@@ -148,7 +148,7 @@ public class Action {
 	 * @param name
 	 *            the name to set
 	 */
-	protected void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -163,7 +163,7 @@ public class Action {
 	 * @param description
 	 *            the description to set
 	 */
-	protected void setDescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 

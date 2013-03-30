@@ -23,7 +23,7 @@
 
         <!-- Activities -->
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.ranlior.smartdroid.activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,10 +33,10 @@
         </activity>
 
         <!-- Services -->
-        <service android:name=".services.SysEventHandleIntentService" />
+        <service android:name="com.ranlior.smartdroid.services.SysEventHandleIntentService" />
 
         <!-- BroadcastReceivers -->
-        <receiver android:name=".broadcastreceivers.SysEventReceiver" >
+        <receiver android:name="com.ranlior.smartdroid.broadcastreceivers.SysEventReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.ACTION_BATTERY_LOW" />
@@ -53,6 +53,11 @@
             android:name=".activities.RuleActivity"
             android:label="@string/title_activity_rule"
             android:theme="@style/Theme.Sherlock" >
+        </activity>
+        <activity
+            android:name=".activities.AddRuleActivity"
+            android:label="New Rule"
+            android:theme="@style/Theme.Sherlock"  >
         </activity>
     </application>
 

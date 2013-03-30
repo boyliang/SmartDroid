@@ -87,16 +87,6 @@ public class ModifyRingerModeAction extends Action {
 	}
 
 	/**
-	 * Minimal constractor.
-	 * 
-	 * @param context		Context the context instantiating this action
-	 * @param rule			Rule represents action's rule
-	 */
-	public ModifyRingerModeAction(Context context, Rule rule) {
-		super(context, rule, ModifyRingerModeAction.class.getSimpleName(), NAME, DESCRIPTION);
-	}
-
-	/**
 	 * Full constractor.
 	 * 
 	 * @param context		Context the context instantiating this action

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
 import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
 import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
 import com.ranlior.smartdroid.model.dto.actions.Action;
+import com.ranlior.smartdroid.model.dto.actions.ChangeWIFIStateAction;
 import com.ranlior.smartdroid.model.dto.actions.ModifyRingerModeAction;
 import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
@@ -46,10 +48,10 @@ public class MainActivity extends Activity {
 				.getFactory(SmartDAOFactory.SQLITE)
 				.getRuleDAO(appCtx);
 
-//		Rule rule1 = new Rule(appCtx, "name1", "desc1");
-//		ruleDAO.insert(rule1);
-//		Rule rule2 = new Rule(appCtx, "name2", "desc2");
-//		ruleDAO.insert(rule2);
+		Rule rule1 = new Rule(appCtx, "name1", "desc1");
+		ruleDAO.insert(rule1);
+		Rule rule2 = new Rule(appCtx, "name2", "desc2");
+		ruleDAO.insert(rule2);
 		Rule rule3 = new Rule(appCtx, "name3", "desc3");
 		ruleDAO.insert(rule3);
 
@@ -57,12 +59,11 @@ public class MainActivity extends Activity {
 		ITriggerDAO triggerDAO = SmartDAOFactory.getFactory(
 				SmartDAOFactory.SQLITE).getTriggerDAO(appCtx);
 
-//		Trigger ringerModeTrigger = new RingerModeTrigger(appCtx, rule1, AudioManager.RINGER_MODE_SILENT);
-//		triggerDAO.insert(ringerModeTrigger);
-//		
-//		Trigger bootCompletedTrigger = new BootCompletedTrigger(appCtx, rule2);
-//		triggerDAO.insert(bootCompletedTrigger);
-		Trigger locationProximityTrigger = new LocationProximityTrigger(appCtx, rule3, 32.062665, 34.862398, 500.0F, -1L);
+		Trigger ringerModeTrigger1 = new RingerModeTrigger(appCtx, rule1, AudioManager.RINGER_MODE_SILENT);
+		triggerDAO.insert(ringerModeTrigger1);
+		Trigger ringerModeTrigger2 = new RingerModeTrigger(appCtx, rule2, AudioManager.RINGER_MODE_VIBRATE);
+		triggerDAO.insert(ringerModeTrigger2);
+		Trigger locationProximityTrigger = new LocationProximityTrigger(appCtx, rule3, 32.089759, 34.848705, 100.0F, -1L);
 		triggerDAO.insert(locationProximityTrigger);
 		locationProximityTrigger.register();
 
@@ -70,16 +71,12 @@ public class MainActivity extends Activity {
 		IActionDAO actionDAO = SmartDAOFactory.getFactory(
 				SmartDAOFactory.SQLITE).getActionDAO(appCtx);
 
-//		Action modifyRingerModeAction = new ModifyRingerModeAction(appCtx, rule1, AudioManager.RINGER_MODE_NORMAL);
-//		actionDAO.insert(modifyRingerModeAction);
-//		
-//		Action notifyBootCompleted = new NotificationAction(
-//				appCtx, rule2, "Boot Completed", "Boot completed triggered",
-//				Notification.DEFAULT_ALL, Notification.FLAG_ONLY_ALERT_ONCE);
-//		actionDAO.insert(notifyBootCompleted);
-		
+		Action changeWifiState1 = new ChangeWIFIStateAction(appCtx, rule1, WifiManager.WIFI_STATE_ENABLED);
+		actionDAO.insert(changeWifiState1);
+		Action changeWifiState2 = new ChangeWIFIStateAction(appCtx, rule2, WifiManager.WIFI_STATE_DISABLED);
+		actionDAO.insert(changeWifiState2);
 		Action notifyAcPlugged = new NotificationAction(
-				appCtx, rule3, "Location Proximity", "Entered proximity",
+				appCtx, rule3, "Location Proximity", "Danielle's home",
 				Notification.DEFAULT_ALL, Notification.FLAG_ONLY_ALERT_ONCE);
 		actionDAO.insert(notifyAcPlugged);
 

@@ -48,6 +48,8 @@ public class RuleAdapter extends ArrayAdapter<Rule> {
 			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);
 			
 
+			
+			
 			convertView.setTag(holder);
 
 		} else {
@@ -57,6 +59,7 @@ public class RuleAdapter extends ArrayAdapter<Rule> {
 
 		holder.tvTitle.setText(rule.getName());
 		holder.tvDesc.setText(rule.getDescription());
+
 		
 		return convertView;
 	}

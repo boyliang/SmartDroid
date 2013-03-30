@@ -10,8 +10,8 @@ public class RuleGenerator {
 	public static List<Rule> getRules(int count) {
 		List<Rule> ruleList = new ArrayList<Rule>();
 		for (int i = 0; i < count; i++) {
-			if (i == 10) {
-				ruleList.add(new Rule(null,"Rule no ' " + i + "with long name that maby 2 rows" , "Rule Description no' "+ i + "with very long description that might be expanding the card size."));
+			if (i == 3) {
+				ruleList.add(new Rule(null,"Rule no ' " + i + " with long name that migth be 2 rows" , "Rule Description no' "+ i + "with very long description that might be expanding the card size."));
 			} else {
 				ruleList.add(new Rule(null ,"Rule no ' " + i, "Rule Description no' "+ i));
 			}

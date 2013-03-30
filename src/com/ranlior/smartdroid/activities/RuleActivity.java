@@ -4,8 +4,14 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.swipetodissmis.SwipeDismissListViewTouchListener;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RuleAdapter;

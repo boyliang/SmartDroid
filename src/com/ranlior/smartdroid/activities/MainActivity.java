@@ -1,86 +1,110 @@
 package com.ranlior.smartdroid.activities;
 
-import java.io.IOException;
-
 import android.app.Activity;
-import android.app.Notification;
-import android.app.WallpaperManager;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.AudioManager;
-import android.net.wifi.WifiManager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.Menu;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.Animator.AnimatorListener;
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.ranlior.smartdroid.R;
-import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
-import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
-import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
-import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
-import com.ranlior.smartdroid.model.dto.actions.Action;
-import com.ranlior.smartdroid.model.dto.actions.ChangeWIFIStateAction;
-import com.ranlior.smartdroid.model.dto.actions.ModifyRingerModeAction;
-import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
-import com.ranlior.smartdroid.model.dto.rules.Rule;
-import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
-import com.ranlior.smartdroid.model.dto.triggers.LocationProximityTrigger;
-import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
-import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 public class MainActivity extends Activity {
-
-	/**
-	 * Holds the logger's tag.
-	 */
-	private static final String TAG = "MainActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		Context appCtx = getApplicationContext();
-
-		// Gets the rules dao
-		IRuleDAO ruleDAO = SmartDAOFactory
-				.getFactory(SmartDAOFactory.SQLITE)
-				.getRuleDAO(appCtx);
-
-		Rule rule1 = new Rule(appCtx, "name1", "desc1");
-		ruleDAO.insert(rule1);
-		Rule rule2 = new Rule(appCtx, "name2", "desc2");
-		ruleDAO.insert(rule2);
-		Rule rule3 = new Rule(appCtx, "name3", "desc3");
-		ruleDAO.insert(rule3);
-
-		// Gets the triggers dao
-		ITriggerDAO triggerDAO = SmartDAOFactory.getFactory(
-				SmartDAOFactory.SQLITE).getTriggerDAO(appCtx);
-
-		Trigger ringerModeTrigger1 = new RingerModeTrigger(appCtx, rule1, AudioManager.RINGER_MODE_SILENT);
-		triggerDAO.insert(ringerModeTrigger1);
-		Trigger ringerModeTrigger2 = new RingerModeTrigger(appCtx, rule2, AudioManager.RINGER_MODE_VIBRATE);
-		triggerDAO.insert(ringerModeTrigger2);
-		Trigger locationProximityTrigger = new LocationProximityTrigger(appCtx, rule3, 32.089759, 34.848705, 100.0F, -1L);
-		triggerDAO.insert(locationProximityTrigger);
-		locationProximityTrigger.register();
-
-		// Gets the notification actions dao
-		IActionDAO actionDAO = SmartDAOFactory.getFactory(
-				SmartDAOFactory.SQLITE).getActionDAO(appCtx);
-
-		Action changeWifiState1 = new ChangeWIFIStateAction(appCtx, rule1, WifiManager.WIFI_STATE_ENABLED);
-		actionDAO.insert(changeWifiState1);
-		Action changeWifiState2 = new ChangeWIFIStateAction(appCtx, rule2, WifiManager.WIFI_STATE_DISABLED);
-		actionDAO.insert(changeWifiState2);
-		Action notifyAcPlugged = new NotificationAction(
-				appCtx, rule3, "Location Proximity", "Danielle's home",
-				Notification.DEFAULT_ALL, Notification.FLAG_ONLY_ALERT_ONCE);
-		actionDAO.insert(notifyAcPlugged);
-
 	}
 
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+
+		final int animationTime = 1500;
+
+		// get the width of the activity layout
+		LinearLayout layout = (LinearLayout) findViewById(R.id.llButtons);
+		int width = layout.getWidth();
+		Log.i("StartScreen", "onWindowFocusChanged width is=" + width);
+
+		// settings icon animation setup
+		final ImageView settingIcon = (ImageView) findViewById(R.id.ivSettings);
+		final ObjectAnimator settingAnim = ObjectAnimator.ofFloat(settingIcon, "rotation", 0, 360);
+		settingAnim.setDuration(animationTime);
+
+		// setting store button animation
+		final Button storeButton = (Button) findViewById(R.id.btnStore);
+		storeButton.setVisibility(View.INVISIBLE);
+		final ObjectAnimator storeButtonTran = ObjectAnimator.ofFloat(storeButton, "translationX", +width, 0).setDuration(animationTime);
+		storeButtonTran.addListener(new AnimatorListener() {
+
+			@Override
+			public void onAnimationStart(Animator arg0) {
+				final ObjectAnimator settingAnim = ObjectAnimator.ofFloat(settingIcon, "rotation", 0, -360);
+				settingAnim.setDuration(animationTime).start();
+			}
+
+			@Override
+			public void onAnimationRepeat(Animator arg0) {
+			}
+
+			@Override
+			public void onAnimationEnd(Animator arg0) {
+			}
+
+			@Override
+			public void onAnimationCancel(Animator arg0) {
+			}
+		});
+
+		// app button animation setup
+		ObjectAnimator appButtonTran = ObjectAnimator.ofFloat(findViewById(R.id.btnApp), "translationX", -width, 0).setDuration(
+				animationTime);
+		appButtonTran.addListener(new AnimatorListener() {
+
+			@Override
+			public void onAnimationStart(Animator arg0) {
+				settingAnim.start();
+			}
+
+			@Override
+			public void onAnimationRepeat(Animator arg0) {
+			}
+
+			@Override
+			public void onAnimationEnd(Animator arg0) {
+				
+				storeButton.setVisibility(View.VISIBLE);
+				storeButtonTran.start();
+			}
+
+			@Override
+			public void onAnimationCancel(Animator arg0) {
+			}
+		});
+
+		appButtonTran.start();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		findViewById(R.id.btnApp).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), RuleActivity.class);
+				startActivity(intent);
+			}
+		});
+
+	}
 
 }

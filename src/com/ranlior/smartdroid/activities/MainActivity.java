@@ -1,6 +1,5 @@
 package com.ranlior.smartdroid.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,23 +9,48 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.ranlior.smartdroid.R;
 
-public class MainActivity extends Activity {
+public class MainActivity extends SherlockActivity {
+
+	/**
+	 * Holds the logger's tag.
+	 */
+	private final static String TAG = "MainActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
+		// Logger
+		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
+
+		setTheme(com.actionbarsherlock.R.style.Theme_Sherlock);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		findViewById(R.id.btnApp).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), RuleActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 
+	// this is needed to determine the layout's width after the layout has been
+	// set
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 
+		Log.d(TAG, "onWindowFocusChanged(hasFocus)");
+		
+		// The animation time of each button to reach his place
 		final int animationTime = 1500;
 
 		// get the width of the activity layout
@@ -47,6 +71,8 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onAnimationStart(Animator arg0) {
+
+				// setting starts the settings icon rotation
 				final ObjectAnimator settingAnim = ObjectAnimator.ofFloat(settingIcon, "rotation", 0, -360);
 				settingAnim.setDuration(animationTime).start();
 			}
@@ -71,6 +97,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onAnimationStart(Animator arg0) {
+				// starting the settings icon rotation animation
 				settingAnim.start();
 			}
 
@@ -80,7 +107,8 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onAnimationEnd(Animator arg0) {
-				
+
+				// set the store button to visible and starting its animation
 				storeButton.setVisibility(View.VISIBLE);
 				storeButtonTran.start();
 			}
@@ -90,21 +118,14 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		// starting the animation which eventually trigger all other animations
 		appButtonTran.start();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		findViewById(R.id.btnApp).setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(), RuleActivity.class);
-				startActivity(intent);
-			}
-		});
-
+		Log.d(TAG, "onResume()");
 	}
 
 }

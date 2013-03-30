@@ -51,7 +51,8 @@
         <!-- ContentProviders -->
         <activity
             android:name=".activities.RuleActivity"
-            android:label="@string/title_activity_rule" >
+            android:label="@string/title_activity_rule"
+            android:theme="@style/Theme.Sherlock" >
         </activity>
     </application>
 

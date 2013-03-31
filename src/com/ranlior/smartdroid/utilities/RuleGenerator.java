@@ -13,11 +13,12 @@ public class RuleGenerator {
 		List<Rule> ruleList = new ArrayList<Rule>();
 		for (int i = 0; i < count; i++) {
 			Rule newRule = new Rule(null ,"Rule no ' " + i, "Rule Description no' "+ i);
+			ruleList.add(newRule);
 			if (i == 3) {
 				newRule.setName("Rule no ' " + i + " with long name that migth be 2 rows");
 				newRule.setDescription("Rule Description no' "+ i + "with very long description that might be expanding the card size.");
+			
 			}
-			ruleList.add(newRule);
 		}
 		return ruleList;
 	}

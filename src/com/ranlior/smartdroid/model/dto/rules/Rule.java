@@ -78,6 +78,7 @@ public class Rule {
 	@ForeignCollectionField
 	private Collection<Action> actions = null;
 
+
 	/**
 	 * Default constructor.
 	 */

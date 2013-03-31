@@ -12,6 +12,6 @@
             android:layout_height="fill_parent"
             android:divider="@null"
             android:dividerHeight="0dp"
-            android:background="@android:color/white" />
+            android:background="#202020" />
 
 </RelativeLayout>

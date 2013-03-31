@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import android.content.Context;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -23,34 +22,42 @@ import com.ranlior.smartdroid.model.dto.rules.Rule;
  * Email:  ran.haveshush.shenkar@gmail.com
  *
  */
-// FIXME: Fix this trigger can't diff between plugged states (ac, usb, wireless)
-// only diff between connected and disconnected.
-@DatabaseTable(tableName = "battery_plugged_triggers")
-public class BatteryPluggedTrigger extends Trigger {
+@DatabaseTable(tableName = "wired_headset_plugged_triggers")
+public class WiredHeadsetPluggedTrigger extends Trigger {
 
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "BatteryPluggedTrigger";
+	private static final String TAG = "WiredHeadsetPluggedTrigger";
 	
 	/**
 	 * The trigger's name. 
 	 */
-	private static final String NAME = "Battery plug state changed";
+	private static final String NAME = "Wired headset plug state";
 	
 	/**
 	 * The trigger's description.
 	 */
-	private static final String DESCRIPTION = "Trigged when the battery plug state changes (not pluged / ac plugged / usb plugged / wireless plugged)";
+	private static final String DESCRIPTION = "Trigged when wired headset plug state changes (plugged / unplugged)";
+	
+	/**
+	 * Constant represents wired headset is plugged.
+	 */
+	public static final int HEADSET_PLUGGED = 1;
+	
+	/**
+	 * Constant represents wired headset is unplugged.
+	 */
+	public static final int HEADSET_UNPLUGGED = 0;
 	
 	/*
-     * Table definition.
-     */
+	 * Table definition.
+	 */
 	
 	/**
 	 * The table name.
 	 */
-	public static final String TABLE_NAME = "battery_plugged_triggers";
+	public static final String TABLE_NAME = "wired_headset_plugged_triggers";
 	
 	/*
      * Column definitions.
@@ -71,34 +78,28 @@ public class BatteryPluggedTrigger extends Trigger {
 	/**
 	 * Holds the trigger wanted pluged state.<BR/><BR/>
 	 * 
-	 * Default: 0 means it is on battery<BR/>
-	 * BatteryManager.BATTERY_PLUGGED_AC<BR/>
-	 * BatteryManager.BATTERY_PLUGGED_USB<BR/>
-	 * BatteryManager.BATTERY_PLUGGED_WIRELESS<BR/>
-	 * 
-	 * @see android.os.BatteryManager
+	 * @see android.media.AudioManager
 	 */
-	@DatabaseField(columnName = BatteryPluggedTrigger.COLUMN_NAME_WANTED_PLUGGED_STATE, canBeNull = false)
-	private int wantedPluggedState = 0;
+	@DatabaseField(columnName = WiredHeadsetPluggedTrigger.COLUMN_NAME_WANTED_PLUGGED_STATE, canBeNull = false)
+	private int wantedPluggedState = HEADSET_PLUGGED;
 	
-
 	/**
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected BatteryPluggedTrigger() {
+	protected WiredHeadsetPluggedTrigger() {
 		super();
 	}
 
 	/**
-	 * Minimal constructor.
+	 * Full constructor.
 	 * 
 	 * @param context				Context the context instantiating this action
 	 * @param rule					Rule represents trigger's rule
-	 * @param wanedPluggedState		Integer contant represents the wanted battery plugged state
+	 * @param wantedPluggedState	Integer represents wired headset wanted plug state
 	 */
-	public BatteryPluggedTrigger(Context context, Rule rule, int wantedPluggedState) {
-		super(context, rule, BatteryPluggedTrigger.class.getSimpleName(), NAME, DESCRIPTION);
+	public WiredHeadsetPluggedTrigger(Context context, Rule rule, int wantedPluggedState) {
+		super(context, rule, WiredHeadsetPluggedTrigger.class.getSimpleName(), NAME, DESCRIPTION);
 		this.wantedPluggedState = wantedPluggedState;
 	}
 
@@ -115,23 +116,22 @@ public class BatteryPluggedTrigger extends Trigger {
 	public void setWantedPluggedState(int wantedPluggedState) {
 		this.wantedPluggedState = wantedPluggedState;
 	}
-	
+
 	public static void handle(Context appCtx, Bundle stateExtras) {
-		// Loggers
+		// Logger
 		Log.d(TAG, "handle(Context appCtx, Bundle stateExtras)");
 		
 		List<Trigger> triggers = null;
 		
-		int chargePlug = stateExtras.getInt(BatteryManager.EXTRA_PLUGGED, -1);
-		if (chargePlug == -1) {
-			return;
-		}
-		
+		int isPlugged = stateExtras.getInt("state");
+		String headsetName = stateExtras.getString("name");
+		int hasMicrophone = stateExtras.getInt("microphone");
+
 		ITriggerDAO triggerDAO = SmartDAOFactory
 				.getFactory(SmartDAOFactory.SQLITE)
 				.getTriggerDAO(appCtx);
 
-		QueryBuilder<Trigger, Long> queryBuilder = triggerDAO.queryBuilder(BatteryPluggedTrigger.class);
+		QueryBuilder<Trigger, Long> queryBuilder = triggerDAO.queryBuilder(WiredHeadsetPluggedTrigger.class);
 		
 		try {
 	       triggers = queryBuilder.query();
@@ -140,19 +140,18 @@ public class BatteryPluggedTrigger extends Trigger {
 	    }
 
 		for (Trigger trigger : triggers) {
-			BatteryPluggedTrigger batteryPluggedTrigger = (BatteryPluggedTrigger) trigger;
-			if (batteryPluggedTrigger.getWantedPluggedState() == chargePlug) {
-				batteryPluggedTrigger.setSatisfied(true);
+			WiredHeadsetPluggedTrigger wiredHeadsetPluggedTrigger = (WiredHeadsetPluggedTrigger) trigger;
+			if (isPlugged ==  wiredHeadsetPluggedTrigger.getWantedPluggedState()) {
+				wiredHeadsetPluggedTrigger.setSatisfied(true);
 			} else {
-				batteryPluggedTrigger.setSatisfied(false);
+				wiredHeadsetPluggedTrigger.setSatisfied(false);
 			}
-			triggerDAO.update(batteryPluggedTrigger);
-			Rule rule = batteryPluggedTrigger.getRule();
+			triggerDAO.update(wiredHeadsetPluggedTrigger);
+			Rule rule = wiredHeadsetPluggedTrigger.getRule();
 			if (rule.isSatisfied()) {
 				rule.setContext(appCtx);
 				rule.perform();
 			}
 		}
 	}
-
 }

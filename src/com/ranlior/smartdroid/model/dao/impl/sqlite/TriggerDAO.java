@@ -144,7 +144,7 @@ public class TriggerDAO implements ITriggerDAO {
 	@Override
 	public Trigger insert(Trigger trigger) {
 		// Logger
-		Log.d(TAG, "insert(Trigger trigger)");
+		Log.d(TAG, "insert("+trigger.getClassName()+" trigger)");
 		
 		Dao<Trigger, Long> baseTriggerDao = triggerDerivedDAOsMap.get(TRIGGER_CLASS_NAME);
 		Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, trigger.getClass());
@@ -167,7 +167,7 @@ public class TriggerDAO implements ITriggerDAO {
 	@Override
 	public void update(Trigger trigger) {
 		// Logger
-		Log.d(TAG, "update(Trigger trigger)");
+		Log.d(TAG, "update("+trigger.getClassName()+" trigger)");
 		
 		Dao<Trigger, Long> baseTriggerDao = triggerDerivedDAOsMap.get(TRIGGER_CLASS_NAME);
 		Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, trigger.getClass());
@@ -199,7 +199,7 @@ public class TriggerDAO implements ITriggerDAO {
 	@Override
 	public void delete(Trigger trigger) {
 		// Logger
-		Log.d(TAG, "delete(Trigger trigger)");
+		Log.d(TAG, "delete("+trigger.getClassName()+" trigger)");
 		
 		Dao<Trigger, Long> baseTriggerDao = triggerDerivedDAOsMap.get(TRIGGER_CLASS_NAME);
 		Dao<Trigger, Long> derivedTriggerDao = mapTriggerDao(context, trigger.getClass());

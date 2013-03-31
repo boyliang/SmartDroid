@@ -89,7 +89,7 @@ public class ChangeWIFIStateAction extends Action {
 	 * 
 	 * @param context		Context the context instantiating this action
 	 * @param rule			Rule represents action's rule
-	 * @param audioStrem	Integer represents audio stream
+	 * @param wifiState		Integer represents the wanted wifi state
 	 */
 	public ChangeWIFIStateAction(Context context, Rule rule, int wifiState) {
 		super(context, rule, ChangeWIFIStateAction.class.getSimpleName(), NAME, DESCRIPTION);

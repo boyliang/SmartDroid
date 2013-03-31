@@ -1,17 +1,13 @@
 package com.ranlior.smartdroid.activities;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.app.Notification;
-import android.app.WallpaperManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 
 import com.ranlior.smartdroid.R;
@@ -21,10 +17,8 @@ import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
 import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.actions.ChangeWIFIStateAction;
-import com.ranlior.smartdroid.model.dto.actions.ModifyRingerModeAction;
 import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
-import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.LocationProximityTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;

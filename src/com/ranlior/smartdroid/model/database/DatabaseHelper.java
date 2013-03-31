@@ -13,6 +13,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.ranlior.smartdroid.model.dto.actions.Action;
+import com.ranlior.smartdroid.model.dto.actions.ChangeBluetoothStateAction;
 import com.ranlior.smartdroid.model.dto.actions.ChangeWIFIStateAction;
 import com.ranlior.smartdroid.model.dto.actions.ModifyRingerModeAction;
 import com.ranlior.smartdroid.model.dto.actions.ModifyVolumeAction;
@@ -105,6 +106,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, SensorTrigger.class);
 			// Creates actions tables
 			TableUtils.createTable(connectionSource, Action.class);
+			TableUtils.createTable(connectionSource, ChangeBluetoothStateAction.class);
 			TableUtils.createTable(connectionSource, ChangeWIFIStateAction.class);
 			TableUtils.createTable(connectionSource, ModifyRingerModeAction.class);
 			TableUtils.createTable(connectionSource, ModifyVolumeAction.class);
@@ -134,6 +136,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, SensorTrigger.class, true);
 			// Drops actions tables
 			TableUtils.dropTable(connectionSource, Action.class, true);
+			TableUtils.dropTable(connectionSource, ChangeBluetoothStateAction.class, true);
 			TableUtils.dropTable(connectionSource, ChangeWIFIStateAction.class, true);
 			TableUtils.dropTable(connectionSource, ModifyRingerModeAction.class, true);
 			TableUtils.dropTable(connectionSource, ModifyVolumeAction.class, true);

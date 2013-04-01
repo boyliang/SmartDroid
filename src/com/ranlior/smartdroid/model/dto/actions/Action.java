@@ -3,12 +3,11 @@
  */
 package com.ranlior.smartdroid.model.dto.actions;
 
+import android.content.Context;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
-
-import android.content.Context;
 
 /**
  * @author Ran Haveshush

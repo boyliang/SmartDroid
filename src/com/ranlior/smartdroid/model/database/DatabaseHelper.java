@@ -109,6 +109,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			// Creates actions tables
 			TableUtils.createTable(connectionSource, Action.class);
 			TableUtils.createTable(connectionSource, ChangeBluetoothStateAction.class);
+			// Creates actions tables
+			TableUtils.createTable(connectionSource, Action.class);
 			TableUtils.createTable(connectionSource, ChangeWIFIStateAction.class);
 			TableUtils.createTable(connectionSource, ModifyRingerModeAction.class);
 			TableUtils.createTable(connectionSource, ModifyVolumeAction.class);
@@ -140,6 +142,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			// Drops actions tables
 			TableUtils.dropTable(connectionSource, Action.class, true);
 			TableUtils.dropTable(connectionSource, ChangeBluetoothStateAction.class, true);
+			// Drops actions tables
+			TableUtils.dropTable(connectionSource, Action.class, true);
 			TableUtils.dropTable(connectionSource, ChangeWIFIStateAction.class, true);
 			TableUtils.dropTable(connectionSource, ModifyRingerModeAction.class, true);
 			TableUtils.dropTable(connectionSource, ModifyVolumeAction.class, true);

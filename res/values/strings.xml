@@ -4,5 +4,7 @@
     <string name="app_name">SmartDroid</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_rule">RuleActivity</string>
+    <string name="title_activity_add_rule">AddRuleActivity</string>
 
 </resources>

@@ -32,6 +32,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.RuleActivity"
+            android:label="@string/title_activity_rule"
+            android:theme="@style/Theme.Sherlock" >
+        </activity>
+        <activity
+            android:name=".activities.AddRuleActivity"
+            android:label="New Rule"
+            android:theme="@style/Theme.Sherlock" >
+        </activity>
         
 		<!-- Services -->
         <service android:name=".services.SysEventHandleIntentService"/>

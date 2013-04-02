@@ -31,7 +31,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name="com.ranlior.smartdroid.activities.RuleActivity"
+            android:label="@string/title_activity_rule"
+            android:theme="@style/Theme.Sherlock" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.AddRuleActivity"
+            android:label="New Rule"
+            android:theme="@style/Theme.Sherlock" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.TriggerSelectActivity"
+            android:label="@string/title_activity_trigger_select" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.ActionSelectActivity"
+            android:label="@string/title_activity_action_select" >
+        </activity>
         <!-- Services -->
         <service android:name="com.ranlior.smartdroid.services.SysEventHandleIntentService" />
 
@@ -49,16 +66,7 @@
         </receiver>
 
         <!-- ContentProviders -->
-        <activity
-            android:name=".activities.RuleActivity"
-            android:label="@string/title_activity_rule"
-            android:theme="@style/Theme.Sherlock" >
-        </activity>
-        <activity
-            android:name=".activities.AddRuleActivity"
-            android:label="New Rule"
-            android:theme="@style/Theme.Sherlock"  >
-        </activity>
+
     </application>
 
 </manifest>

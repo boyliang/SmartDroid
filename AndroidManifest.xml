@@ -38,9 +38,13 @@
             android:theme="@style/Theme.Sherlock" >
         </activity>
         <activity
-            android:name=".activities.AddRuleActivity"
-            android:label="New Rule"
+            android:name=".activities.RuleEditorActivity"
+            android:label="Rule Editor"
             android:theme="@style/Theme.Sherlock" >
+            <intent-filter>
+                <action android:name="com.ranlior.smartdroid.ACTION_NEW_RULE" />
+                <category android:name="com.ranlior.smartdroid.ACTION_EDIT_RULE" />
+            </intent-filter>
         </activity>
         
 		<!-- Services -->

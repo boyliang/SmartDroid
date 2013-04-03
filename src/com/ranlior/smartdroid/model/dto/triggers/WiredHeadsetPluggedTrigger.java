@@ -87,7 +87,7 @@ public class WiredHeadsetPluggedTrigger extends Trigger {
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected WiredHeadsetPluggedTrigger() {
+	public WiredHeadsetPluggedTrigger() {
 		super();
 	}
 

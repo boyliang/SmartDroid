@@ -34,12 +34,12 @@ public class BatteryLevelTrigger extends Trigger {
 	/**
 	 * The trigger's name. 
 	 */
-	private static final String NAME = "Battery level state changed";
+	public static final String NAME = "Battery level state changed";
 	
 	/**
 	 * The trigger's description.
 	 */
-	private static final String DESCRIPTION = "Trigged when the battery level state changes (low / okay)";
+	public static final String DESCRIPTION = "Trigged when the battery level state changes (low / okay)";
 	
 	/**
 	 * The contant representing battary level low.
@@ -89,7 +89,7 @@ public class BatteryLevelTrigger extends Trigger {
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected BatteryLevelTrigger() {
+	public BatteryLevelTrigger() {
 		super();
 	}
 

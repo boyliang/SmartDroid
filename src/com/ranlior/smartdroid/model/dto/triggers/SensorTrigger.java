@@ -46,7 +46,7 @@ public class SensorTrigger extends Trigger {
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected SensorTrigger() {
+	public SensorTrigger() {
 		super();
 	}
 

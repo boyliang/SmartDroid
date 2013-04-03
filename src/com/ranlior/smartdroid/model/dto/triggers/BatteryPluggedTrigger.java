@@ -86,7 +86,7 @@ public class BatteryPluggedTrigger extends Trigger {
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected BatteryPluggedTrigger() {
+	public BatteryPluggedTrigger() {
 		super();
 	}
 

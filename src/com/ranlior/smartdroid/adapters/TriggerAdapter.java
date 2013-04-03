@@ -30,7 +30,6 @@ public class TriggerAdapter extends ArrayAdapter<Trigger> {
 		
 		this.context = context;
 		this.triggers = triggers;
-		
 	}
 
 	public static TriggerAdapter getInstance(Context context, int trigger_layout,  List<Trigger> triggers) {
@@ -43,6 +42,7 @@ public class TriggerAdapter extends ArrayAdapter<Trigger> {
 		return instance;
 	}
 
+	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		final ViewHolder holder;
 		final Trigger trigger = triggers.get(position);

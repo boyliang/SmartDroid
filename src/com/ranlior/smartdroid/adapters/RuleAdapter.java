@@ -35,7 +35,6 @@ public class RuleAdapter extends ArrayAdapter<Rule> {
 	}
 
 	public static RuleAdapter getInstance(Context context, int card_layout, List<Rule> ruleList) {
-		
 		Log.d(TAG, "getInstance(Context context, int card_layout, List<Rule> ruleList)");
 		
 		if (instance == null) {
@@ -44,6 +43,7 @@ public class RuleAdapter extends ArrayAdapter<Rule> {
 		return instance;
 	}
 
+	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		
 		final ViewHolder holder;
@@ -72,6 +72,5 @@ public class RuleAdapter extends ArrayAdapter<Rule> {
 		TextView tvTitle;
 		TextView tvDesc;
 	}
-
 	
 }

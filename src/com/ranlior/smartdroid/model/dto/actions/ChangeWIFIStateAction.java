@@ -80,7 +80,7 @@ public class ChangeWIFIStateAction extends Action {
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected ChangeWIFIStateAction() {
+	public ChangeWIFIStateAction() {
 		super();
 	}
 

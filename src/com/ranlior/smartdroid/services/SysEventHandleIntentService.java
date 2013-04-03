@@ -15,6 +15,7 @@ import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.LocationProximityTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.WiredHeadsetPluggedTrigger;
 
 /**
  * @author Ran Haveshush

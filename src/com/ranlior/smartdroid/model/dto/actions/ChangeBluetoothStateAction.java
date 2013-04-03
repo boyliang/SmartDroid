@@ -81,7 +81,7 @@ public class ChangeBluetoothStateAction extends Action {
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected ChangeBluetoothStateAction() {
+	public ChangeBluetoothStateAction() {
 		super();
 	}
 

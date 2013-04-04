@@ -90,7 +90,7 @@ public class BatteryLevelTrigger extends Trigger {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public BatteryLevelTrigger() {
-		super();
+		super(BatteryLevelTrigger.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

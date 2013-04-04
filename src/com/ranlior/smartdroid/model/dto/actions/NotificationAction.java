@@ -131,7 +131,7 @@ public class NotificationAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public NotificationAction() {
-		super();
+		super(NAME, DESCRIPTION);
 	}
 
 	/**

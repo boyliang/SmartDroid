@@ -141,7 +141,7 @@ public class ModifyVolumeAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public ModifyVolumeAction() {
-		super();
+		super(NAME, DESCRIPTION);
 	}
 
 	/**

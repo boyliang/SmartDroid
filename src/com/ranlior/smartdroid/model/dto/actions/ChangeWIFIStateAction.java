@@ -81,7 +81,7 @@ public class ChangeWIFIStateAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public ChangeWIFIStateAction() {
-		super();
+		super(NAME, DESCRIPTION);
 	}
 
 	/**

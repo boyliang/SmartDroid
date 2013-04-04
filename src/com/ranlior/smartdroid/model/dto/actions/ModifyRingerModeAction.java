@@ -83,7 +83,7 @@ public class ModifyRingerModeAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public ModifyRingerModeAction() {
-		super();
+		super(NAME, DESCRIPTION);
 	}
 
 	/**

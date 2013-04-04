@@ -73,7 +73,7 @@ public class StartAppAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public StartAppAction() {
-		super();
+		super(NAME, DESCRIPTION);
 	}
 
 	/**

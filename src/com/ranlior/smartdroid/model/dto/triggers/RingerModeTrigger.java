@@ -78,7 +78,7 @@ public class RingerModeTrigger extends Trigger {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public RingerModeTrigger() {
-		super();
+		super(RingerModeTrigger.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

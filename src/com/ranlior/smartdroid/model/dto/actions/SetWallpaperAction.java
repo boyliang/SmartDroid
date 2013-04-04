@@ -75,7 +75,7 @@ public class SetWallpaperAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public SetWallpaperAction() {
-		super();
+		super(NAME, DESCRIPTION);
 	}
 
 	/**

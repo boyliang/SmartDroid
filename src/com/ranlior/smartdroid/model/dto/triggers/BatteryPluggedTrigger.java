@@ -87,7 +87,7 @@ public class BatteryPluggedTrigger extends Trigger {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public BatteryPluggedTrigger() {
-		super();
+		super(BatteryPluggedTrigger.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

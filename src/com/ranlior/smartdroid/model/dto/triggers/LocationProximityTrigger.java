@@ -118,7 +118,7 @@ public class LocationProximityTrigger extends Trigger {
 	 * Default constructor. ORMLite needs a no-arg constructor.
 	 */
 	public LocationProximityTrigger() {
-		super();
+		super(LocationProximityTrigger.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

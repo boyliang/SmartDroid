@@ -72,18 +72,8 @@ public class StartAppAction extends Action {
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected StartAppAction() {
-		super();
-	}
-
-	/**
-	 * Minimal constractor.
-	 * 
-	 * @param context		Context the context instantiating this action
-	 * @param rule			Rule represents action's rule
-	 */
-	public StartAppAction(Context context, Rule rule) {
-		super(context, rule, StartAppAction.class.getSimpleName(), NAME, DESCRIPTION);
+	public StartAppAction() {
+		super(NAME, DESCRIPTION);
 	}
 
 	/**

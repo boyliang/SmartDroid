@@ -4,7 +4,6 @@
 package com.ranlior.smartdroid.model.dto.actions;
 
 import android.content.Context;
-
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.ranlior.smartdroid.config.SmartDroid;
@@ -55,12 +54,28 @@ public class Action {
 
 	
 	/**
+	 * DONT USE THIS CONSTRUCTOR:
+	 * 
 	 * Default constructor.
 	 * Ormlite require default constructor.
 	 */
 	public Action() {
 		super();
 	}
+	
+	/**
+	 * Minimal constructor.
+	 * 
+	 * @param name
+	 *            String represents action's name
+	 * @param description
+	 *            String represents action's description
+	 */
+	public Action(String name, String description) {
+		super();
+		this.name = name;
+		this.description = description;
+	} 
 
 	/**
 	 * Full constructor.
@@ -78,7 +93,7 @@ public class Action {
 		this.name = name;
 		this.description = description;
 	}
-	
+
 	/**
 	 * @return the context
 	 */
@@ -145,26 +160,10 @@ public class Action {
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
 	 * @return the description
 	 */
 	public String getDescription() {
 		return description;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	/**

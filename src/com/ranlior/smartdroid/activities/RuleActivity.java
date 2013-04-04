@@ -43,7 +43,7 @@ public class RuleActivity extends SherlockListActivity {
 	        Log.d(TAG, "Got click: " + item.getTitle().toString());
 	        
 	        if(item.getTitle().toString().equals("Add Rule")) {
-	        	Intent intent = new Intent(this, AddRuleActivity.class);
+	        	Intent intent = new Intent(this, RuleEditorActivity.class);
 	        	startActivity(intent);
 	        }
 	        

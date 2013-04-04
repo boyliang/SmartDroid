@@ -140,18 +140,8 @@ public class ModifyVolumeAction extends Action {
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected ModifyVolumeAction() {
-		super();
-	}
-
-	/**
-	 * Minimal constractor.
-	 * 
-	 * @param context		Context the context instantiating this action
-	 * @param rule			Rule represents action's rule
-	 */
-	public ModifyVolumeAction(Context context, Rule rule) {
-		super(context, rule, ModifyVolumeAction.class.getSimpleName(), NAME, DESCRIPTION);
+	public ModifyVolumeAction() {
+		super(NAME, DESCRIPTION);
 	}
 
 	/**

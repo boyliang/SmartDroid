@@ -11,8 +11,7 @@ import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
- * @author Ran Haveshush
- * Email: ran.haveshush.shenkar@gmail.com
+ * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
  * 
  */
 @DatabaseTable(tableName = "triggers")
@@ -34,11 +33,11 @@ public class Trigger implements Comparable<Trigger> {
 	 */
 	@DatabaseField(columnName = SmartDroid.Triggers.COLUMN_NAME_ID, generatedId = true, allowGeneratedIdInsert = true)
 	private Long id = null;
-	
+
 	/**
 	 * Holds the trigger's class name.
 	 */
-	@DatabaseField(columnName = SmartDroid.Triggers.COLUMN_NAME_CLASS_NAME, canBeNull = false)	
+	@DatabaseField(columnName = SmartDroid.Triggers.COLUMN_NAME_CLASS_NAME, canBeNull = false)
 	private String className = null;
 
 	/**
@@ -58,14 +57,31 @@ public class Trigger implements Comparable<Trigger> {
 	 */
 	@DatabaseField(columnName = SmartDroid.Triggers.COLUMN_NAME_IS_SATISFIED, canBeNull = false)
 	private boolean isSatisfied = false;
-	
-	
+
 	/**
-	 * Default constructor.
-	 * Ormlite require default constructor.
+	 * DONT USE THIS CONSTRUCTOR:
+	 * 
+	 * Default constructor. Ormlite require default constructor.
 	 */
 	public Trigger() {
 		super();
+	}
+
+	/**
+	 * Minimal constructor.
+	 * 
+	 * @param className
+	 *            String represents trigger's class name
+	 * @param name
+	 *            String represents trigger's name
+	 * @param description
+	 *            String represents trigger's description
+	 */
+	public Trigger(String className, String name, String description) {
+		super();
+		this.className = className;
+		this.name = name;
+		this.description = description;
 	}
 
 	/**
@@ -76,7 +92,7 @@ public class Trigger implements Comparable<Trigger> {
 	 * @param rule
 	 *            Rule represents trigger's rule
 	 * @param className
-	 * 			  String represents trigger's class name
+	 *            String represents trigger's class name
 	 * @param name
 	 *            String represents trigger's name
 	 * @param description
@@ -99,7 +115,8 @@ public class Trigger implements Comparable<Trigger> {
 	}
 
 	/**
-	 * @param context the context to set
+	 * @param context
+	 *            the context to set
 	 */
 	public void setContext(Context context) {
 		this.context = context;
@@ -134,7 +151,7 @@ public class Trigger implements Comparable<Trigger> {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	/**
 	 * @return the className
 	 */
@@ -143,7 +160,8 @@ public class Trigger implements Comparable<Trigger> {
 	}
 
 	/**
-	 * @param className the className to set
+	 * @param className
+	 *            the className to set
 	 */
 	public void setClassName(String className) {
 		this.className = className;
@@ -157,26 +175,10 @@ public class Trigger implements Comparable<Trigger> {
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
 	 * @return the description
 	 */
 	public String getDescription() {
 		return description;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	/**
@@ -199,14 +201,18 @@ public class Trigger implements Comparable<Trigger> {
 	 * implemenet this method. This is where the trigger registration logic
 	 * implementation.
 	 */
-	public void register() {}
-	
+	public void register() {
+	}
+
 	/**
 	 * 
 	 */
-	public void unregister() {}
+	public void unregister() {
+	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override

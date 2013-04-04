@@ -15,7 +15,6 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.ranlior.smartdroid.R;
 
 public class MainActivity extends SherlockActivity {

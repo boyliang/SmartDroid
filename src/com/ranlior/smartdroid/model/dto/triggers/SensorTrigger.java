@@ -26,6 +26,16 @@ public class SensorTrigger extends Trigger {
 	 * Holds the logger's tag.
 	 */
 	private static final String TAG = "SensorTrigger";
+
+	/**
+	 * The trigger's name. 
+	 */
+	private static final String NAME = "Sensor trigger";
+
+	/**
+	 * The trigger's description. 
+	 */
+	private static final String DESCRIPTION = "Triggred when the sensor state is satisfied";
 	
 	/**
 	 * Holds the sensor manager.
@@ -46,8 +56,8 @@ public class SensorTrigger extends Trigger {
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected SensorTrigger() {
-		super();
+	public SensorTrigger() {
+		super(SensorTrigger.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

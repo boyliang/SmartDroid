@@ -42,7 +42,7 @@ public class TriggerSelectActivity extends ListActivity {
 			triggers.add(new Trigger(null, null, null, TRIGGERS[i], DESCRIPTIONS[i]));
 		}
 		
-		setListAdapter(TriggerAdapter.getInstance(this, R.layout.trigger_item, triggers));
+		setListAdapter(new TriggerAdapter(this, R.layout.trigger_item, triggers));
 	}
 	
 	@Override

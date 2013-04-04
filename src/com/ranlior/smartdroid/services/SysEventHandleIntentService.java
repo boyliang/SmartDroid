@@ -15,6 +15,7 @@ import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.LocationProximityTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.WiredHeadsetPluggedTrigger;
 
 /**
  * @author Ran Haveshush
@@ -66,6 +67,8 @@ public class SysEventHandleIntentService extends IntentService {
 			BatteryPluggedTrigger.handle(appCtx, stateExtras);
 		} else if ("com.ranlior.smartdroid.ACTION_LOCATION_PROXIMITY".equals(action)) {
 			LocationProximityTrigger.handle(appCtx, stateExtras);
+		} else if ("android.intent.action.HEADSET_PLUG".equals(action)) {
+			WiredHeadsetPluggedTrigger.handle(appCtx, stateExtras);
 		}
 	}
 

@@ -43,9 +43,9 @@ public class RuleGenerator {
 		for (int i = 0; i < count; i++) {
 			Action newAction = new Action(null, new Rule(null, "", ""), "Rule no ' " + i, "Rule Description no' " + i, "type");
 			if (i == 3) {
-				newAction.setName("Trigger no ' " + i + " with long name that migth be 2 rows");
-				newAction.setDescription("Trigger Description no' " + i
-						+ "with very long description that might be expanding the card size.");
+				newAction.setClassName("Trigger no ' " + i + " with long name that migth be 2 rows");
+//				newAction.setDescription("Trigger Description no' " + i
+//						+ "with very long description that might be expanding the card size.");
 			}
 			ActionList.add(newAction);
 		}

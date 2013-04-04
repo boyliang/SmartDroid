@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
@@ -13,12 +12,12 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.ranlior.smartdroid.R;
-import com.ranlior.smartdroid.adapters.AddRuleFragmentAdapter;
-import com.ranlior.smartdroid.fragments.SimpleListFragment;
+import com.ranlior.smartdroid.adapters.RuleEditorFragmentAdapter;
+import com.ranlior.smartdroid.fragments.FragmentGenerator;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class AddRuleActivity extends SherlockFragmentActivity {
+public class RuleEditorActivity extends SherlockFragmentActivity {
 
 	/**
 	 * The logger's tag.
@@ -29,7 +28,7 @@ public class AddRuleActivity extends SherlockFragmentActivity {
 	 * 
 	 * Holds the adapter that create pages of lists
 	 */
-	private AddRuleFragmentAdapter mAdapter;
+	private RuleEditorFragmentAdapter mAdapter;
 
 	/**
 	 * holds the ViewPgaer
@@ -61,7 +60,7 @@ public class AddRuleActivity extends SherlockFragmentActivity {
 
 		setContentView(R.layout.activity_add_rule);
 
-		mAdapter = new AddRuleFragmentAdapter(getSupportFragmentManager());
+		mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager());
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPager.setAdapter(mAdapter);
@@ -70,12 +69,14 @@ public class AddRuleActivity extends SherlockFragmentActivity {
 		mIndicator.setViewPager(mPager);
 
 		pagePosition = 0;
-
+		
+		
+		
 		mIndicator.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
 			public void onPageSelected(int position) {
-				Toast.makeText(AddRuleActivity.this, "Changed to page " + position, Toast.LENGTH_SHORT).show();
+				Toast.makeText(RuleEditorActivity.this, "Changed to page " + position, Toast.LENGTH_SHORT).show();
 				pagePosition = position;
 				
 			}
@@ -99,6 +100,8 @@ public class AddRuleActivity extends SherlockFragmentActivity {
 			if(requestCode == SELECT_TRIGGER_REQUEST_CODE) {
 				Log.i(TAG, "the user selected: " + data.getStringExtra("triggerName"));
 				triggerStrings.add( data.getStringExtra("triggerName"));
+				FragmentGenerator triggerPage = (FragmentGenerator)getSupportFragmentManager().findFragmentByTag("android:switcher:"+R.id.pager+":0");
+				triggerPage.addTrigger(data.getStringExtra("triggerName"));
 				
 			}
 		} else {

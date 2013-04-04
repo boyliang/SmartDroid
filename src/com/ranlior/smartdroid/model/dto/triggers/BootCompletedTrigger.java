@@ -52,8 +52,8 @@ public class BootCompletedTrigger extends Trigger {
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected BootCompletedTrigger() {
-		super();
+	public BootCompletedTrigger() {
+		super(BootCompletedTrigger.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

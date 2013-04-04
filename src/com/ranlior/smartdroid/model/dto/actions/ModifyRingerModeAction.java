@@ -82,8 +82,8 @@ public class ModifyRingerModeAction extends Action {
 	 * Default constructor.
 	 * ORMLite needs a no-arg constructor.
 	 */
-	protected ModifyRingerModeAction() {
-		super();
+	public ModifyRingerModeAction() {
+		super(NAME, DESCRIPTION);
 	}
 
 	/**

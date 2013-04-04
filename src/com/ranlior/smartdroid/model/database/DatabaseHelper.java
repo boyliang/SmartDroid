@@ -13,6 +13,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.ranlior.smartdroid.model.dto.actions.Action;
+import com.ranlior.smartdroid.model.dto.actions.ChangeBluetoothStateAction;
 import com.ranlior.smartdroid.model.dto.actions.ChangeWIFIStateAction;
 import com.ranlior.smartdroid.model.dto.actions.ModifyRingerModeAction;
 import com.ranlior.smartdroid.model.dto.actions.ModifyVolumeAction;
@@ -27,6 +28,7 @@ import com.ranlior.smartdroid.model.dto.triggers.LocationProximityTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.SensorTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
+import com.ranlior.smartdroid.model.dto.triggers.WiredHeadsetPluggedTrigger;
 
 /**
  * @author Ran Haveshush
@@ -103,6 +105,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, LocationProximityTrigger.class);
 			TableUtils.createTable(connectionSource, RingerModeTrigger.class);
 			TableUtils.createTable(connectionSource, SensorTrigger.class);
+			TableUtils.createTable(connectionSource, WiredHeadsetPluggedTrigger.class);
+			// Creates actions tables
+			TableUtils.createTable(connectionSource, Action.class);
+			TableUtils.createTable(connectionSource, ChangeBluetoothStateAction.class);
 			// Creates actions tables
 			TableUtils.createTable(connectionSource, Action.class);
 			TableUtils.createTable(connectionSource, ChangeWIFIStateAction.class);
@@ -132,6 +138,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, LocationProximityTrigger.class, true);
 			TableUtils.dropTable(connectionSource, RingerModeTrigger.class, true);
 			TableUtils.dropTable(connectionSource, SensorTrigger.class, true);
+			TableUtils.dropTable(connectionSource, WiredHeadsetPluggedTrigger.class, true);
+			// Drops actions tables
+			TableUtils.dropTable(connectionSource, Action.class, true);
+			TableUtils.dropTable(connectionSource, ChangeBluetoothStateAction.class, true);
 			// Drops actions tables
 			TableUtils.dropTable(connectionSource, Action.class, true);
 			TableUtils.dropTable(connectionSource, ChangeWIFIStateAction.class, true);

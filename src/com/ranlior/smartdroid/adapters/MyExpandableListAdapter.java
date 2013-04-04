@@ -1,4 +1,4 @@
-package com.ranlior.smartdroid.sandbox;
+package com.ranlior.smartdroid.adapters;
 
 import java.util.List;
 

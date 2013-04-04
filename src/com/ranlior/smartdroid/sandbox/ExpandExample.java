@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.adapters.MyExpandableListAdapter;
 import com.ranlior.smartdroid.utilities.RuleGenerator;
 
 public class ExpandExample extends Activity {
@@ -28,6 +29,7 @@ public class ExpandExample extends Activity {
 		adapter = new MyExpandableListAdapter(this, RuleGenerator.getTriggers(3));
 		list.setAdapter(adapter);
 		list.setGroupIndicator(null);
+		
 		
 	}
 

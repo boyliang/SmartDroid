@@ -3,7 +3,28 @@
  */
 package com.ranlior.smartdroid.config;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import android.provider.BaseColumns;
+
+import com.ranlior.smartdroid.model.dto.actions.ChangeBluetoothStateAction;
+import com.ranlior.smartdroid.model.dto.actions.ChangeWIFIStateAction;
+import com.ranlior.smartdroid.model.dto.actions.ModifyRingerModeAction;
+import com.ranlior.smartdroid.model.dto.actions.ModifyVolumeAction;
+import com.ranlior.smartdroid.model.dto.actions.NotificationAction;
+import com.ranlior.smartdroid.model.dto.actions.SetWallpaperAction;
+import com.ranlior.smartdroid.model.dto.actions.StartAppAction;
+import com.ranlior.smartdroid.model.dto.triggers.BatteryLevelTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.LocationProximityTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.SensorTrigger;
+import com.ranlior.smartdroid.model.dto.triggers.Trigger;
+import com.ranlior.smartdroid.model.dto.triggers.WiredHeadsetPluggedTrigger;
+
 
 /**
  * @author Ran Haveshush
@@ -57,6 +78,15 @@ public final class SmartDroid {
 		 */
 		public static final String ACTION_LOCATION_PROXIMITY = APP_PACKAGE + ".ACTION_LOCATION_PROXIMITY";
 		
+		/**
+		 * Action to add new rule.
+		 */
+		public static final String ACTION_NEW_RULE = APP_PACKAGE + ".ACTION_NEW_RULE";
+		
+		/**
+		 * Action to edit existing rule.
+		 */
+		public static final String ACTION_EDIT_RULE = APP_PACKAGE + ".ACTION_EDIT_RULE";
 	}
 	
 	/**
@@ -319,6 +349,20 @@ public final class SmartDroid {
 		 * <P>Type: INTEGER</P>
 		 */
 		public static final int COLUMN_VALUE_TRUE = 1;
+		
+		/**
+		 * Maps all concrette derived triggers.
+		 */
+		// TODO: list new concrette derived trigger's classes here
+		public static final List<Trigger> LIST = new ArrayList<Trigger>(Arrays.asList(
+			new BatteryLevelTrigger(),
+			new BatteryPluggedTrigger(),
+			new BootCompletedTrigger(),
+			new LocationProximityTrigger(),
+			new RingerModeTrigger(),
+			new SensorTrigger(),
+			new WiredHeadsetPluggedTrigger()
+		));
         
 	}
 	
@@ -388,6 +432,21 @@ public final class SmartDroid {
 		 * <P>Constraint: NOT NULL</p>
 		 */
 		public static final String COLUMN_NAME_RULE_ID = "rule_id";
+		
+		/**
+		 * Maps all concrette derived actions.
+		 */
+		// TODO: list new concrette derived action's classes here
+		public static final List<com.ranlior.smartdroid.model.dto.actions.Action> LIST = 
+			new ArrayList<com.ranlior.smartdroid.model.dto.actions.Action>(Arrays.asList(
+				new ChangeBluetoothStateAction(),
+				new ChangeWIFIStateAction(),
+				new ModifyRingerModeAction(),
+				new ModifyVolumeAction(),
+				new NotificationAction(),
+				new SetWallpaperAction(),
+				new StartAppAction()
+			));
         
 	}
 

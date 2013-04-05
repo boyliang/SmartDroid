@@ -3,11 +3,13 @@ package com.ranlior.smartdroid.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import com.ranlior.smartdroid.fragments.EditorFragmentFactory;
+
+import com.ranlior.smartdroid.fragments.ActionEditorFragment;
+import com.ranlior.smartdroid.fragments.TriggerEditorFragment;
 
 public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 	
-	private static final String TAG = "RuleEditorFragmentAdapter";
+	private static final String TAG = RuleEditorFragmentAdapter.class.getSimpleName();
 	
     protected static final String[] CONTENT = new String[] { "Triggers", "Actions", "Rule" };
 
@@ -19,7 +21,14 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return EditorFragmentFactory.newInstance(CONTENT[position % CONTENT.length]);
+    	switch (position) {
+		case 0:
+			return new TriggerEditorFragment();
+		case 1:
+			return new ActionEditorFragment();
+		default:
+			return null;
+		}
     }
 
     @Override

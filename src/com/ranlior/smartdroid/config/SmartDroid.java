@@ -121,6 +121,20 @@ public final class SmartDroid {
 		 * <P>Type: INTEGER</P>
 		 */
 		public static final String EXTRA_BATTERY_LEVEL = APP_PACKAGE + ".EXTRA_BATTERY_LEVEL";
+
+		/**
+		 * Extra key for trigger class name.
+		 *  
+		 * <P>Type: String</P>
+		 */
+		public static final String EXTRA_TRIGGER_CLASS_NAME = "triggerClassName";
+		
+		/**
+		 * Extra key for action class name.
+		 *  
+		 * <P>Type: String</P>
+		 */
+		public static final String EXTRA_ACTION_CLASS_NAME = "actionClassName";
 		
 	}
 	

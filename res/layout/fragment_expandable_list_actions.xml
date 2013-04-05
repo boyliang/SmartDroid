@@ -7,10 +7,12 @@
     android:background="#DDDDDD">
 
     <ExpandableListView
-        android:id="@+id/expandableListView1"
+        android:id="@+id/expandableListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:childDivider="#00000000"
-        android:divider="#00000000" />
+        android:divider="#00000000"
+        android:groupIndicator="@null"
+        android:childDivider="@null"
+        android:childIndicator="@null" />
    
 </LinearLayout>

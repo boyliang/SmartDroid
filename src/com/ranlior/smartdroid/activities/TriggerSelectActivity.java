@@ -37,7 +37,7 @@ public class TriggerSelectActivity extends ListActivity {
 
 		Intent resIntent = new Intent();
 
-		resIntent.putExtra("triggerName", SmartDroid.Triggers.LIST.get(position).getClassName());
+		resIntent.putExtra(SmartDroid.Extra.EXTRA_TRIGGER_CLASS_NAME, SmartDroid.Triggers.LIST.get(position).getClassName());
 
 		setResult(RESULT_OK, resIntent);
 		finish();

@@ -13,17 +13,17 @@ import android.widget.TextView;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 
-public class ActionAdapter extends ArrayAdapter<Action> {
+public class SelectActionAdapter extends ArrayAdapter<Action> {
 
 	private static final String TAG = "ActionAdapter";
 	
-	private static ActionAdapter instance = null;
+	private static SelectActionAdapter instance = null;
 
 	private List<Action> actions;
 	
-	Context context;
+	private Context context;
 
-	private ActionAdapter(Context context, int trigger_layout,  List<Action> actions) {
+	private SelectActionAdapter(Context context, int trigger_layout,  List<Action> actions) {
 		super(context, trigger_layout, actions);
 		
 		Log.d(TAG, "constructor");
@@ -33,12 +33,12 @@ public class ActionAdapter extends ArrayAdapter<Action> {
 		
 	}
 
-	public static ActionAdapter getInstance(Context context, int action_layout,  List<Action> actions) {
+	public static SelectActionAdapter getInstance(Context context, int action_layout,  List<Action> actions) {
 		
 		Log.d(TAG, "getInstance(Context context, int action_layout, List<Rule> actions)");
 		
 		if (instance == null) {
-			instance = new ActionAdapter(context, action_layout, actions);
+			instance = new SelectActionAdapter(context, action_layout, actions);
 		}
 		return instance;
 	}

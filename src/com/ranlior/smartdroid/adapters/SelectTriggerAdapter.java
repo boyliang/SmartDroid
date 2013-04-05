@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
-public class TriggerAdapter extends ArrayAdapter<Trigger> {
+public class SelectTriggerAdapter extends ArrayAdapter<Trigger> {
 
 	private static final String TAG = "TriggerAdapter";
 	
@@ -31,7 +31,7 @@ public class TriggerAdapter extends ArrayAdapter<Trigger> {
 	 * @param trigger_layout
 	 * @param triggers
 	 */
-	public TriggerAdapter(Context context, int trigger_layout,  List<Trigger> triggers) {
+	public SelectTriggerAdapter(Context context, int trigger_layout,  List<Trigger> triggers) {
 		super(context, trigger_layout, triggers);
 		
 		Log.d(TAG, "TriggerAdapter(Context context, int trigger_layout,  List<Trigger> triggers)");

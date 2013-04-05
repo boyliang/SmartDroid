@@ -19,7 +19,7 @@ import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.ActionSelectActivity;
 import com.ranlior.smartdroid.activities.RuleEditorActivity;
 import com.ranlior.smartdroid.activities.TriggerSelectActivity;
-import com.ranlior.smartdroid.adapters.MyExpandableListAdapter;
+import com.ranlior.smartdroid.adapters.ExpandableTrigerListAdapter;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 import com.ranlior.smartdroid.utilities.RuleGenerator;
 
@@ -31,7 +31,7 @@ public final class FragmentGenerator extends SherlockFragment {
 
 	private ExpandableListView lvSimple;
 
-	private MyExpandableListAdapter adaper;
+	private ExpandableTrigerListAdapter adaper;
 
 	private static List<Trigger> triggers;
 
@@ -109,7 +109,7 @@ public final class FragmentGenerator extends SherlockFragment {
 			linearLayout = (LinearLayout) inflater.inflate(R.layout.activity_expand_example, null);
 
 			lvSimple = (ExpandableListView) linearLayout.findViewById(R.id.expandableListView1);
-			adaper = new MyExpandableListAdapter(getActivity(), triggers);
+			adaper = new ExpandableTrigerListAdapter(getActivity(), triggers);
 			lvSimple.setAdapter(adaper);
 			lvSimple.setGroupIndicator(null);
 			lvSimple.setChildDivider(null);

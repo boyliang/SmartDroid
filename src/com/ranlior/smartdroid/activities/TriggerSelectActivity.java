@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.ranlior.smartdroid.R;
-import com.ranlior.smartdroid.adapters.TriggerAdapter;
+import com.ranlior.smartdroid.adapters.SelectTriggerAdapter;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 public class TriggerSelectActivity extends ListActivity {
@@ -42,7 +42,7 @@ public class TriggerSelectActivity extends ListActivity {
 			triggers.add(new Trigger(null, null, null, TRIGGERS[i], DESCRIPTIONS[i]));
 		}
 		
-		setListAdapter(new TriggerAdapter(this, R.layout.trigger_item, triggers));
+		setListAdapter(new SelectTriggerAdapter(this, R.layout.trigger_item, triggers));
 	}
 	
 	@Override

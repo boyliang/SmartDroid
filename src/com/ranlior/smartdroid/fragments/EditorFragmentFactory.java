@@ -19,35 +19,60 @@ import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.ActionSelectActivity;
 import com.ranlior.smartdroid.activities.RuleEditorActivity;
 import com.ranlior.smartdroid.activities.TriggerSelectActivity;
+import com.ranlior.smartdroid.adapters.ExpandableActionListAdapter;
 import com.ranlior.smartdroid.adapters.ExpandableTrigerListAdapter;
+import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
-import com.ranlior.smartdroid.utilities.RuleGenerator;
+import com.ranlior.smartdroid.utilities.TriggerFactory;
 
-public final class FragmentGenerator extends SherlockFragment {
+public final class EditorFragmentFactory extends SherlockFragment {
 
 	private static final String TAG = "SimpleListFragment";
-
-	private String content;
+	
+	private static final String KEY_CONTENT = "content";
 
 	private ExpandableListView lvSimple;
 
-	private ExpandableTrigerListAdapter adaper;
+	private ExpandableTrigerListAdapter expandableTriggerAdaper;
+	private ExpandableActionListAdapter expandableActionAdaper;
 
 	private static List<Trigger> triggers;
+	
+	private ReciveData hostingActiviity = (ReciveData)getActivity();
 
-	public static FragmentGenerator newInstance(String content) {
-
-		if (triggers == null) {
-			triggers = RuleGenerator.getTriggers(3);
-		}
+	public static EditorFragmentFactory newInstance(String content) {
 
 		Log.d(TAG, "newInstance(String content)");
 
-		FragmentGenerator fragment = new FragmentGenerator();
-
-		fragment.content = content;
+		EditorFragmentFactory fragment = new EditorFragmentFactory();
+		
+		Bundle args = new Bundle();
+		args.putString(KEY_CONTENT, content);
+		
+		fragment.setArguments(args);
 
 		return fragment;
+	}
+	
+	/**
+	 * hosting activity must implement that interface 
+	 * 
+	 * @author lior ginsberg
+	 *
+	 */
+	public interface ReciveData {
+		
+		/**
+		 * 
+		 * @return the list of triggers from hosing activity
+		 */
+		public List<Trigger> getTriggers();
+		
+		/**
+		 * 
+		 * @return the list of actions from hosting activity
+		 */
+		public List<Action> getActions();
 	}
 
 	@Override
@@ -63,11 +88,11 @@ public final class FragmentGenerator extends SherlockFragment {
 		super.onCreateOptionsMenu(menu, inflater);
 		Log.d(TAG, "onCreateOptionsMenu(Menu menu, MenuInflater inflater)");
 
-		if ("Triggers".equals(content)) {
+		if ("Triggers".equals(getArguments().get(KEY_CONTENT))) {
 			inflater.inflate(R.menu.trigger_list_menu, menu);
-		} else if ("Actions".equals(content)) {
+		} else if ("Actions".equals(getArguments().get(KEY_CONTENT))) {
 			inflater.inflate(R.menu.action_list_menu, menu);
-		} else if ("Rule".equals(content)) {
+		} else if ("Rule".equals(getArguments().get(KEY_CONTENT))) {
 			menu.clear();
 		}
 	}
@@ -105,44 +130,46 @@ public final class FragmentGenerator extends SherlockFragment {
 
 		LinearLayout linearLayout = null;
 
-		if (content.equals("Triggers")) {
+		
+		
+		if ("Triggers".equals(getArguments().get(KEY_CONTENT))) {
 			linearLayout = (LinearLayout) inflater.inflate(R.layout.activity_expand_example, null);
-
 			lvSimple = (ExpandableListView) linearLayout.findViewById(R.id.expandableListView1);
-			adaper = new ExpandableTrigerListAdapter(getActivity(), triggers);
-			lvSimple.setAdapter(adaper);
+			expandableTriggerAdaper = new ExpandableTrigerListAdapter(getActivity(), hostingActiviity.getTriggers());
+			lvSimple.setAdapter(expandableTriggerAdaper);
 			lvSimple.setGroupIndicator(null);
 			lvSimple.setChildDivider(null);
 			lvSimple.setChildIndicator(null);
 
-		} else if (content.equals("Actions")) {
-			linearLayout = (LinearLayout) inflater.inflate(R.layout.list_fragment_page, null);
+		} else if ("Actions".equals(getArguments().get(KEY_CONTENT))) {
+			linearLayout = (LinearLayout) inflater.inflate(R.layout.activity_expand_example, null);
+			lvSimple = (ExpandableListView) linearLayout.findViewById(R.id.expandableListView1);
+			expandableActionAdaper = new ExpandableActionListAdapter(getActivity(), hostingActiviity.getActions());
+			lvSimple.setAdapter(expandableActionAdaper);
+			lvSimple.setGroupIndicator(null);
+			lvSimple.setChildDivider(null);
+			lvSimple.setChildIndicator(null);
 
-			// lvSimple = (ListView) linearLayout.findViewById(R.id.lvSimple);
-			// lvSimple.setAdapter(ActionAdapter.getInstance(getActivity(),
-			// R.layout.action_item, RuleGenerator.getActions(2)));
-
-		} else if (content.equals("Rule")) {
+		} else if ("Rule".equals(getArguments().get(KEY_CONTENT))) {
 			linearLayout = (LinearLayout) inflater.inflate(R.layout.rule_fragment_details, null);
-
 		}
 
 		return linearLayout;
 	}
 
 	// the activity call it after onActivityResult
-	public void addTrigger(String stringExtra) {
+	public void triggerAddedEvent(String triggerClassName) {
 
-		triggers.addAll(RuleGenerator.getTriggers(3));
+		triggers.add(TriggerFactory.getTriggrByTypeName(triggerClassName));
 
-		adaper.notifyDataSetChanged();
+		expandableTriggerAdaper.notifyDataSetChanged();
 		lvSimple.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				lvSimple.setSelection(adaper.getGroupCount() - 1);
+				lvSimple.setSelection(expandableTriggerAdaper.getGroupCount() - 1);
 			}
 		}, 100L);
-		lvSimple.expandGroup(adaper.getGroupCount() - 1);
+		lvSimple.expandGroup(expandableTriggerAdaper.getGroupCount() - 1);
 
 	}
 

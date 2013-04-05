@@ -11,22 +11,23 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RuleEditorFragmentAdapter;
-import com.ranlior.smartdroid.fragments.FragmentGenerator;
+import com.ranlior.smartdroid.fragments.EditorFragmentFactory;
+import com.ranlior.smartdroid.fragments.EditorFragmentFactory.ReciveData;
+import com.ranlior.smartdroid.model.dto.actions.Action;
+import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class RuleEditorActivity extends SherlockFragmentActivity {
+public class RuleEditorActivity extends SherlockFragmentActivity implements ReciveData{
 
 	/**
 	 * The logger's tag.
 	 */
 	private static final String TAG = "AddRuleActivity";
 
-	/**menu
-	 * 
+	/**
 	 * Holds the adapter that create pages of lists
 	 */
 	private RuleEditorFragmentAdapter mAdapter;
@@ -52,15 +53,27 @@ public class RuleEditorActivity extends SherlockFragmentActivity {
 	//ONLY MOCKUP
 	public static List<String> triggerStrings = new ArrayList<String>();
 	
+	/**
+	 * Holds list of trigger associate with that activity
+	 */
+	private List<Trigger> triggers;
+
+	/**
+	 * Holds list of actions associate with that activity
+	 */
+	private List<Action> actions;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		Log.d(TAG, "onCreate(Bundle savedInstanceState) ");
-
 		setContentView(R.layout.activity_add_rule);
-
+		
+		
+		//TODO in case of editing action those list will be fetched base on the rule id that passed
+		triggers = new ArrayList<Trigger>();
+		actions = new ArrayList<Action>();
+	
 		mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager());
 
 		mPager = (ViewPager) findViewById(R.id.pager);
@@ -70,9 +83,7 @@ public class RuleEditorActivity extends SherlockFragmentActivity {
 		mIndicator.setViewPager(mPager);
 
 		pagePosition = 0;
-		
-		
-		
+
 		mIndicator.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
@@ -101,13 +112,23 @@ public class RuleEditorActivity extends SherlockFragmentActivity {
 			if(requestCode == SELECT_TRIGGER_REQUEST_CODE) {
 				Log.i(TAG, "the user selected: " + data.getStringExtra("triggerName"));
 				triggerStrings.add( data.getStringExtra("triggerName"));
-				FragmentGenerator triggerPage = (FragmentGenerator)getSupportFragmentManager().findFragmentByTag("android:switcher:"+R.id.pager+":0");
-				triggerPage.addTrigger(data.getStringExtra("triggerName"));
+				EditorFragmentFactory triggerPage = (EditorFragmentFactory)getSupportFragmentManager().findFragmentByTag("android:switcher:"+R.id.pager+":0");
+				triggerPage.triggerAddedEvent(data.getStringExtra("triggerName"));
 				
 			}
 		} else {
 			Log.e(TAG, "there is a problem returning data from " + (requestCode == SELECT_TRIGGER_REQUEST_CODE ?  "SelectTriggerActivity" : "SelectActionActivity"));
 		}
+	}
+	
+	@Override
+	public List<Trigger> getTriggers() {
+		return triggers;
+	}
+
+	@Override
+	public List<Action> getActions() {
+		return actions;
 	}
 	
 }

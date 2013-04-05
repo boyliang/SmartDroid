@@ -3,9 +3,8 @@ package com.ranlior.smartdroid.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.Watson.OnCreateOptionsMenuListener;
 
-import com.ranlior.smartdroid.fragments.FragmentGenerator;
+import com.ranlior.smartdroid.fragments.EditorFragmentFactory;
 
 public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 	
@@ -21,7 +20,7 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return FragmentGenerator.newInstance(CONTENT[position % CONTENT.length]);
+        return EditorFragmentFactory.newInstance(CONTENT[position % CONTENT.length]);
     }
 
     @Override

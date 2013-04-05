@@ -3,6 +3,7 @@ package com.ranlior.smartdroid.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.Watson.OnCreateOptionsMenuListener;
 
 import com.ranlior.smartdroid.fragments.FragmentGenerator;
 
@@ -32,5 +33,6 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
       return RuleEditorFragmentAdapter.CONTENT[position % CONTENT.length];
     }
+    
     
 }

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RuleEditorFragmentAdapter;
 import com.ranlior.smartdroid.fragments.FragmentGenerator;
@@ -108,5 +109,5 @@ public class RuleEditorActivity extends SherlockFragmentActivity {
 			Log.e(TAG, "there is a problem returning data from " + (requestCode == SELECT_TRIGGER_REQUEST_CODE ?  "SelectTriggerActivity" : "SelectActionActivity"));
 		}
 	}
-
+	
 }

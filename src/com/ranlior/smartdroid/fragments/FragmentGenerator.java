@@ -63,8 +63,10 @@ public final class FragmentGenerator extends SherlockFragment {
 		super.onCreateOptionsMenu(menu, inflater);
 		Log.d(TAG, "onCreateOptionsMenu(Menu menu, MenuInflater inflater)");
 
-		if ("Triggers".equals(content) || "Actions".equals(content)) {
-			menu.add("Add Item").setIcon(R.drawable.ic_action_new).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		if ("Triggers".equals(content)) {
+			inflater.inflate(R.menu.trigger_list_menu, menu);
+		} else if ("Actions".equals(content)) {
+			inflater.inflate(R.menu.action_list_menu, menu);
 		} else if ("Rule".equals(content)) {
 			menu.clear();
 		}
@@ -73,23 +75,25 @@ public final class FragmentGenerator extends SherlockFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.d(TAG, "onOptionsItemSelected(MenuItem item)");
+		Intent intent = null;
+		int requestCode = -1;
 
-		if ("Add Item".equals(item.getTitle().toString())) {
+		switch (item.getItemId()) {
+		case R.id.addTrigger:
+			Log.i(TAG, "clicked on the '+' action for triggers");
+			intent = new Intent(getActivity(), TriggerSelectActivity.class);
+			requestCode = RuleEditorActivity.SELECT_TRIGGER_REQUEST_CODE;
 
-			Intent intent = null;
-			int requestCode = -1;
-			if ("Triggers".equals(content)) {
-				intent = new Intent(getActivity(), TriggerSelectActivity.class);
-				requestCode = RuleEditorActivity.SELECT_TRIGGER_REQUEST_CODE;
-				Log.i(TAG, "clicked on the '+' action for triggers");
-			} else if ("Actions".equals(content)) {
-				Log.i(TAG, "clicked on the '+' action for actions");
-				intent = new Intent(getActivity(), ActionSelectActivity.class);
-				requestCode = RuleEditorActivity.SELECT_ACTION_REQUEST_CODE;
-			}
-
-			getActivity().startActivityForResult(intent, requestCode);
+			break;
+		case R.id.addAction:
+			Log.i(TAG, "clicked on the '+' action for actions");
+			intent = new Intent(getActivity(), ActionSelectActivity.class);
+			requestCode = RuleEditorActivity.SELECT_ACTION_REQUEST_CODE;
+		default:
+			break;
 		}
+
+		getActivity().startActivityForResult(intent, requestCode);
 
 		return true;
 	}

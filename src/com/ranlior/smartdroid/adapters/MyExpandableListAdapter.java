@@ -83,6 +83,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 		return groupPosition;
 	}
 
+	//TODO create holder for the view recycling 
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 		View view;

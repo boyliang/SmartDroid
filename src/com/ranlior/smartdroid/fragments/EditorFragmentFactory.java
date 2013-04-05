@@ -21,7 +21,6 @@ import com.ranlior.smartdroid.activities.RuleEditorActivity;
 import com.ranlior.smartdroid.activities.TriggerSelectActivity;
 import com.ranlior.smartdroid.adapters.ExpandableActionListAdapter;
 import com.ranlior.smartdroid.adapters.ExpandableTrigerListAdapter;
-import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 import com.ranlior.smartdroid.utilities.TriggerFactory;
 
@@ -36,9 +35,9 @@ public final class EditorFragmentFactory extends SherlockFragment {
 	private ExpandableTrigerListAdapter expandableTriggerAdaper;
 	private ExpandableActionListAdapter expandableActionAdaper;
 
+	private RuleEditorActivity hostingActiviity;
+
 	private static List<Trigger> triggers;
-	
-	private ReciveData hostingActiviity = (ReciveData)getActivity();
 
 	public static EditorFragmentFactory newInstance(String content) {
 
@@ -53,34 +52,13 @@ public final class EditorFragmentFactory extends SherlockFragment {
 
 		return fragment;
 	}
-	
-	/**
-	 * hosting activity must implement that interface 
-	 * 
-	 * @author lior ginsberg
-	 *
-	 */
-	public interface ReciveData {
-		
-		/**
-		 * 
-		 * @return the list of triggers from hosing activity
-		 */
-		public List<Trigger> getTriggers();
-		
-		/**
-		 * 
-		 * @return the list of actions from hosting activity
-		 */
-		public List<Action> getActions();
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
-
+		hostingActiviity = (RuleEditorActivity) getActivity();
 	}
 
 	@Override
@@ -108,7 +86,6 @@ public final class EditorFragmentFactory extends SherlockFragment {
 			Log.i(TAG, "clicked on the '+' action for triggers");
 			intent = new Intent(getActivity(), TriggerSelectActivity.class);
 			requestCode = RuleEditorActivity.SELECT_TRIGGER_REQUEST_CODE;
-
 			break;
 		case R.id.addAction:
 			Log.i(TAG, "clicked on the '+' action for actions");
@@ -135,7 +112,8 @@ public final class EditorFragmentFactory extends SherlockFragment {
 		if ("Triggers".equals(getArguments().get(KEY_CONTENT))) {
 			linearLayout = (LinearLayout) inflater.inflate(R.layout.activity_expand_example, null);
 			lvSimple = (ExpandableListView) linearLayout.findViewById(R.id.expandableListView1);
-			expandableTriggerAdaper = new ExpandableTrigerListAdapter(getActivity(), hostingActiviity.getTriggers());
+			triggers = hostingActiviity.getTriggers();
+			expandableTriggerAdaper = new ExpandableTrigerListAdapter(getActivity(), triggers);
 			lvSimple.setAdapter(expandableTriggerAdaper);
 			lvSimple.setGroupIndicator(null);
 			lvSimple.setChildDivider(null);
@@ -160,7 +138,7 @@ public final class EditorFragmentFactory extends SherlockFragment {
 	// the activity call it after onActivityResult
 	public void triggerAddedEvent(String triggerClassName) {
 
-		triggers.add(TriggerFactory.getTriggrByTypeName(triggerClassName));
+		triggers.add(TriggerFactory.getTriggerforClassName(triggerClassName));
 
 		expandableTriggerAdaper.notifyDataSetChanged();
 		lvSimple.postDelayed(new Runnable() {

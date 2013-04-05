@@ -14,13 +14,12 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RuleEditorFragmentAdapter;
 import com.ranlior.smartdroid.fragments.EditorFragmentFactory;
-import com.ranlior.smartdroid.fragments.EditorFragmentFactory.ReciveData;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class RuleEditorActivity extends SherlockFragmentActivity implements ReciveData {
+public class RuleEditorActivity extends SherlockFragmentActivity {
 
 	/**
 	 * The logger's tag.
@@ -117,12 +116,10 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Reci
 		}
 	}
 
-	@Override
 	public List<Trigger> getTriggers() {
 		return triggers;
 	}
 
-	@Override
 	public List<Action> getActions() {
 		return actions;
 	}

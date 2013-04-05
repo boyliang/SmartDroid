@@ -27,7 +27,7 @@ public class TriggerSelectActivity extends ListActivity {
 		setContentView(R.layout.activity_trigger_select);
 
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
-		
+
 		SelectTriggerAdapter triggerAdapter = new SelectTriggerAdapter(this, R.layout.trigger_item, SmartDroid.Triggers.LIST);
 		setListAdapter(triggerAdapter);
 	}
@@ -38,7 +38,7 @@ public class TriggerSelectActivity extends ListActivity {
 		Intent resIntent = new Intent();
 
 		resIntent.putExtra("triggerName", SmartDroid.Triggers.LIST.get(position).getClassName());
-		
+
 		setResult(RESULT_OK, resIntent);
 		finish();
 	}

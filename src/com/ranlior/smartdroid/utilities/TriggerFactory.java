@@ -1,7 +1,6 @@
 package com.ranlior.smartdroid.utilities;
 
-import android.content.Context;
-
+import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dto.triggers.BatteryLevelTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
@@ -17,9 +16,20 @@ public class TriggerFactory {
 	 * @return Trigger instance
 	 * @throws Exception
 	 */
-	public static Trigger getTriggerforClassName(String triggerCalssName) throws Exception {
-	
-			return (Trigger) Class.forName(triggerCalssName).getConstructor().newInstance();
+	public static Trigger getTriggerforClassName(String triggerCalssName) {
+		Trigger trigger = null;
+		
+		try {
+			trigger = (Trigger) Class.forName(SmartDroid.Triggers.PACKAGE + "." + triggerCalssName).newInstance();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return trigger;
 	}
 	
 	/**
@@ -31,7 +41,6 @@ public class TriggerFactory {
 	 */
 	
 	public static Trigger getTriggrByTypeName(String triggerConcreteType) {
-		
 		Trigger trigger = null;
 		
 		if("RingerModeTrigger".equals(triggerConcreteType)) {

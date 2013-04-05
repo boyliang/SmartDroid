@@ -1479,7 +1479,9 @@ containing a value of this type.
         public static final int abs__title=0x7f050020;
         public static final int abs__titleDivider=0x7f050021;
         public static final int abs__up=0x7f050010;
-        public static final int action_settings=0x7f05004f;
+        public static final int action_settings=0x7f050050;
+        public static final int addAction=0x7f05004f;
+        public static final int addTrigger=0x7f050052;
         public static final int analogClock1=0x7f050044;
         public static final int bottom=0x7f050003;
         public static final int btnApp=0x7f05003c;
@@ -1498,7 +1500,7 @@ containing a value of this type.
         public static final int llButtons=0x7f05003b;
         public static final int lvRules=0x7f05003f;
         public static final int lvSimple=0x7f050049;
-        public static final int new_trigger_or_action=0x7f050050;
+        public static final int new_trigger_or_action=0x7f050051;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050006;
         public static final int pager=0x7f050041;
@@ -1571,10 +1573,12 @@ containing a value of this type.
         public static final int trigger_item=0x7f030026;
     }
     public static final class menu {
-        public static final int action_select=0x7f0c0000;
-        public static final int main=0x7f0c0001;
-        public static final int rule_editor_menu=0x7f0c0002;
-        public static final int trigger_select=0x7f0c0003;
+        public static final int action_list_menu=0x7f0c0000;
+        public static final int action_select=0x7f0c0001;
+        public static final int main=0x7f0c0002;
+        public static final int rule_editor_menu=0x7f0c0003;
+        public static final int trigger_list_menu=0x7f0c0004;
+        public static final int trigger_select=0x7f0c0005;
     }
     public static final class raw {
         public static final int cog_wheel=0x7f040000;
@@ -1626,6 +1630,8 @@ containing a value of this type.
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0b0009;
         public static final int action_settings=0x7f0b0010;
+        public static final int addaction=0x7f0b0016;
+        public static final int addtrigger=0x7f0b0017;
         public static final int app_name=0x7f0b000f;
         public static final int hello_world=0x7f0b0011;
         public static final int title_activity_action_select=0x7f0b0015;

@@ -53,13 +53,12 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 							rulesAdapter.remove(rulesAdapter.getItem(position));
 						}
 						rulesAdapter.notifyDataSetChanged();
-					}
-				});
+				}
+		});
 
 		lvRules.setOnTouchListener(touchListener);
 
-		// this is a special listener that preventing from swiping to dismiss
-		// while scrolling
+		// this is a special listener that preventing from swiping to dismiss to trigger while scrolling
 		lvRules.setOnScrollListener(touchListener.makeScrollListener());
 
 		// Prepare the loader.

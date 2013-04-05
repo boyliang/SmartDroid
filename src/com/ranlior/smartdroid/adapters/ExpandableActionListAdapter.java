@@ -1,4 +1,4 @@
-package com.ranlior.smartdroid.sandbox;
+package com.ranlior.smartdroid.adapters;
 
 import java.util.List;
 
@@ -6,27 +6,21 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.ranlior.smartdroid.R;
-import com.ranlior.smartdroid.animations.ExpandAnimation;
-import com.ranlior.smartdroid.config.SmartDroid.Triggers;
-import com.ranlior.smartdroid.model.dto.triggers.Trigger;
-import com.ranlior.smartdroid.utilities.DisplayHelper;
+import com.ranlior.smartdroid.model.dto.actions.Action;
 
-public class MyExpandableListAdapter extends BaseExpandableListAdapter {
+public class ExpandableActionListAdapter extends BaseExpandableListAdapter {
 
 	private Context context = null;
 
-	List<Trigger> triggers;
+	List<Action> actions;
 
-	public MyExpandableListAdapter(Context context, List<Trigger> triggers) {
+	public ExpandableActionListAdapter(Context context, List<Action> actions) {
 		this.context = context;
-		this.triggers = triggers;
+		this.actions = actions;
 	}
 
 	@Override
@@ -45,16 +39,17 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
 		
-			String triggerClassName = triggers.get(groupPosition).getClassName();
+			String triggerClassName = actions.get(groupPosition).getClassName();
 			
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			if ("RingerModeTrigger".equals(triggerClassName)) {
-				convertView = inflater.inflate(R.layout.expand_ringer_trigger, null);
-			}else if ("BatteryLevelTrigger".equals(triggerClassName)) {
-				convertView = inflater.inflate(R.layout.expand_battery_trigger, null);
-			}else if("BattryPluggedTrigger".equals(triggerClassName)) {
-				convertView = inflater.inflate(R.layout.expand_power_trigger, null);
-			}
+			//TODO inflate actionView for action type 
+//			if ("RingerModeTrigger".equals(triggerClassName)) {
+//				convertView = inflater.inflate(R.layout.expand_ringer_trigger, null);
+//			}else if ("BatteryLevelTrigger".equals(triggerClassName)) {
+//				convertView = inflater.inflate(R.layout.expand_battery_trigger, null);
+//			}else if("BattryPluggedTrigger".equals(triggerClassName)) {
+//				convertView = inflater.inflate(R.layout.expand_power_trigger, null);
+//			}
 		
 		return convertView;
 	}
@@ -74,7 +69,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public int getGroupCount() {
 		// TODO Auto-generated method stub
-		return triggers.size();
+		return actions.size();
 	}
 
 	@Override
@@ -83,6 +78,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 		return groupPosition;
 	}
 
+	//TODO create holder for the view recycling 
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 		View view;
@@ -91,8 +87,8 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 		TextView title = (TextView) view.findViewById(R.id.title);
 		TextView desc = (TextView) view.findViewById(R.id.description);
 
-		title.setText(triggers.get(groupPosition).getName());
-		desc.setText(triggers.get(groupPosition).getDescription());
+		title.setText(actions.get(groupPosition).getName());
+		desc.setText(actions.get(groupPosition).getDescription());
 
 		return view;
 	}

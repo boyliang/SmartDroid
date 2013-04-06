@@ -21,14 +21,6 @@ public class TriggerSelectAdapter extends ArrayAdapter<Trigger> {
 
 	private List<Trigger> triggers;
 	
-
-	/**
-	 * Full constractor.
-	 * 
-	 * @param context
-	 * @param trigger_layout
-	 * @param triggers
-	 */
 	public TriggerSelectAdapter(Context context, int trigger_layout,  List<Trigger> triggers) {
 		super(context, trigger_layout, triggers);
 		

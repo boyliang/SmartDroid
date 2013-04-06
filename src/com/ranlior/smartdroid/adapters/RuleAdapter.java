@@ -27,7 +27,7 @@ public class RuleAdapter extends ArrayAdapter<Rule> {
 	private RuleAdapter(Context context, int card_layout,  List<Rule> ruleList) {
 		super(context, card_layout, ruleList);
 		
-		Log.d(TAG, "constructor");
+		Log.d(TAG, "RuleAdapter(Context context, int card_layout,  List<Rule> ruleList)");
 		
 		this.context = context;
 		this.rules = ruleList;

@@ -20,9 +20,11 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.ranlior.smartdroid.R;
-import com.ranlior.smartdroid.activities.TriggerSelectActivity;
+import com.ranlior.smartdroid.activities.ActionSelectActivity;
 import com.ranlior.smartdroid.adapters.ExpandableActionListAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
+import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
+import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 
 /**
@@ -51,6 +53,13 @@ public class ActionEditorFragment extends SherlockFragment {
 		setHasOptionsMenu(true);
 		
 		hostingActivity = getActivity();
+		
+		IActionDAO actionDAO = SmartDAOFactory
+				.getFactory(SmartDAOFactory.SQLITE)
+				.getActionDAO(hostingActivity);
+		
+		// FIXME: get the real rule id
+		actions = (List<Action>) actionDAO.list(0);
 	}
 
 	@Override
@@ -67,7 +76,7 @@ public class ActionEditorFragment extends SherlockFragment {
 
 		switch (item.getItemId()) {
 		case R.id.addAction:
-			Intent intent = new Intent(hostingActivity, TriggerSelectActivity.class);
+			Intent intent = new Intent(hostingActivity, ActionSelectActivity.class);
 			startActivityForResult(intent, SELECT_ACTION_REQUEST_CODE);
 			return true;
 		default:

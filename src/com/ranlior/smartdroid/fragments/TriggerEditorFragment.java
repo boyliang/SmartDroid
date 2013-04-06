@@ -21,8 +21,10 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.TriggerSelectActivity;
-import com.ranlior.smartdroid.adapters.ExpandableTrigerListAdapter;
+import com.ranlior.smartdroid.adapters.ExpandableTriggerListAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
+import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
+import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 /**
@@ -32,13 +34,13 @@ import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 public class TriggerEditorFragment extends SherlockFragment {
 
 	private static final String TAG = TriggerEditorFragment.class.getSimpleName();
-	
+
 	public static final int SELECT_TRIGGER_REQUEST_CODE = 1001;
-	
+
 	private static List<Trigger> triggers;
 
-	private ExpandableTrigerListAdapter expandableTriggerAdaper;
-	
+	private ExpandableTriggerListAdapter expandableTriggerAdaper;
+
 	private ExpandableListView elvTriggers;
 
 	private Activity hostingActivity;
@@ -47,17 +49,22 @@ public class TriggerEditorFragment extends SherlockFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
-		
+
 		setHasOptionsMenu(true);
-		
+
 		hostingActivity = getActivity();
+
+		ITriggerDAO triggerDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getTriggerDAO(hostingActivity);
+
+		// FIXME: get the real rule id
+		triggers = (List<Trigger>) triggerDAO.list(0);
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 		Log.d(TAG, "onCreateOptionsMenu(Menu menu, MenuInflater inflater)");
-		
+
 		inflater.inflate(R.menu.trigger_list_menu, menu);
 	}
 
@@ -77,10 +84,9 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
 		Log.d(TAG, "onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)");
-		
-		expandableTriggerAdaper = new ExpandableTrigerListAdapter(hostingActivity, triggers);
+
+		expandableTriggerAdaper = new ExpandableTriggerListAdapter(hostingActivity, triggers);
 		LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
 		// TODO: change the list id
 		elvTriggers = (ExpandableListView) linearLayout.findViewById(R.id.expandableListView);
@@ -92,13 +98,13 @@ public class TriggerEditorFragment extends SherlockFragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(TAG, "onActivityResult(int requestCode, int resultCode, Intent data)");
-		
+
 		if (resultCode == hostingActivity.RESULT_OK) {
 			if (requestCode == SELECT_TRIGGER_REQUEST_CODE) {
-				
+
 				String triggerClassName = data.getStringExtra(SmartDroid.Extra.EXTRA_TRIGGER_CLASS_NAME);
 				Trigger trigger = null;
-				
+
 				try {
 					trigger = (Trigger) Class.forName(SmartDroid.Triggers.PACKAGE + "." + triggerClassName).newInstance();
 				} catch (InstantiationException e) {
@@ -110,8 +116,9 @@ public class TriggerEditorFragment extends SherlockFragment {
 				} catch (java.lang.InstantiationException e) {
 					e.printStackTrace();
 				}
-				
+
 				triggers.add(trigger);
+				expandableTriggerAdaper.notifyDataSetChanged();
 			}
 		}
 	}

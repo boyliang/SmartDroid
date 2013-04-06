@@ -3,6 +3,7 @@ package com.ranlior.smartdroid.adapters;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +13,17 @@ import android.widget.TextView;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
-public class ExpandableTrigerListAdapter extends BaseExpandableListAdapter {
+public class ExpandableTriggerListAdapter extends BaseExpandableListAdapter {
+
+	private static final String TAG = ExpandableTriggerListAdapter.class.getSimpleName();
 
 	private Context context = null;
 
 	List<Trigger> triggers;
 
-	public ExpandableTrigerListAdapter(Context context, List<Trigger> triggers) {
+	public ExpandableTriggerListAdapter(Context context, List<Trigger> triggers) {
+		Log.d(TAG, "ExpandableTriggerListAdapter(Context context, List<Trigger> triggers)");
+
 		this.context = context;
 		this.triggers = triggers;
 	}
@@ -35,6 +40,7 @@ public class ExpandableTrigerListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+		Log.d(TAG, "getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)");
 
 		String triggerClassName = triggers.get(groupPosition).getClassName();
 
@@ -52,31 +58,29 @@ public class ExpandableTrigerListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 
 	@Override
-	public Object getGroup(int groupPosition) {
-		// TODO Auto-generated method stub
-		return groupPosition;
-	}
-
-	@Override
 	public int getGroupCount() {
-		// TODO Auto-generated method stub
 		return triggers.size();
 	}
 
 	@Override
+	public Object getGroup(int groupPosition) {
+		return groupPosition;
+	}
+
+	@Override
 	public long getGroupId(int groupPosition) {
-		// TODO Auto-generated method stub
 		return groupPosition;
 	}
 
 	// TODO create holder for the view recycling
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+		Log.d(TAG, "getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)");
+
 		View view;
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.trigger_item, null);
@@ -91,13 +95,11 @@ public class ExpandableTrigerListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

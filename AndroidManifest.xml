@@ -32,16 +32,17 @@
             android:name=".activities.RuleActivity"
             android:label="@string/title_activity_rule"
             android:theme="@style/Theme.Sherlock" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activities.RuleEditorActivity"
             android:label="Rule Editor"
             android:theme="@style/Theme.Sherlock" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-
                 <action android:name="com.ranlior.smartdroid.ACTION_NEW_RULE" />
 
                 <category android:name="com.ranlior.smartdroid.ACTION_EDIT_RULE" />

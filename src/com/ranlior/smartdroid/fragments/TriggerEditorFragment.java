@@ -21,7 +21,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.TriggerSelectActivity;
-import com.ranlior.smartdroid.adapters.ExpandableTriggerListAdapter;
+import com.ranlior.smartdroid.adapters.TriggerExpandableListAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
 import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
@@ -39,7 +39,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 	private static List<Trigger> triggers;
 
-	private ExpandableTriggerListAdapter expandableTriggerAdaper;
+	private TriggerExpandableListAdapter expandableTriggerAdaper;
 
 	private ExpandableListView elvTriggers;
 
@@ -86,7 +86,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)");
 
-		expandableTriggerAdaper = new ExpandableTriggerListAdapter(hostingActivity, triggers);
+		expandableTriggerAdaper = new TriggerExpandableListAdapter(hostingActivity, triggers);
 		LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
 		// TODO: change the list id
 		elvTriggers = (ExpandableListView) linearLayout.findViewById(R.id.expandableListView);

@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.ranlior.smartdroid.R;
-import com.ranlior.smartdroid.adapters.SelectTriggerAdapter;
+import com.ranlior.smartdroid.adapters.TriggerSelectAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
@@ -28,7 +28,7 @@ public class TriggerSelectActivity extends ListActivity {
 
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
 
-		SelectTriggerAdapter triggerAdapter = new SelectTriggerAdapter(this, R.layout.trigger_item, SmartDroid.Triggers.LIST);
+		TriggerSelectAdapter triggerAdapter = new TriggerSelectAdapter(this, R.layout.trigger_item, SmartDroid.Triggers.LIST);
 		setListAdapter(triggerAdapter);
 	}
 

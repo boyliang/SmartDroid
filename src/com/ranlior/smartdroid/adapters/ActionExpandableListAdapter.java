@@ -13,16 +13,16 @@ import android.widget.TextView;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 
-public class ExpandableActionListAdapter extends BaseExpandableListAdapter {
+public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 
-	private static final String TAG = ExpandableActionListAdapter.class.getSimpleName();
+	private static final String TAG = ActionExpandableListAdapter.class.getSimpleName();
 
 	private Context context = null;
 
 	List<Action> actions;
 
-	public ExpandableActionListAdapter(Context context, List<Action> actions) {
-		Log.d(TAG, "ExpandableActionListAdapter(Context context, List<Action> actions)");
+	public ActionExpandableListAdapter(Context context, List<Action> actions) {
+		Log.d(TAG, "Constructor");
 
 		this.context = context;
 		this.actions = actions;

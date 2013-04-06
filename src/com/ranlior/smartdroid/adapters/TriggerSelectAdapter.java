@@ -13,11 +13,9 @@ import android.widget.TextView;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
-public class SelectTriggerAdapter extends ArrayAdapter<Trigger> {
+public class TriggerSelectAdapter extends ArrayAdapter<Trigger> {
 
-	private static final String TAG = "TriggerAdapter";
-	
-	private Context context;
+	private static final String TAG = TriggerSelectAdapter.class.getSimpleName();
 	
 	private LayoutInflater inflater;
 
@@ -31,12 +29,11 @@ public class SelectTriggerAdapter extends ArrayAdapter<Trigger> {
 	 * @param trigger_layout
 	 * @param triggers
 	 */
-	public SelectTriggerAdapter(Context context, int trigger_layout,  List<Trigger> triggers) {
+	public TriggerSelectAdapter(Context context, int trigger_layout,  List<Trigger> triggers) {
 		super(context, trigger_layout, triggers);
 		
-		Log.d(TAG, "TriggerAdapter(Context context, int trigger_layout,  List<Trigger> triggers)");
+		Log.d(TAG, "Constructor");
 		
-		this.context = context;
 		this.inflater = LayoutInflater.from(context);
 		this.triggers = triggers;
 	}

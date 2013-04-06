@@ -13,16 +13,16 @@ import android.widget.TextView;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
-public class ExpandableTriggerListAdapter extends BaseExpandableListAdapter {
+public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 
-	private static final String TAG = ExpandableTriggerListAdapter.class.getSimpleName();
+	private static final String TAG = TriggerExpandableListAdapter.class.getSimpleName();
 
 	private Context context = null;
 
 	List<Trigger> triggers;
 
-	public ExpandableTriggerListAdapter(Context context, List<Trigger> triggers) {
-		Log.d(TAG, "ExpandableTriggerListAdapter(Context context, List<Trigger> triggers)");
+	public TriggerExpandableListAdapter(Context context, List<Trigger> triggers) {
+		Log.d(TAG, "Constructor");
 
 		this.context = context;
 		this.triggers = triggers;

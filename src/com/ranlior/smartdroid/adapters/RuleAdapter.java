@@ -15,21 +15,17 @@ import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 public class RuleAdapter extends ArrayAdapter<Rule> {
 
-	private static final String TAG = "RuleAdapter";
+	private static final String TAG = RuleAdapter.class.getSimpleName();
 	
 	private static RuleAdapter instance = null;
 
 	private List<Rule> rules;
-	
-	Context context;
-
 
 	private RuleAdapter(Context context, int card_layout,  List<Rule> ruleList) {
 		super(context, card_layout, ruleList);
 		
-		Log.d(TAG, "RuleAdapter(Context context, int card_layout,  List<Rule> ruleList)");
+		Log.d(TAG, "Constructor");
 		
-		this.context = context;
 		this.rules = ruleList;
 		
 	}

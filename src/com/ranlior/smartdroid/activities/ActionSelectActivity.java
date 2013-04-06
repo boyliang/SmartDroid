@@ -8,7 +8,7 @@ import com.ranlior.smartdroid.R;
 
 public class ActionSelectActivity extends Activity {
 
-	private static final String TAG = "ActionSelectActivity";
+	private static final String TAG = ActionSelectActivity.class.getSimpleName();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

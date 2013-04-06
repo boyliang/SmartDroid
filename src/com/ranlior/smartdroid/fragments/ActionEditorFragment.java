@@ -21,7 +21,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.ActionSelectActivity;
-import com.ranlior.smartdroid.adapters.ExpandableActionListAdapter;
+import com.ranlior.smartdroid.adapters.ActionExpandableListAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
 import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
@@ -39,7 +39,7 @@ public class ActionEditorFragment extends SherlockFragment {
 	
 	private static List<Action> actions;
 
-	private ExpandableActionListAdapter expandableActionAdaper;
+	private ActionExpandableListAdapter expandableActionAdaper;
 	
 	private ExpandableListView elvActions;
 
@@ -89,7 +89,7 @@ public class ActionEditorFragment extends SherlockFragment {
 
 		Log.d(TAG, "onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)");
 		
-		expandableActionAdaper = new ExpandableActionListAdapter(hostingActivity, actions);
+		expandableActionAdaper = new ActionExpandableListAdapter(hostingActivity, actions);
 		LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_expandable_list_actions, null);
 		// TODO: change the list id
 		elvActions = (ExpandableListView) linearLayout.findViewById(R.id.expandableListView);

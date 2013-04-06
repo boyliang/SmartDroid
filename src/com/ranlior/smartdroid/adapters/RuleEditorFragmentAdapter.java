@@ -12,13 +12,11 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 
 	private static final String TAG = RuleEditorFragmentAdapter.class.getSimpleName();
 
-	protected static final String[] CONTENT = new String[] { "Triggers", "Actions", "Rule" };
-
-	private int mCount = CONTENT.length;
+	protected static final String[] CONTENT = new String[] { "Triggers", "Actions" };
 
 	public RuleEditorFragmentAdapter(FragmentManager fm) {
 		super(fm);
-		Log.d(TAG, "RuleEditorFragmentAdapter(FragmentManager fm)");
+		Log.d(TAG, "Constructor");
 	}
 
 	@Override
@@ -38,7 +36,7 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 	@Override
 	public int getCount() {
 		Log.d(TAG, "getCount()");
-		return mCount;
+		return CONTENT.length;
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class ModifyVolumeAction extends Action {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "ModifyVolumeAction";
+	private static final String TAG = ModifyVolumeAction.class.getSimpleName();
 	
 	/**
 	 * The action's name. 
@@ -141,7 +141,7 @@ public class ModifyVolumeAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public ModifyVolumeAction() {
-		super(NAME, DESCRIPTION);
+		super(ModifyVolumeAction.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

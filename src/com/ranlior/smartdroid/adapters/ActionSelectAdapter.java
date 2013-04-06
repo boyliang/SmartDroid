@@ -19,14 +19,17 @@ public class ActionSelectAdapter extends ArrayAdapter<Action> {
 	
 	private LayoutInflater inflater;
 
+	private int layoutResourceId = -1;
+
 	private List<Action> actions;
 
-	public ActionSelectAdapter(Context context, int trigger_layout,  List<Action> actions) {
-		super(context, trigger_layout, actions);
+	public ActionSelectAdapter(Context context, int layoutResourceId, List<Action> actions) {
+		super(context, layoutResourceId, actions);
 		
 		Log.d(TAG, "Constructor");
 		
 		this.inflater = LayoutInflater.from(context);
+		this.layoutResourceId  = layoutResourceId;
 		this.actions = actions;
 	}
 
@@ -35,7 +38,7 @@ public class ActionSelectAdapter extends ArrayAdapter<Action> {
 		final ViewHolder holder;
 		final Action action = actions.get(position);
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.trigger_item, null);
+			convertView = inflater.inflate(layoutResourceId, null);
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
 			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);

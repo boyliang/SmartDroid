@@ -65,7 +65,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 		super.onCreateOptionsMenu(menu, inflater);
 		Log.d(TAG, "onCreateOptionsMenu(Menu menu, MenuInflater inflater)");
 
-		inflater.inflate(R.menu.trigger_list_menu, menu);
+		inflater.inflate(R.menu.activity_trigger_select, menu);
 	}
 
 	@Override
@@ -103,6 +103,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 			if (requestCode == SELECT_TRIGGER_REQUEST_CODE) {
 
 				String triggerClassName = data.getStringExtra(SmartDroid.Extra.EXTRA_TRIGGER_CLASS_NAME);
+				Log.d(TAG, "triggerClassName: " + triggerClassName);
 				Trigger trigger = null;
 
 				try {

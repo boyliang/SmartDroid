@@ -27,7 +27,7 @@ public class NotificationAction extends Action {
 	/**
 	 * Holds the logger's tag.
 	 */
-	private static final String TAG = "NotificationAction";
+	private static final String TAG = NotificationAction.class.getSimpleName();
 	
 	/**
 	 * The action's name. 
@@ -131,7 +131,7 @@ public class NotificationAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public NotificationAction() {
-		super(NAME, DESCRIPTION);
+		super(NotificationAction.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

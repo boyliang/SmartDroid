@@ -18,15 +18,18 @@ public class TriggerSelectAdapter extends ArrayAdapter<Trigger> {
 	private static final String TAG = TriggerSelectAdapter.class.getSimpleName();
 	
 	private LayoutInflater inflater;
+	
+	private int layoutResourceId = -1;
 
 	private List<Trigger> triggers;
 	
-	public TriggerSelectAdapter(Context context, int trigger_layout,  List<Trigger> triggers) {
-		super(context, trigger_layout, triggers);
+	public TriggerSelectAdapter(Context context, int layoutResourceId,  List<Trigger> triggers) {
+		super(context, layoutResourceId, triggers);
 		
 		Log.d(TAG, "Constructor");
 		
 		this.inflater = LayoutInflater.from(context);
+		this.layoutResourceId = layoutResourceId;
 		this.triggers = triggers;
 	}
 
@@ -35,7 +38,7 @@ public class TriggerSelectAdapter extends ArrayAdapter<Trigger> {
 		ViewHolder holder = null;
 		Trigger trigger = triggers.get(position);
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.trigger_item, null);
+			convertView = inflater.inflate(layoutResourceId, null);
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
 			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);		

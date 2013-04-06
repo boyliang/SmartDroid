@@ -34,13 +34,13 @@ import com.ranlior.smartdroid.model.dto.actions.Action;
 public class ActionEditorFragment extends SherlockFragment {
 
 	private static final String TAG = ActionEditorFragment.class.getSimpleName();
-	
+
 	public static final int SELECT_ACTION_REQUEST_CODE = 1002;
-	
+
 	private static List<Action> actions;
 
 	private ActionExpandableListAdapter expandableActionAdaper;
-	
+
 	private ExpandableListView elvActions;
 
 	private Activity hostingActivity;
@@ -49,15 +49,13 @@ public class ActionEditorFragment extends SherlockFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
-		
+
 		setHasOptionsMenu(true);
-		
+
 		hostingActivity = getActivity();
-		
-		IActionDAO actionDAO = SmartDAOFactory
-				.getFactory(SmartDAOFactory.SQLITE)
-				.getActionDAO(hostingActivity);
-		
+
+		IActionDAO actionDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getActionDAO(hostingActivity);
+
 		// FIXME: get the real rule id
 		actions = (List<Action>) actionDAO.list(0);
 	}
@@ -66,8 +64,8 @@ public class ActionEditorFragment extends SherlockFragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 		Log.d(TAG, "onCreateOptionsMenu(Menu menu, MenuInflater inflater)");
-		
-		inflater.inflate(R.menu.action_list_menu, menu);
+
+		inflater.inflate(R.menu.activity_action_select, menu);
 	}
 
 	@Override
@@ -88,7 +86,7 @@ public class ActionEditorFragment extends SherlockFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		Log.d(TAG, "onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)");
-		
+
 		expandableActionAdaper = new ActionExpandableListAdapter(hostingActivity, actions);
 		LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_expandable_list_actions, null);
 		// TODO: change the list id
@@ -101,13 +99,14 @@ public class ActionEditorFragment extends SherlockFragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(TAG, "onActivityResult(int requestCode, int resultCode, Intent data)");
-		
+
 		if (resultCode == hostingActivity.RESULT_OK) {
 			if (requestCode == SELECT_ACTION_REQUEST_CODE) {
-				
+
 				String actionClassName = data.getStringExtra(SmartDroid.Extra.EXTRA_ACTION_CLASS_NAME);
+				Log.d(TAG, "actionClassName: " + actionClassName);
 				Action action = null;
-				
+
 				try {
 					action = (Action) Class.forName(SmartDroid.Actions.PACKAGE + "." + actionClassName).newInstance();
 				} catch (InstantiationException e) {
@@ -119,8 +118,9 @@ public class ActionEditorFragment extends SherlockFragment {
 				} catch (java.lang.InstantiationException e) {
 					e.printStackTrace();
 				}
-				
+
 				actions.add(action);
+				expandableActionAdaper.notifyDataSetChanged();
 			}
 		}
 	}

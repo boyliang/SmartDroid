@@ -23,7 +23,7 @@ public class ChangeBluetoothStateAction extends Action {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "ChangeBluetoothStateAction";
+	private static final String TAG = ChangeBluetoothStateAction.class.getSimpleName();
 	
 	/**
 	 * The action's name.
@@ -82,7 +82,7 @@ public class ChangeBluetoothStateAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public ChangeBluetoothStateAction() {
-		super(NAME, DESCRIPTION);
+		super(ChangeBluetoothStateAction.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

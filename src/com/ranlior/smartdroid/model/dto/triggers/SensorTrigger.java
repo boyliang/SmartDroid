@@ -25,7 +25,7 @@ public class SensorTrigger extends Trigger {
 	/**
 	 * Holds the logger's tag.
 	 */
-	private static final String TAG = "SensorTrigger";
+	private static final String TAG = SensorTrigger.class.getSimpleName();
 
 	/**
 	 * The trigger's name. 

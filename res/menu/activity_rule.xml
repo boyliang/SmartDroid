@@ -5,6 +5,6 @@
         android:id="@+id/addRule"
         android:icon="@drawable/ic_action_new"
         android:showAsAction="ifRoom"
-        android:title="Add Rule"/>
+        android:title="@string/add_rule"/>
 
 </menu>

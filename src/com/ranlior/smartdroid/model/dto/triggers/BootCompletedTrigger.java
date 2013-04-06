@@ -27,7 +27,7 @@ public class BootCompletedTrigger extends Trigger {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "BootCompletedTrigger";
+	private static final String TAG = BootCompletedTrigger.class.getSimpleName();
 	
 	/**
 	 * The trigger's name. 

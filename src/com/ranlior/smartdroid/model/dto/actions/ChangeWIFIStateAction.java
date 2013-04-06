@@ -22,7 +22,7 @@ public class ChangeWIFIStateAction extends Action {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "ChangeWIFIStateAction";
+	private static final String TAG = ChangeWIFIStateAction.class.getSimpleName();
 	
 	/**
 	 * The action's name.
@@ -81,7 +81,7 @@ public class ChangeWIFIStateAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public ChangeWIFIStateAction() {
-		super(NAME, DESCRIPTION);
+		super(ChangeWIFIStateAction.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

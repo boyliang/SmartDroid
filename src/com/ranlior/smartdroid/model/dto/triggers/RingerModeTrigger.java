@@ -29,7 +29,7 @@ public class RingerModeTrigger extends Trigger {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "RingerModeTrigger";
+	private static final String TAG = RingerModeTrigger.class.getSimpleName();
 	
 	/**
 	 * The trigger's name. 

@@ -24,7 +24,7 @@ public class StartAppAction extends Action {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "StartAppAction";
+	private static final String TAG = StartAppAction.class.getSimpleName();
 	
 	/**
 	 * The action's name. 
@@ -73,7 +73,7 @@ public class StartAppAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public StartAppAction() {
-		super(NAME, DESCRIPTION);
+		super(StartAppAction.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

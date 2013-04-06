@@ -28,7 +28,7 @@ public class LocationProximityTrigger extends Trigger {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "LocationProximityTrigger";
+	private static final String TAG = LocationProximityTrigger.class.getSimpleName();
 
 	/**
 	 * The trigger's name.

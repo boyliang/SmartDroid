@@ -5,6 +5,6 @@
         android:id="@+id/addTrigger"
         android:icon="@drawable/ic_action_new"
         android:showAsAction="always"
-        android:title="@string/addtrigger"/>
+        android:title="@string/add_trigger"/>
 
 </menu>

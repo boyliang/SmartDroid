@@ -22,7 +22,7 @@ public class ModifyRingerModeAction extends Action {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "ModifyRingerModeAction";
+	private static final String TAG = ModifyRingerModeAction.class.getSimpleName();
 	
 	/**
 	 * The action's name. 
@@ -83,7 +83,7 @@ public class ModifyRingerModeAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public ModifyRingerModeAction() {
-		super(NAME, DESCRIPTION);
+		super(ModifyRingerModeAction.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

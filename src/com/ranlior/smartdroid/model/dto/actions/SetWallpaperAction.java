@@ -26,7 +26,7 @@ public class SetWallpaperAction extends Action {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "SetWallpaperAction";
+	private static final String TAG = SetWallpaperAction.class.getSimpleName();
 	
 	/**
 	 * The action's name. 
@@ -75,7 +75,7 @@ public class SetWallpaperAction extends Action {
 	 * ORMLite needs a no-arg constructor.
 	 */
 	public SetWallpaperAction() {
-		super(NAME, DESCRIPTION);
+		super(SetWallpaperAction.class.getSimpleName(), NAME, DESCRIPTION);
 	}
 
 	/**

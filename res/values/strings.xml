@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    
     <string name="app_name">SmartDroid</string>
+
+    <!-- MainActivity -->
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_rule">RuleActivity</string>
-    <string name="title_activity_add_rule">AddRuleActivity</string>
-    <string name="title_activity_trigger_select">TriggerSelect</string>
-    <string name="title_activity_action_select">ActionSelectActivity</string>
-    <string name="addaction">addAction</string>
-    <string name="addtrigger">addTrigger</string>
+    
+    <!-- RulesActivity -->
+    <string name="title_activity_rule">Rules</string>
+    <string name="add_rule">Add Rule</string>
+    
+    <!-- SelectTriggerAction -->
+    <string name="title_activity_trigger_select">Select Trigger</string>
+    <string name="add_trigger">Add Trigger</string>
+    
+    <!-- SelectActionFragment -->
+    <string name="title_activity_action_select">Select Action</string>
+    <string name="add_action">Add Action</string>
 
 </resources>

@@ -28,7 +28,7 @@ public class WiredHeadsetPluggedTrigger extends Trigger {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "WiredHeadsetPluggedTrigger";
+	private static final String TAG = WiredHeadsetPluggedTrigger.class.getSimpleName();
 	
 	/**
 	 * The trigger's name. 

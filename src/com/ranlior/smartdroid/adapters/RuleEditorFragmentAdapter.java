@@ -35,13 +35,11 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public int getCount() {
-		Log.d(TAG, "getCount()");
 		return CONTENT.length;
 	}
 
 	@Override
 	public CharSequence getPageTitle(int position) {
-		Log.d(TAG, "getPageTitle(int position)");
 		return RuleEditorFragmentAdapter.CONTENT[position % CONTENT.length];
 	}
 

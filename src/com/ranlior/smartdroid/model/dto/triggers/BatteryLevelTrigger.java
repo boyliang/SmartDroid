@@ -29,7 +29,7 @@ public class BatteryLevelTrigger extends Trigger {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "BatteryLevelTrigger";
+	private static final String TAG = BatteryLevelTrigger.class.getSimpleName();
 	
 	/**
 	 * The trigger's name. 

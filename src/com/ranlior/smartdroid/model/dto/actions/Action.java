@@ -10,8 +10,7 @@ import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
- * @author Ran Haveshush
- * Email: ran.haveshush.shenkar@gmail.com
+ * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
  * 
  */
 @DatabaseTable(tableName = "actions")
@@ -33,11 +32,11 @@ public class Action {
 	 */
 	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_ID, generatedId = true, allowGeneratedIdInsert = true)
 	private Long id = null;
-	
+
 	/**
 	 * Holds the action's class name.
 	 */
-	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_CLASS_NAME, canBeNull = false)	
+	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_CLASS_NAME, canBeNull = false)
 	private String className = null;
 
 	/**
@@ -52,30 +51,31 @@ public class Action {
 	@DatabaseField(columnName = SmartDroid.Actions.COLUMN_NAME_DESCRIPTION, canBeNull = false)
 	private String description = null;
 
-	
 	/**
 	 * DONT USE THIS CONSTRUCTOR:
 	 * 
-	 * Default constructor.
-	 * Ormlite require default constructor.
+	 * Default constructor. Ormlite require default constructor.
 	 */
 	public Action() {
 		super();
 	}
-	
+
 	/**
 	 * Minimal constructor.
 	 * 
+	 * @param className
+	 *            String represents action's class name
 	 * @param name
 	 *            String represents action's name
 	 * @param description
 	 *            String represents action's description
 	 */
-	public Action(String name, String description) {
+	public Action(String className, String name, String description) {
 		super();
+		this.className = className;
 		this.name = name;
 		this.description = description;
-	} 
+	}
 
 	/**
 	 * Full constructor.
@@ -102,7 +102,8 @@ public class Action {
 	}
 
 	/**
-	 * @param context the context to set
+	 * @param context
+	 *            the context to set
 	 */
 	public void setContext(Context context) {
 		this.context = context;
@@ -146,7 +147,8 @@ public class Action {
 	}
 
 	/**
-	 * @param className the className to set
+	 * @param className
+	 *            the className to set
 	 */
 	public void setClassName(String className) {
 		this.className = className;
@@ -170,6 +172,7 @@ public class Action {
 	 * Performs the action. Every derived class should implemenet this method.
 	 * This is where the action logic implemeneted.
 	 */
-	public void perform() {};
+	public void perform() {
+	};
 
 }

@@ -31,7 +31,7 @@ public class BatteryPluggedTrigger extends Trigger {
 	/**
 	 * Holds logger's tag.
 	 */
-	private static final String TAG = "BatteryPluggedTrigger";
+	private static final String TAG = BatteryPluggedTrigger.class.getSimpleName();
 	
 	/**
 	 * The trigger's name. 

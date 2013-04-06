@@ -3,6 +3,7 @@
  */
 package com.ranlior.smartdroid.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -37,13 +38,46 @@ public class ActionEditorFragment extends SherlockFragment {
 
 	public static final int SELECT_ACTION_REQUEST_CODE = 1002;
 
-	private static List<Action> actions;
+	public static List<Action> actions;
 
 	private ActionExpandableListAdapter expandableActionAdaper;
 
 	private ExpandableListView elvActions;
+	
+	private IActionEditorListener listener;
 
 	private Activity hostingActivity;
+	
+	
+	
+	/**
+	 * Listener interface for the fragment. Container Activity must implement
+	 * this interface.
+	 * 
+	 * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
+	 * 
+	 */
+	public interface IActionEditorListener {
+		/**
+		 * Gets the rule to edit id.
+		 */
+		public long getRuleId();
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		Log.d(TAG, "onAttach(Activity activity)");
+
+		// Ensures hosting activity implements the Listener interface
+		try {
+			listener = (IActionEditorListener) activity;
+			// Gets fragment hosting activity
+			hostingActivity = activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement " + IActionEditorListener.class.getSimpleName());
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,12 +86,19 @@ public class ActionEditorFragment extends SherlockFragment {
 
 		setHasOptionsMenu(true);
 
-		hostingActivity = getActivity();
-
-		IActionDAO actionDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getActionDAO(hostingActivity);
-
-		// FIXME: get the real rule id
-		actions = (List<Action>) actionDAO.list(0);
+		// Gets triggr's rule id, if any
+		long ruleId = listener.getRuleId();
+		
+		// If new rule added there isn't any rule id
+		if (ruleId == 0) {
+			// create empty new actions list
+			actions = new ArrayList<Action>();
+		// If existing rule edited there is rule id
+		} else {
+			// Gets rule's actions
+			IActionDAO actionDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getActionDAO(hostingActivity);
+			actions = (List<Action>) actionDAO.list(ruleId);
+		}
 	}
 
 	@Override
@@ -71,6 +112,7 @@ public class ActionEditorFragment extends SherlockFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.d(TAG, "onOptionsItemSelected(MenuItem item)");
+		Log.d(TAG, "item selected: " + item.getTitle());
 
 		switch (item.getItemId()) {
 		case R.id.addAction:
@@ -82,6 +124,7 @@ public class ActionEditorFragment extends SherlockFragment {
 		}
 	}
 
+	// FIXME: check if needed or use onCreate only
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -89,7 +132,6 @@ public class ActionEditorFragment extends SherlockFragment {
 
 		expandableActionAdaper = new ActionExpandableListAdapter(hostingActivity, actions);
 		LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_expandable_list_actions, null);
-		// TODO: change the list id
 		elvActions = (ExpandableListView) linearLayout.findViewById(R.id.expandableListView);
 		elvActions.setAdapter(expandableActionAdaper);
 

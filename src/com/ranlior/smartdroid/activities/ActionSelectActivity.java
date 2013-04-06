@@ -29,7 +29,7 @@ public class ActionSelectActivity extends ListActivity {
 
 		setContentView(R.layout.activity_action_select);
 
-		ActionSelectAdapter actionAdapter = new ActionSelectAdapter(this, R.layout.action_item, SmartDroid.Actions.LIST);
+		ActionSelectAdapter actionAdapter = new ActionSelectAdapter(this, R.layout.action_list_item, SmartDroid.Actions.LIST);
 		setListAdapter(actionAdapter);
 	}
 

@@ -28,7 +28,7 @@ public class TriggerSelectActivity extends ListActivity {
 
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
 
-		TriggerSelectAdapter triggerAdapter = new TriggerSelectAdapter(this, R.layout.trigger_item, SmartDroid.Triggers.LIST);
+		TriggerSelectAdapter triggerAdapter = new TriggerSelectAdapter(this, R.layout.trigger_list_item, SmartDroid.Triggers.LIST);
 		setListAdapter(triggerAdapter);
 	}
 

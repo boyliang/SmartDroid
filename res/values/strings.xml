@@ -10,7 +10,11 @@
     <string name="title_activity_rule">Rules</string>
     <string name="add_rule">Add Rule</string>
     
-    <!-- SelectTriggerAction -->
+    <!-- RuleEditorAcitvity -->
+    <string name="title_activity_rule_editor">Rule Editor</string>
+    <string name="save_rule">Add Rule</string>
+    
+    <!-- SelectTriggerFragment -->
     <string name="title_activity_trigger_select">Select Trigger</string>
     <string name="add_trigger">Add Trigger</string>
     

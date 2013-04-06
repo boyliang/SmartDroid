@@ -50,7 +50,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	/**
 	 * The database version.
 	 */
-	public static final int DATABASE_VERSION = 22;
+	public static final int DATABASE_VERSION = 23;
 
 	/**
 	 * Minimal constructor.

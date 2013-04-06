@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -16,12 +19,15 @@ import com.actionbarsherlock.view.MenuItem;
 import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RuleAdapter;
+import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.loaders.RulesLoader;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 public class RuleActivity extends SherlockFragmentActivity implements LoaderManager.LoaderCallbacks<List<Rule>> {
 
 	private final static String TAG = RuleActivity.class.getSimpleName();
+	
+	public static final int ADD_RULE_REQUEST_CODE = 1001;
 
 	private RuleAdapter rulesAdapter = null;
 
@@ -36,9 +42,19 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rule);
 
-		rulesAdapter = RuleAdapter.getInstance(this, R.layout.rule_card_layout, rules);
+		rulesAdapter = new RuleAdapter(this, R.layout.rule_list_item, rules);
 		lvRules = (ListView) findViewById(R.id.lvRules);
 		lvRules.setAdapter(rulesAdapter);
+		lvRules.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// Redirects the rule editor activiry with the selected rule id
+				Intent intent = new Intent(RuleActivity.this, RuleEditorActivity.class);
+				intent.setAction(SmartDroid.Action.ACTION_EDIT_RULE);
+				intent.putExtra(SmartDroid.Extra.EXTRA_RULE_ID, id);
+				startActivity(intent);
+			}
+		});
 
 		// set swipe to dismiss gesture and remove from the adapter the item
 		SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(lvRules,
@@ -78,7 +94,8 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 		switch (item.getItemId()) {
 		case R.id.addRule:
 			Intent intent = new Intent(this, RuleEditorActivity.class);
-			startActivity(intent);
+			intent.setAction(SmartDroid.Action.ACTION_ADD_RULE);
+			startActivityForResult(intent, ADD_RULE_REQUEST_CODE);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

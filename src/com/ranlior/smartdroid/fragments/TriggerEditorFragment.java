@@ -3,6 +3,7 @@
  */
 package com.ranlior.smartdroid.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -37,13 +38,44 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 	public static final int SELECT_TRIGGER_REQUEST_CODE = 1001;
 
-	private static List<Trigger> triggers;
+	public static List<Trigger> triggers;
 
 	private TriggerExpandableListAdapter expandableTriggerAdaper;
 
 	private ExpandableListView elvTriggers;
 
+	private ITriggerEditorListener listener;
+
 	private Activity hostingActivity;
+
+	/**
+	 * Listener interface for the fragment. Container Activity must implement
+	 * this interface.
+	 * 
+	 * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
+	 * 
+	 */
+	public interface ITriggerEditorListener {
+		/**
+		 * Gets the rule to edit id.
+		 */
+		public long getRuleId();
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		Log.d(TAG, "onAttach(Activity activity)");
+
+		// Ensures hosting activity implements the Listener interface
+		try {
+			listener = (ITriggerEditorListener) activity;
+			// Gets fragment hosting activity
+			hostingActivity = activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement " + ITriggerEditorListener.class.getSimpleName());
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,12 +84,19 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 		setHasOptionsMenu(true);
 
-		hostingActivity = getActivity();
-
-		ITriggerDAO triggerDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getTriggerDAO(hostingActivity);
-
-		// FIXME: get the real rule id
-		triggers = (List<Trigger>) triggerDAO.list(0);
+		// Gets triggr's rule id, if any
+		long ruleId = listener.getRuleId();
+		
+		// If new rule added there isn't any rule id
+		if (ruleId == 0) {
+			// create empty new triggers list
+			triggers = new ArrayList<Trigger>();
+		// If existing rule edited there is rule id
+		} else {
+			// Gets rule's triggers
+			ITriggerDAO triggerDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getTriggerDAO(hostingActivity);
+			triggers = (List<Trigger>) triggerDAO.list(ruleId);
+		}
 	}
 
 	@Override
@@ -71,6 +110,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.d(TAG, "onOptionsItemSelected(MenuItem item)");
+		Log.d(TAG, "item selected: " + item.getTitle());
 
 		switch (item.getItemId()) {
 		case R.id.addTrigger:
@@ -82,13 +122,13 @@ public class TriggerEditorFragment extends SherlockFragment {
 		}
 	}
 
+	// FIXME: check if needed or use onCreate only
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)");
 
 		expandableTriggerAdaper = new TriggerExpandableListAdapter(hostingActivity, triggers);
 		LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
-		// TODO: change the list id
 		elvTriggers = (ExpandableListView) linearLayout.findViewById(R.id.expandableListView);
 		elvTriggers.setAdapter(expandableTriggerAdaper);
 

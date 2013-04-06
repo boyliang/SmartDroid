@@ -81,7 +81,7 @@ public final class SmartDroid {
 		/**
 		 * Action to add new rule.
 		 */
-		public static final String ACTION_NEW_RULE = APP_PACKAGE + ".ACTION_NEW_RULE";
+		public static final String ACTION_ADD_RULE = APP_PACKAGE + ".ACTION_ADD_RULE";
 		
 		/**
 		 * Action to edit existing rule.
@@ -97,7 +97,7 @@ public final class SmartDroid {
 	 *
 	 */
 	public static final class Extra {
-		
+
 		// This class cannot be instantiated
 		private Extra() {}
 
@@ -109,11 +109,19 @@ public final class SmartDroid {
 		public static final String EXTRA_ACTION = APP_PACKAGE + ".EXTRA_ACTION";
 		
 		/**
+		 * Extra key for intent rule id long.
+		 *  
+		 * <P>Type: REAL</P>
+		 */
+		public static final String EXTRA_RULE_ID = APP_PACKAGE + ".EXTRA_RULE_ID";
+		
+		/**
 		 * Extra key for intent trigger id long.
 		 *  
 		 * <P>Type: REAL</P>
 		 */
 		public static final String EXTRA_TRIGGER_ID = APP_PACKAGE + ".EXTRA_TRIGGER_ID";
+
 		
 		/**
 		 * Extra key for intent battery level integer.

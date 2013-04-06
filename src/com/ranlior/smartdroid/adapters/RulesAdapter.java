@@ -13,13 +13,13 @@ import android.widget.TextView;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
-public class RuleAdapter extends ArrayAdapter<Rule> {
+public class RulesAdapter extends ArrayAdapter<Rule> {
 
-	private static final String TAG = RuleAdapter.class.getSimpleName();
+	private static final String TAG = RulesAdapter.class.getSimpleName();
 
 	private List<Rule> rules;
 
-	public RuleAdapter(Context context, int layoutResourceId,  List<Rule> rules) {
+	public RulesAdapter(Context context, int layoutResourceId,  List<Rule> rules) {
 		super(context, layoutResourceId, rules);
 		
 		Log.d(TAG, "Constructor");

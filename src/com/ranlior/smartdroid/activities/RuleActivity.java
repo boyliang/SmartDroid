@@ -18,7 +18,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
 import com.ranlior.smartdroid.R;
-import com.ranlior.smartdroid.adapters.RuleAdapter;
+import com.ranlior.smartdroid.adapters.RulesAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.loaders.RulesLoader;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
@@ -29,7 +29,7 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 	
 	public static final int ADD_RULE_REQUEST_CODE = 1001;
 
-	private RuleAdapter rulesAdapter = null;
+	private RulesAdapter rulesAdapter = null;
 
 	private List<Rule> rules = new ArrayList<Rule>();
 
@@ -42,7 +42,7 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rule);
 
-		rulesAdapter = new RuleAdapter(this, R.layout.rule_list_item, rules);
+		rulesAdapter = new RulesAdapter(this, R.layout.rule_list_item, rules);
 		lvRules = (ListView) findViewById(R.id.lvRules);
 		lvRules.setAdapter(rulesAdapter);
 		lvRules.setOnItemClickListener(new OnItemClickListener() {
@@ -51,7 +51,7 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 				// Redirects the rule editor activiry with the selected rule id
 				Intent intent = new Intent(RuleActivity.this, RuleEditorActivity.class);
 				intent.setAction(SmartDroid.Action.ACTION_EDIT_RULE);
-				intent.putExtra(SmartDroid.Extra.EXTRA_RULE_ID, id);
+				intent.putExtra(SmartDroid.Extra.EXTRA_RULE_ID, rules.get(position).getId());
 				startActivity(intent);
 			}
 		});

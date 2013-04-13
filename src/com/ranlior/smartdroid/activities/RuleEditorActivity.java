@@ -56,6 +56,10 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 
 	// FIXME: change visiability to private
 	static Rule rule;
+	
+	private List<Trigger> triggers;
+	
+	private List<Action> actions;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -119,15 +123,15 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 		switch (item.getItemId()) {
 		case R.id.saveRule:
 			// Validates add rule workflow
-			List<Trigger> triggers = (List<Trigger>) rule.getTriggers();
-			List<Action> actions = (List<Action>) rule.getActions();
 			if (triggers != null && actions != null) {
-				Intent resIntent = new Intent();
-				setResult(RESULT_OK, resIntent);
+				rule.setTriggers(triggers);
+				rule.setActions(actions);
+				setResult(RESULT_OK);
 				finish();
 			} else {
 				Toast.makeText(appCtx, "Your triggers or actions list is empty.", Toast.LENGTH_SHORT).show();
 			}
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -135,12 +139,12 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 
 	@Override
 	public void setTriggers(List<Trigger> triggers) {
-		rule.setTriggers(triggers);
+		this.triggers = triggers;
 	}
 	
 	@Override
 	public void setActions(List<Action> actions) {
-		rule.setActions(actions);
+		this.actions = actions;
 	}
 
 }

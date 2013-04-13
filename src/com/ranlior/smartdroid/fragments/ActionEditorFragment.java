@@ -151,7 +151,6 @@ public class ActionEditorFragment extends SherlockFragment {
 
 		if (resultCode == hostingActivity.RESULT_OK) {
 			if (requestCode == SELECT_ACTION_REQUEST_CODE) {
-
 				String actionClassName = data.getStringExtra(SmartDroid.Extra.EXTRA_ACTION_CLASS_NAME);
 				Log.d(TAG, "actionClassName: " + actionClassName);
 				Action action = null;

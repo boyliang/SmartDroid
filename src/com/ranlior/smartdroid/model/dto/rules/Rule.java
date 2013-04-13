@@ -176,13 +176,7 @@ public class Rule {
 	 * @param triggers
 	 */
 	public void setTriggers(Collection<Trigger> triggers) {
-		ITriggerDAO triggerDAO = SmartDAOFactory
-				.getFactory(SmartDAOFactory.SQLITE)
-				.getTriggerDAO(context);
-		
-		for (Trigger trigger : triggers) {
-			triggerDAO.insert(trigger);
-		}
+		this.triggers = triggers;
 	}
 
 	/**
@@ -200,13 +194,7 @@ public class Rule {
 	 * @param actions
 	 */
 	public void setActions(List<Action> actions) {
-		IActionDAO actionDAO = SmartDAOFactory
-				.getFactory(SmartDAOFactory.SQLITE)
-				.getActionDAO(context);
-		
-		for (Action action: actions) {
-			actionDAO.insert(action);
-		}
+		this.actions = actions;
 	}
 
 	/**

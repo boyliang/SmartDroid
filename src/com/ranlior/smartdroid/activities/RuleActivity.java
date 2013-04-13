@@ -119,11 +119,11 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 	protected void onActivityResult(int resultCode, int requestCode, Intent intent) {
 		Log.d(TAG, "onActivityResult(int resultCode, int requestCode, Intent intent)");
 
-		if (resultCode == RESULT_OK) {
+		if (requestCode == RESULT_OK) {
 			// FIXME: Gets the rule from the rule editor
 			Rule rule = RuleEditorActivity.rule;
 			
-			switch (requestCode) {
+			switch (resultCode) {
 			case ADD_RULE_REQUEST_CODE:
 				ruleDAO.insert(rule);
 				Toast.makeText(appCtx, "Rule Saved", Toast.LENGTH_SHORT).show();

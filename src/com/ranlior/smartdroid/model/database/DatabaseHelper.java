@@ -68,7 +68,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
 		// Logs that the database is being creating
-		Log.w(TAG, "Creating database name:" + DATABASE_NAME + "version: " + DATABASE_VERSION);
+		Log.w(TAG, "Creating database name: " + DATABASE_NAME + " version: " + DATABASE_VERSION);
 		
 		createTables();
 	}
@@ -109,8 +109,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			// Creates actions tables
 			TableUtils.createTable(connectionSource, Action.class);
 			TableUtils.createTable(connectionSource, ChangeBluetoothStateAction.class);
-			// Creates actions tables
-			TableUtils.createTable(connectionSource, Action.class);
 			TableUtils.createTable(connectionSource, ChangeWIFIStateAction.class);
 			TableUtils.createTable(connectionSource, ModifyRingerModeAction.class);
 			TableUtils.createTable(connectionSource, ModifyVolumeAction.class);
@@ -142,8 +140,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			// Drops actions tables
 			TableUtils.dropTable(connectionSource, Action.class, true);
 			TableUtils.dropTable(connectionSource, ChangeBluetoothStateAction.class, true);
-			// Drops actions tables
-			TableUtils.dropTable(connectionSource, Action.class, true);
 			TableUtils.dropTable(connectionSource, ChangeWIFIStateAction.class, true);
 			TableUtils.dropTable(connectionSource, ModifyRingerModeAction.class, true);
 			TableUtils.dropTable(connectionSource, ModifyVolumeAction.class, true);

@@ -4,6 +4,7 @@
 package com.ranlior.smartdroid.model.dto.rules;
 
 import java.util.Collection;
+import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.ranlior.smartdroid.model.dto.triggers.Trigger;
  * Email: ran.haveshush.shenkar@gmail.com
  * 
  */
+// FIXME: check if the collections should be presisted allways?
 @DatabaseTable(tableName = "rules")
 public class Rule {
 	
@@ -169,6 +171,19 @@ public class Rule {
 		
 		return triggers = triggerDAO.list(this.getId());
 	}
+	
+	/**
+	 * @param triggers
+	 */
+	public void setTriggers(Collection<Trigger> triggers) {
+		ITriggerDAO triggerDAO = SmartDAOFactory
+				.getFactory(SmartDAOFactory.SQLITE)
+				.getTriggerDAO(context);
+		
+		for (Trigger trigger : triggers) {
+			triggerDAO.insert(trigger);
+		}
+	}
 
 	/**
 	 * @return the actions
@@ -179,6 +194,19 @@ public class Rule {
 				.getActionDAO(context);
 		
 		return actions = actionDAO.list(this.getId());
+	}
+	
+	/**
+	 * @param actions
+	 */
+	public void setActions(List<Action> actions) {
+		IActionDAO actionDAO = SmartDAOFactory
+				.getFactory(SmartDAOFactory.SQLITE)
+				.getActionDAO(context);
+		
+		for (Action action: actions) {
+			actionDAO.insert(action);
+		}
 	}
 
 	/**

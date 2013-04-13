@@ -3,6 +3,7 @@ package com.ranlior.smartdroid.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -21,13 +23,18 @@ import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RulesAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.loaders.RulesLoader;
+import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
+import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 public class RuleActivity extends SherlockFragmentActivity implements LoaderManager.LoaderCallbacks<List<Rule>> {
 
 	private final static String TAG = RuleActivity.class.getSimpleName();
-	
+
 	public static final int ADD_RULE_REQUEST_CODE = 1001;
+	public static final int EDIT_RULE_REQUEST_CODE = 1002;
+	
+	private Context appCtx;
 
 	private RulesAdapter rulesAdapter = null;
 
@@ -35,12 +42,18 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 
 	private ListView lvRules = null;
 
+	private IRuleDAO ruleDAO;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
 
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rule);
+
+		appCtx = getApplicationContext();
+		
+		ruleDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getRuleDAO(appCtx);
 
 		rulesAdapter = new RulesAdapter(this, R.layout.rule_list_item, rules);
 		lvRules = (ListView) findViewById(R.id.lvRules);
@@ -52,7 +65,7 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 				Intent intent = new Intent(RuleActivity.this, RuleEditorActivity.class);
 				intent.setAction(SmartDroid.Action.ACTION_EDIT_RULE);
 				intent.putExtra(SmartDroid.Extra.EXTRA_RULE_ID, rules.get(position).getId());
-				startActivity(intent);
+				startActivityForResult(intent, EDIT_RULE_REQUEST_CODE);
 			}
 		});
 
@@ -93,12 +106,34 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 
 		switch (item.getItemId()) {
 		case R.id.addRule:
-			Intent intent = new Intent(this, RuleEditorActivity.class);
+			Intent intent = new Intent(RuleActivity.this, RuleEditorActivity.class);
 			intent.setAction(SmartDroid.Action.ACTION_ADD_RULE);
 			startActivityForResult(intent, ADD_RULE_REQUEST_CODE);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int resultCode, int requestCode, Intent intent) {
+		Log.d(TAG, "onActivityResult(int resultCode, int requestCode, Intent intent)");
+
+		if (resultCode == RESULT_OK) {
+			// FIXME: Gets the rule from the rule editor
+			Rule rule = RuleEditorActivity.rule;
+			
+			switch (requestCode) {
+			case ADD_RULE_REQUEST_CODE:
+				ruleDAO.insert(rule);
+				Toast.makeText(appCtx, "Rule Saved", Toast.LENGTH_SHORT).show();
+				break;
+			case EDIT_RULE_REQUEST_CODE:
+				ruleDAO.delete(rule);
+				ruleDAO.insert(rule);
+				Toast.makeText(appCtx, "Rule Updated", Toast.LENGTH_SHORT).show();
+				break;
+			}
 		}
 	}
 

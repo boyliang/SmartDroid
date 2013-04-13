@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
@@ -38,18 +37,18 @@ public class ActionEditorFragment extends SherlockFragment {
 
 	public static final int SELECT_ACTION_REQUEST_CODE = 1002;
 
-	public static List<Action> actions;
+	private long ruleId = -1;
+
+	private static List<Action> actions;
 
 	private ActionExpandableListAdapter expandableActionAdaper;
 
 	private ExpandableListView elvActions;
-	
-	private IActionEditorListener listener;
+
+	private Listener listener;
 
 	private Activity hostingActivity;
-	
-	
-	
+
 	/**
 	 * Listener interface for the fragment. Container Activity must implement
 	 * this interface.
@@ -57,11 +56,11 @@ public class ActionEditorFragment extends SherlockFragment {
 	 * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
 	 * 
 	 */
-	public interface IActionEditorListener {
+	public interface Listener {
 		/**
-		 * Gets the rule to edit id.
+		 * @param actions
 		 */
-		public long getRuleId();
+		public void setActions(List<Action> actions);
 	}
 
 	@Override
@@ -71,11 +70,11 @@ public class ActionEditorFragment extends SherlockFragment {
 
 		// Ensures hosting activity implements the Listener interface
 		try {
-			listener = (IActionEditorListener) activity;
+			listener = (Listener) activity;
 			// Gets fragment hosting activity
 			hostingActivity = activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement " + IActionEditorListener.class.getSimpleName());
+			throw new ClassCastException(activity.toString() + " must implement " + Listener.class.getSimpleName());
 		}
 	}
 
@@ -85,12 +84,22 @@ public class ActionEditorFragment extends SherlockFragment {
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
 
 		setHasOptionsMenu(true);
-
-		// Gets triggr's rule id, if any
-		long ruleId = listener.getRuleId();
 		
+		// During creation, if arguments have been supplied to the fragment
+	    // then parse those out
+		Bundle args = getArguments();
+		if (args != null) {
+			ruleId = args.getLong(SmartDroid.Extra.EXTRA_RULE_ID);
+		}
+		
+		// If recreating a previously destroyed instance
+		if (savedInstanceState != null) {
+			// Restore value of members from saved state
+			ruleId = savedInstanceState.getLong(SmartDroid.Extra.EXTRA_RULE_ID);
+		}
+
 		// If new rule added there isn't any rule id
-		if (ruleId == 0) {
+		if (ruleId == -1) {
 			// create empty new actions list
 			actions = new ArrayList<Action>();
 		// If existing rule edited there is rule id
@@ -112,7 +121,6 @@ public class ActionEditorFragment extends SherlockFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.d(TAG, "onOptionsItemSelected(MenuItem item)");
-		Log.d(TAG, "item selected: " + item.getTitle());
 
 		switch (item.getItemId()) {
 		case R.id.addAction:
@@ -127,15 +135,14 @@ public class ActionEditorFragment extends SherlockFragment {
 	// FIXME: check if needed or use onCreate only
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
 		Log.d(TAG, "onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)");
 
 		expandableActionAdaper = new ActionExpandableListAdapter(hostingActivity, actions);
-		LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_expandable_list_actions, null);
-		elvActions = (ExpandableListView) linearLayout.findViewById(R.id.expandableListView);
+		View view = inflater.inflate(R.layout.fragment_expandable_list_actions, null);
+		elvActions = (ExpandableListView) view.findViewById(R.id.expandableListView);
 		elvActions.setAdapter(expandableActionAdaper);
 
-		return linearLayout;
+		return view;
 	}
 
 	@Override
@@ -162,9 +169,24 @@ public class ActionEditorFragment extends SherlockFragment {
 				}
 
 				actions.add(action);
+//				elvActions.postDelayed(new Runnable() {
+//					@Override
+//					public void run() {
+//						elvActions.setSelection(expandableActionAdaper.getGroupCount() - 1);
+//					}
+//				}, 100L);
+//				elvActions.expandGroup(expandableActionAdaper.getGroupCount() - 1);
 				expandableActionAdaper.notifyDataSetChanged();
 			}
 		}
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		Log.d(TAG, "onStop()");
+		
+		listener.setActions(actions);
 	}
 
 }

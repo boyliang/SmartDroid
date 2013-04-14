@@ -18,7 +18,9 @@ import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.fragments.ActionEditorFragment;
 import com.ranlior.smartdroid.fragments.TriggerEditorFragment;
 import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
+import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
 import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
+import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
@@ -53,13 +55,13 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 	private State state;
 
 	private IRuleDAO ruleDAO;
+	
+	private ITriggerDAO triggerDAO;
+	
+	private IActionDAO actionDAO;
 
 	// FIXME: change visiability to private
 	static Rule rule;
-	
-	private List<Trigger> triggers;
-	
-	private List<Action> actions;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +86,11 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 		} else if (SmartDroid.Action.ACTION_EDIT_RULE.equals(action)) {
 			state = State.EDIT_RULE;
 		}
-
+		
 		switch (state) {
 		case ADD_RULE:
 			rule = new Rule(appCtx, "Name", "Desc");
+			ruleDAO.insert(rule);
 			break;
 		case EDIT_RULE:
 			long ruleId = intent.getLongExtra(SmartDroid.Extra.EXTRA_RULE_ID, -1);
@@ -97,7 +100,7 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 			throw new IllegalStateException(TAG + " caused by invalid action");
 		}
 
-		mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager());
+		mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager(), rule.getId());
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPager.setAdapter(mAdapter);
@@ -123,9 +126,9 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 		switch (item.getItemId()) {
 		case R.id.saveRule:
 			// Validates add rule workflow
+			List<Trigger> triggers = (List<Trigger>) rule.getTriggers();
+			List<Action> actions = (List<Action>) rule.getActions();
 			if (triggers != null && actions != null) {
-				rule.setTriggers(triggers);
-				rule.setActions(actions);
 				setResult(RESULT_OK);
 				finish();
 			} else {
@@ -139,12 +142,21 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 
 	@Override
 	public void setTriggers(List<Trigger> triggers) {
-		this.triggers = triggers;
+		triggerDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getTriggerDAO(appCtx);
+		// Persists all triggers
+		for (Trigger trigger : triggers) {
+			triggerDAO.insert(trigger);
+		}
+		
 	}
 	
 	@Override
 	public void setActions(List<Action> actions) {
-		this.actions = actions;
+		actionDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getActionDAO(appCtx);
+		// Persists all actions
+		for (Action action : actions) {
+			actionDAO.insert(action);
+		}
 	}
 
 }

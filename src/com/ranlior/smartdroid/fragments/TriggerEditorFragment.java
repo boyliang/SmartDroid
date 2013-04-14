@@ -3,7 +3,6 @@
  */
 package com.ranlior.smartdroid.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -24,7 +23,9 @@ import com.ranlior.smartdroid.activities.TriggerSelectActivity;
 import com.ranlior.smartdroid.adapters.TriggerExpandableListAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
+import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
 import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 /**
@@ -38,6 +39,12 @@ public class TriggerEditorFragment extends SherlockFragment {
 	public static final int SELECT_TRIGGER_REQUEST_CODE = 1001;
 	
 	private long ruleId = -1;
+	
+	private IRuleDAO ruleDAO;
+	
+	private Rule rule;
+	
+	private ITriggerDAO triggerDAO;
 
 	private List<Trigger> triggers;
 
@@ -123,17 +130,14 @@ public class TriggerEditorFragment extends SherlockFragment {
 			// Restore value of members from saved state
 			ruleId = savedInstanceState.getLong(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
-
-		// If new rule added there isn't any rule id
-		if (ruleId == -1) {
-			// create empty new triggers list
-			triggers = new ArrayList<Trigger>();
-		// If existing rule edited there is rule id
-		} else {
-			// Gets rule's triggers
-			ITriggerDAO triggerDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getTriggerDAO(hostingActivity);
-			triggers = (List<Trigger>) triggerDAO.list(ruleId);
-		}
+		
+		// Gets rule
+		ruleDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getRuleDAO(hostingActivity);
+		rule = ruleDAO.get(ruleId);
+		
+		// Gets rule's triggers
+		triggerDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getTriggerDAO(hostingActivity);
+		triggers = (List<Trigger>) triggerDAO.list(ruleId);
 	}
 
 	@Override
@@ -158,7 +162,6 @@ public class TriggerEditorFragment extends SherlockFragment {
 		}
 	}
 
-	// FIXME: check if needed or use onCreate only
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)");
@@ -183,6 +186,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 				try {
 					trigger = (Trigger) Class.forName(SmartDroid.Triggers.PACKAGE + "." + triggerClassName).newInstance();
+					trigger.setRule(rule);
 				} catch (InstantiationException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
@@ -207,9 +211,9 @@ public class TriggerEditorFragment extends SherlockFragment {
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
-		Log.d(TAG, "onStop()");
+	public void onPause() {
+		super.onPause();
+		Log.d(TAG, "onPause()");
 		
 		listener.setTriggers(triggers);
 	}

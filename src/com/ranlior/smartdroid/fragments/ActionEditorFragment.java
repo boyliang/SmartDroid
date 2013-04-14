@@ -3,7 +3,6 @@
  */
 package com.ranlior.smartdroid.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -25,7 +24,9 @@ import com.ranlior.smartdroid.adapters.ActionExpandableListAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
 import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
+import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
 import com.ranlior.smartdroid.model.dto.actions.Action;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -38,6 +39,12 @@ public class ActionEditorFragment extends SherlockFragment {
 	public static final int SELECT_ACTION_REQUEST_CODE = 1002;
 
 	private long ruleId = -1;
+	
+	private IRuleDAO ruleDAO;
+	
+	private Rule rule;
+	
+	private IActionDAO actionDAO;
 
 	private static List<Action> actions;
 
@@ -62,6 +69,21 @@ public class ActionEditorFragment extends SherlockFragment {
 		 */
 		public void setActions(List<Action> actions);
 	}
+	
+	/**
+	 * Create a new instance of the fargment, initialized to show the actions
+	 * of the rule by given rule id.
+	 */
+	public static ActionEditorFragment newInstance(long ruleId) {
+		ActionEditorFragment fragment = new ActionEditorFragment();
+
+		// Supply rule id input as an argument.
+		Bundle args = new Bundle();
+		args.putLong(SmartDroid.Extra.EXTRA_RULE_ID, ruleId);
+		fragment.setArguments(args);
+
+		return fragment;
+	}
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -76,6 +98,17 @@ public class ActionEditorFragment extends SherlockFragment {
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString() + " must implement " + Listener.class.getSimpleName());
 		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		Log.d(TAG, "onSaveInstanceState(Bundle outState)");
+		
+		// Saves the rule id
+		outState.putLong(SmartDroid.Extra.EXTRA_RULE_ID, ruleId);
+		
+		// Calls the superclass so it can save the view hierarchy state
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -97,17 +130,14 @@ public class ActionEditorFragment extends SherlockFragment {
 			// Restore value of members from saved state
 			ruleId = savedInstanceState.getLong(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
+		
+		// Gets rule
+		ruleDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getRuleDAO(hostingActivity);
+		rule = ruleDAO.get(ruleId);
 
-		// If new rule added there isn't any rule id
-		if (ruleId == -1) {
-			// create empty new actions list
-			actions = new ArrayList<Action>();
-		// If existing rule edited there is rule id
-		} else {
-			// Gets rule's actions
-			IActionDAO actionDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getActionDAO(hostingActivity);
-			actions = (List<Action>) actionDAO.list(ruleId);
-		}
+		// Gets rule's actions
+		actionDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getActionDAO(hostingActivity);
+		actions = (List<Action>) actionDAO.list(ruleId);
 	}
 
 	@Override
@@ -157,6 +187,7 @@ public class ActionEditorFragment extends SherlockFragment {
 
 				try {
 					action = (Action) Class.forName(SmartDroid.Actions.PACKAGE + "." + actionClassName).newInstance();
+					action.setRule(rule);
 				} catch (InstantiationException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
@@ -181,9 +212,9 @@ public class ActionEditorFragment extends SherlockFragment {
 	}
 	
 	@Override
-	public void onStop() {
-		super.onStop();
-		Log.d(TAG, "onStop()");
+	public void onPause() {
+		super.onPause();
+		Log.d(TAG, "onPause()");
 		
 		listener.setActions(actions);
 	}

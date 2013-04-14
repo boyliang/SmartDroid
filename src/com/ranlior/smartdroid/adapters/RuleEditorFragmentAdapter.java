@@ -13,10 +13,14 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 	private static final String TAG = RuleEditorFragmentAdapter.class.getSimpleName();
 
 	protected static final String[] CONTENT = new String[] { "Triggers", "Actions" };
+	
+	private long ruleId = -1;
 
-	public RuleEditorFragmentAdapter(FragmentManager fm) {
+	public RuleEditorFragmentAdapter(FragmentManager fm, long ruleId) {
 		super(fm);
 		Log.d(TAG, "Constructor");
+		
+		this.ruleId = ruleId;
 	}
 
 	@Override
@@ -25,9 +29,9 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 
 		switch (position) {
 		case 0:
-			return new TriggerEditorFragment();
+			return TriggerEditorFragment.newInstance(ruleId);
 		case 1:
-			return new ActionEditorFragment();
+			return ActionEditorFragment.newInstance(ruleId);
 		default:
 			return null;
 		}

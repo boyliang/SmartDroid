@@ -125,12 +125,12 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 			
 			switch (resultCode) {
 			case ADD_RULE_REQUEST_CODE:
-				ruleDAO.insert(rule);
+//				ruleDAO.insert(rule);
 				Toast.makeText(appCtx, "Rule Saved", Toast.LENGTH_SHORT).show();
 				break;
 			case EDIT_RULE_REQUEST_CODE:
-				ruleDAO.delete(rule);
-				ruleDAO.insert(rule);
+//				ruleDAO.delete(rule);
+//				ruleDAO.insert(rule);
 				Toast.makeText(appCtx, "Rule Updated", Toast.LENGTH_SHORT).show();
 				break;
 			}

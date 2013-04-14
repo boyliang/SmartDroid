@@ -176,6 +176,9 @@ public class Rule {
 	 * @param triggers
 	 */
 	public void setTriggers(Collection<Trigger> triggers) {
+		for (Trigger trigger : triggers) {
+			trigger.setRule(this);
+		}
 		this.triggers = triggers;
 	}
 
@@ -194,6 +197,9 @@ public class Rule {
 	 * @param actions
 	 */
 	public void setActions(List<Action> actions) {
+		for (Action action : actions) {
+			action.setRule(this);
+		}
 		this.actions = actions;
 	}
 

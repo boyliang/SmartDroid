@@ -7,58 +7,18 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-import com.ranlior.smartdroid.model.dto.rules.Rule;
-
 /**
- * @author Ran Haveshush
- * Email:  ran.haveshush.shenkar@gmail.com
- *
+ * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
+ * 
  */
-@DatabaseTable(tableName = "change_wifi_state_actions")
 public class ChangeWIFIStateAction extends Action {
-	
-	/**
-	 * Holds logger's tag.
-	 */
-	private static final String TAG = ChangeWIFIStateAction.class.getSimpleName();
-	
-	/**
-	 * The action's name.
-	 */
-	private static final String NAME = "Change wifi state";
-	
-	/**
-	 * The action's description.
-	 */
-	private static final String DESCRIPTION = "Changes wifi state (enabled / disabled)";
-	
-	/*
-	 * Table definition.
-	 */
-	
-	/**
-	 * The table name.
-	 */
-	private static final String TABLE_NAME = "change_wifi_state_actions";
-	
-	/*
-	 * Columns definitions.
-	 */
-	
-	/**
-	 * Column name wifi state.
-	 * 
-	 * <P>Type: INTEGER</P>
-	 * <P>Constraint: NOT NULL</p>
-	 */
-	private static final String COLUMN_NAME_WIFI_STATE = "wifi_state";
 
-	/*
-	 * Instance variables.
-	 */
-	
+	private static final String TAG = ChangeWIFIStateAction.class.getSimpleName();
+
+	private static final String NAME = "Change wifi state";
+
+	private static final String DESCRIPTION = "Changes wifi state (enabled / disabled)";
+
 	/**
 	 * Holds the wanted wifi state.
 	 * 
@@ -70,29 +30,23 @@ public class ChangeWIFIStateAction extends Action {
 	 * </P>
 	 * 
 	 * For more info:
+	 * 
 	 * @see android.net.wifi.WifiManager
 	 */
-	@DatabaseField(columnName = ChangeWIFIStateAction.COLUMN_NAME_WIFI_STATE, canBeNull = false)
 	private int wifiState = WifiManager.WIFI_STATE_ENABLED;
-	
 
-	/**
-	 * Default constructor.
-	 * ORMLite needs a no-arg constructor.
-	 */
 	public ChangeWIFIStateAction() {
-		super(ChangeWIFIStateAction.class.getSimpleName(), NAME, DESCRIPTION);
+		super(NAME, DESCRIPTION);
 	}
 
 	/**
 	 * Full constractor.
 	 * 
-	 * @param context		Context the context instantiating this action
-	 * @param rule			Rule represents action's rule
-	 * @param wifiState		Integer represents the wanted wifi state
+	 * @param wifiState
+	 *            Integer represents the wanted wifi state
 	 */
-	public ChangeWIFIStateAction(Context context, Rule rule, int wifiState) {
-		super(context, rule, ChangeWIFIStateAction.class.getSimpleName(), NAME, DESCRIPTION);
+	public ChangeWIFIStateAction(int wifiState) {
+		super(NAME, DESCRIPTION);
 		this.wifiState = wifiState;
 	}
 
@@ -104,22 +58,24 @@ public class ChangeWIFIStateAction extends Action {
 	}
 
 	/**
-	 * @param wifiState the wifiState to set
+	 * @param wifiState
+	 *            the wifiState to set
 	 */
 	public void setWifiState(int wifiState) {
 		this.wifiState = wifiState;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.ranlior.smartdroid.model.dto.actions.Action#perform()
 	 */
 	@Override
-	public void perform() {
-		// Logger
-		Log.d(TAG, "perform()");
-		
+	public void perform(Context context) {
+		Log.d(TAG, "perform(Context context)");
+
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-		
+
 		// Changes wifi state
 		if (wifiState == WifiManager.WIFI_STATE_ENABLED) {
 			wifiManager.setWifiEnabled(true);

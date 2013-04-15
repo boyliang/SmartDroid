@@ -3,6 +3,7 @@
  */
 package com.ranlior.smartdroid.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -18,13 +19,13 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.db4o.ObjectContainer;
+import com.db4o.query.Predicate;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.ActionSelectActivity;
 import com.ranlior.smartdroid.adapters.ActionExpandableListAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
-import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
-import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
-import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
+import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
@@ -38,23 +39,19 @@ public class ActionEditorFragment extends SherlockFragment {
 
 	public static final int SELECT_ACTION_REQUEST_CODE = 1002;
 
+	private ObjectContainer db = null;
+
 	private long ruleId = -1;
-	
-	private IRuleDAO ruleDAO;
-	
-	private Rule rule;
-	
-	private IActionDAO actionDAO;
 
-	private static List<Action> actions;
+	private static List<Action> actions = null;
 
-	private ActionExpandableListAdapter expandableActionAdaper;
+	private ActionExpandableListAdapter expandableActionAdaper = null;
 
-	private ExpandableListView elvActions;
+	private ExpandableListView elvActions = null;
 
-	private Listener listener;
+	private Listener listener = null;
 
-	private Activity hostingActivity;
+	private Activity hostingActivity = null;
 
 	/**
 	 * Listener interface for the fragment. Container Activity must implement
@@ -69,10 +66,10 @@ public class ActionEditorFragment extends SherlockFragment {
 		 */
 		public void setActions(List<Action> actions);
 	}
-	
+
 	/**
-	 * Create a new instance of the fargment, initialized to show the actions
-	 * of the rule by given rule id.
+	 * Create a new instance of the fargment, initialized to show the actions of
+	 * the rule by given rule id.
 	 */
 	public static ActionEditorFragment newInstance(long ruleId) {
 		ActionEditorFragment fragment = new ActionEditorFragment();
@@ -99,14 +96,14 @@ public class ActionEditorFragment extends SherlockFragment {
 			throw new ClassCastException(activity.toString() + " must implement " + Listener.class.getSimpleName());
 		}
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		Log.d(TAG, "onSaveInstanceState(Bundle outState)");
-		
+
 		// Saves the rule id
 		outState.putLong(SmartDroid.Extra.EXTRA_RULE_ID, ruleId);
-		
+
 		// Calls the superclass so it can save the view hierarchy state
 		super.onSaveInstanceState(outState);
 	}
@@ -117,27 +114,35 @@ public class ActionEditorFragment extends SherlockFragment {
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
 
 		setHasOptionsMenu(true);
-		
+
+		db = Db4oHelper.db(hostingActivity);
+
 		// During creation, if arguments have been supplied to the fragment
-	    // then parse those out
+		// then parse those out
 		Bundle args = getArguments();
 		if (args != null) {
 			ruleId = args.getLong(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
-		
+
 		// If recreating a previously destroyed instance
 		if (savedInstanceState != null) {
 			// Restore value of members from saved state
 			ruleId = savedInstanceState.getLong(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
-		
-		// Gets rule
-		ruleDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getRuleDAO(hostingActivity);
-		rule = ruleDAO.get(ruleId);
 
-		// Gets rule's actions
-		actionDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getActionDAO(hostingActivity);
-		actions = (List<Action>) actionDAO.list(ruleId);
+		// Gets the rule
+		List<Rule> rules = db.query(new Predicate<Rule>() {
+			public boolean match(Rule rule) {
+				return rule.getId() == ruleId;
+			}
+		});
+
+		// Gets rule's triggers
+		if (!rules.isEmpty()) {
+			actions = rules.get(0).getActions();
+		} else {
+			actions = new ArrayList<Action>();
+		}
 	}
 
 	@Override
@@ -187,7 +192,6 @@ public class ActionEditorFragment extends SherlockFragment {
 
 				try {
 					action = (Action) Class.forName(SmartDroid.Actions.PACKAGE + "." + actionClassName).newInstance();
-					action.setRule(rule);
 				} catch (InstantiationException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
@@ -199,24 +203,37 @@ public class ActionEditorFragment extends SherlockFragment {
 				}
 
 				actions.add(action);
-//				elvActions.postDelayed(new Runnable() {
-//					@Override
-//					public void run() {
-//						elvActions.setSelection(expandableActionAdaper.getGroupCount() - 1);
-//					}
-//				}, 100L);
-//				elvActions.expandGroup(expandableActionAdaper.getGroupCount() - 1);
+				// elvActions.postDelayed(new Runnable() {
+				// @Override
+				// public void run() {
+				// elvActions.setSelection(expandableActionAdaper.getGroupCount()
+				// - 1);
+				// }
+				// }, 100L);
+				// elvActions.expandGroup(expandableActionAdaper.getGroupCount()
+				// - 1);
 				expandableActionAdaper.notifyDataSetChanged();
+				
+				listener.setActions(actions);
 			}
 		}
 	}
-	
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		Log.d(TAG, "onResume()");
+
+		db = Db4oHelper.db(hostingActivity);
+	}
+
 	@Override
 	public void onPause() {
 		super.onPause();
 		Log.d(TAG, "onPause()");
-		
-		listener.setActions(actions);
+
+		db.close();
 	}
 
 }

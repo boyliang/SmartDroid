@@ -42,7 +42,7 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		Log.d(TAG, "getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)");
 
-		String triggerClassName = actions.get(groupPosition).getClassName();
+		String triggerClassName = actions.get(groupPosition).getClass().getSimpleName();
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		if ("RingerModeTrigger".equals(triggerClassName)) {

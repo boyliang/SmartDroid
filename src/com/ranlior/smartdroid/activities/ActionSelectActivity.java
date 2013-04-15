@@ -36,11 +36,12 @@ public class ActionSelectActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView list, View view, int position, long id) {
 		Log.d(TAG, "onListItemClick(ListView list, View view, int position, long id)");
-		
+
 		Intent resIntent = new Intent();
-		resIntent.putExtra(SmartDroid.Extra.EXTRA_ACTION_CLASS_NAME, SmartDroid.Actions.LIST.get(position).getClassName());
+		resIntent.putExtra(SmartDroid.Extra.EXTRA_ACTION_CLASS_NAME,
+				SmartDroid.Actions.LIST.get(position).getClass().getSimpleName());
 		setResult(RESULT_OK, resIntent);
-		
+
 		finish();
 	}
 }

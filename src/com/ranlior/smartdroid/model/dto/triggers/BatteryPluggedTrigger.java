@@ -3,7 +3,6 @@
  */
 package com.ranlior.smartdroid.model.dto.triggers;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import android.content.Context;
@@ -11,65 +10,31 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.table.DatabaseTable;
-import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
-import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
+import com.db4o.ObjectContainer;
+import com.db4o.ext.DatabaseClosedException;
+import com.db4o.ext.DatabaseReadOnlyException;
+import com.db4o.ext.Db4oIOException;
+import com.db4o.query.Predicate;
+import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
- * @author Ran Haveshush
- * Email:  ran.haveshush.shenkar@gmail.com
- *
+ * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
+ * 
  */
 // FIXME: Fix this trigger can't diff between plugged states (ac, usb, wireless)
 // only diff between connected and disconnected.
-@DatabaseTable(tableName = "battery_plugged_triggers")
 public class BatteryPluggedTrigger extends Trigger {
 
-	/**
-	 * Holds logger's tag.
-	 */
 	private static final String TAG = BatteryPluggedTrigger.class.getSimpleName();
-	
-	/**
-	 * The trigger's name. 
-	 */
+
 	private static final String NAME = "Battery plug state changed";
-	
-	/**
-	 * The trigger's description.
-	 */
+
 	private static final String DESCRIPTION = "Trigged when the battery plug state changes (not pluged / ac plugged / usb plugged / wireless plugged)";
-	
-	/*
-     * Table definition.
-     */
-	
+
 	/**
-	 * The table name.
-	 */
-	public static final String TABLE_NAME = "battery_plugged_triggers";
-	
-	/*
-     * Column definitions.
-     */
-	
-	/**
-	 * Column name wanted plugged state.
-	 * 
-	 * <P>Type: INTEGER</P>
-	 * <P>Constraint: NOT NULL</p>
-	 */
-	public static final String COLUMN_NAME_WANTED_PLUGGED_STATE = "wanted_plugged_state";
-	
-	/*
-	 * Instance variables.
-	 */
-	
-	/**
-	 * Holds the trigger wanted pluged state.<BR/><BR/>
+	 * Holds the trigger wanted pluged state.<BR/>
+	 * <BR/>
 	 * 
 	 * Default: 0 means it is on battery<BR/>
 	 * BatteryManager.BATTERY_PLUGGED_AC<BR/>
@@ -78,27 +43,20 @@ public class BatteryPluggedTrigger extends Trigger {
 	 * 
 	 * @see android.os.BatteryManager
 	 */
-	@DatabaseField(columnName = BatteryPluggedTrigger.COLUMN_NAME_WANTED_PLUGGED_STATE, canBeNull = false)
 	private int wantedPluggedState = 0;
-	
 
-	/**
-	 * Default constructor.
-	 * ORMLite needs a no-arg constructor.
-	 */
 	public BatteryPluggedTrigger() {
-		super(BatteryPluggedTrigger.class.getSimpleName(), NAME, DESCRIPTION);
+		super(NAME, DESCRIPTION);
 	}
 
 	/**
-	 * Minimal constructor.
+	 * Full constructor.
 	 * 
-	 * @param context				Context the context instantiating this action
-	 * @param rule					Rule represents trigger's rule
-	 * @param wanedPluggedState		Integer contant represents the wanted battery plugged state
+	 * @param wanedPluggedState
+	 *            Integer contant represents the wanted battery plugged state
 	 */
-	public BatteryPluggedTrigger(Context context, Rule rule, int wantedPluggedState) {
-		super(context, rule, BatteryPluggedTrigger.class.getSimpleName(), NAME, DESCRIPTION);
+	public BatteryPluggedTrigger(int wantedPluggedState) {
+		super(NAME, DESCRIPTION);
 		this.wantedPluggedState = wantedPluggedState;
 	}
 
@@ -110,48 +68,53 @@ public class BatteryPluggedTrigger extends Trigger {
 	}
 
 	/**
-	 * @param wantedPluggedState the wantedPluggedState to set
+	 * @param wantedPluggedState
+	 *            the wantedPluggedState to set
 	 */
 	public void setWantedPluggedState(int wantedPluggedState) {
 		this.wantedPluggedState = wantedPluggedState;
 	}
-	
+
 	public static void handle(Context appCtx, Bundle stateExtras) {
-		// Loggers
 		Log.d(TAG, "handle(Context appCtx, Bundle stateExtras)");
-		
-		List<Trigger> triggers = null;
-		
+
 		int chargePlug = stateExtras.getInt(BatteryManager.EXTRA_PLUGGED, -1);
 		if (chargePlug == -1) {
 			return;
 		}
-		
-		ITriggerDAO triggerDAO = SmartDAOFactory
-				.getFactory(SmartDAOFactory.SQLITE)
-				.getTriggerDAO(appCtx);
 
-		QueryBuilder<Trigger, Long> queryBuilder = triggerDAO.queryBuilder(BatteryPluggedTrigger.class);
-		
+		ObjectContainer db = Db4oHelper.db(appCtx);
+
 		try {
-	       triggers = queryBuilder.query();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+			List<BatteryPluggedTrigger> triggers = db.query(BatteryPluggedTrigger.class);
 
-		for (Trigger trigger : triggers) {
-			BatteryPluggedTrigger batteryPluggedTrigger = (BatteryPluggedTrigger) trigger;
-			if (batteryPluggedTrigger.getWantedPluggedState() == chargePlug) {
-				batteryPluggedTrigger.setSatisfied(true);
-			} else {
-				batteryPluggedTrigger.setSatisfied(false);
+			for (BatteryPluggedTrigger trigger : triggers) {
+				if (trigger.getWantedPluggedState() == chargePlug) {
+					trigger.setSatisfied(true);
+				} else {
+					trigger.setSatisfied(false);
+				}
+				db.store(trigger);
 			}
-			triggerDAO.update(batteryPluggedTrigger);
-			Rule rule = batteryPluggedTrigger.getRule();
-			if (rule.isSatisfied()) {
-				rule.setContext(appCtx);
-				rule.perform();
+
+			List<Rule> rules = db.query(new Predicate<Rule>() {
+				public boolean match(Rule rule) {
+					return rule.isSatisfied();
+				}
+			});
+
+			for (Rule rule : rules) {
+				rule.perform(appCtx);
 			}
+		} catch (Db4oIOException e) {
+			e.printStackTrace();
+		} catch (DatabaseClosedException e) {
+			e.printStackTrace();
+		} catch (DatabaseReadOnlyException e) {
+			e.printStackTrace();
+		} finally {
+			db.commit();
+			db.close();
 		}
 	}
 

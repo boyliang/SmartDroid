@@ -12,15 +12,14 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.db4o.ObjectContainer;
+import com.db4o.query.Predicate;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RuleEditorFragmentAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.fragments.ActionEditorFragment;
 import com.ranlior.smartdroid.fragments.TriggerEditorFragment;
-import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
-import com.ranlior.smartdroid.model.dao.logic.IActionDAO;
-import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
-import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
+import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
@@ -31,37 +30,31 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 
 	private static final String TAG = RuleEditorActivity.class.getSimpleName();
 
-	private Context appCtx;
+	private Context appCtx = null;
 
-	private RuleEditorFragmentAdapter mAdapter;
+	private ObjectContainer db = null;
 
-	private ViewPager mPager;
+	private RuleEditorFragmentAdapter mAdapter = null;
 
-	private PageIndicator mIndicator;
+	private ViewPager mPager = null;
 
-	/**
-	 * Task Editor states enum.
-	 * Inner class representing all the possiable state the
-	 * task editor may be in.
-	 * 
-	 * @author ran
-	 *
-	 */
-	public enum State {
-		ADD_RULE,
-		EDIT_RULE
-	}
-
-	private State state;
-
-	private IRuleDAO ruleDAO;
-	
-	private ITriggerDAO triggerDAO;
-	
-	private IActionDAO actionDAO;
+	private PageIndicator mIndicator = null;
 
 	// FIXME: change visiability to private
-	static Rule rule;
+	static Rule rule = null;
+
+	/**
+	 * Task Editor states enum. Inner class representing all the possiable state
+	 * the task editor may be in.
+	 * 
+	 * @author ran
+	 * 
+	 */
+	public enum State {
+		ADD_RULE, EDIT_RULE
+	}
+
+	private State state = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +66,7 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 
 		appCtx = getApplicationContext();
 
-		ruleDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getRuleDAO(appCtx);
+		db = Db4oHelper.db(appCtx);
 
 		// Gets the action from the intent
 		Intent intent = getIntent();
@@ -86,15 +79,19 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 		} else if (SmartDroid.Action.ACTION_EDIT_RULE.equals(action)) {
 			state = State.EDIT_RULE;
 		}
-		
+
 		switch (state) {
 		case ADD_RULE:
-			rule = new Rule(appCtx, "Name", "Desc");
-			ruleDAO.insert(rule);
+			rule = new Rule("Name", "Desc");
 			break;
 		case EDIT_RULE:
-			long ruleId = intent.getLongExtra(SmartDroid.Extra.EXTRA_RULE_ID, -1);
-			rule = ruleDAO.get(ruleId);
+			final long ruleId = intent.getLongExtra(SmartDroid.Extra.EXTRA_RULE_ID, -1);
+			List<Rule> rules = db.query(new Predicate<Rule>() {
+				public boolean match(Rule rule) {
+					return rule.getId() == ruleId;
+				}
+			});
+			rule = rules.get(0);
 			break;
 		default:
 			throw new IllegalStateException(TAG + " caused by invalid action");
@@ -126,9 +123,7 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 		switch (item.getItemId()) {
 		case R.id.saveRule:
 			// Validates add rule workflow
-			List<Trigger> triggers = (List<Trigger>) rule.getTriggers();
-			List<Action> actions = (List<Action>) rule.getActions();
-			if (triggers != null && actions != null) {
+			if (!rule.getTriggers().isEmpty() && !rule.getActions().isEmpty()) {
 				setResult(RESULT_OK);
 				finish();
 			} else {
@@ -141,22 +136,27 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 	}
 
 	@Override
-	public void setTriggers(List<Trigger> triggers) {
-		triggerDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getTriggerDAO(appCtx);
-		// Persists all triggers
-		for (Trigger trigger : triggers) {
-			triggerDAO.insert(trigger);
-		}
-		
+	protected void onPause() {
+		super.onPause();
+		Log.d(TAG, "onPause()");
+		db.close();
 	}
-	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.d(TAG, "onResume()");
+		db = Db4oHelper.db(appCtx);
+	}
+
+	@Override
+	public void setTriggers(List<Trigger> triggers) {
+		rule.getTriggers().addAll(triggers);
+	}
+
 	@Override
 	public void setActions(List<Action> actions) {
-		actionDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getActionDAO(appCtx);
-		// Persists all actions
-		for (Action action : actions) {
-			actionDAO.insert(action);
-		}
+		rule.getActions().addAll(actions);
 	}
 
 }

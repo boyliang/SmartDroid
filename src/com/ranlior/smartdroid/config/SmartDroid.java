@@ -21,7 +21,6 @@ import com.ranlior.smartdroid.model.dto.triggers.BatteryPluggedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.BootCompletedTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.LocationProximityTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
-import com.ranlior.smartdroid.model.dto.triggers.SensorTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 import com.ranlior.smartdroid.model.dto.triggers.WiredHeadsetPluggedTrigger;
 
@@ -382,7 +381,6 @@ public final class SmartDroid {
 			new BootCompletedTrigger(),
 			new LocationProximityTrigger(),
 			new RingerModeTrigger(),
-			new SensorTrigger(),
 			new WiredHeadsetPluggedTrigger()
 		));
         

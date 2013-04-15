@@ -30,7 +30,7 @@ public class RulesLoader extends AsyncTaskLoader<List<Rule>> {
 
 		Log.d(TAG, "RulesLoader(Context context)");
 
-		ruleDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getRuleDAO(getContext());
+		ruleDAO = SmartDAOFactory.getFactory(SmartDAOFactory.DB4O).getRuleDAO(getContext());
 	}
 
 	/**

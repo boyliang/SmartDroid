@@ -3,6 +3,7 @@
  */
 package com.ranlior.smartdroid.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -18,13 +19,13 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.db4o.ObjectContainer;
+import com.db4o.query.Predicate;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.TriggerSelectActivity;
 import com.ranlior.smartdroid.adapters.TriggerExpandableListAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
-import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
-import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
-import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
+import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
@@ -37,24 +38,20 @@ public class TriggerEditorFragment extends SherlockFragment {
 	private static final String TAG = TriggerEditorFragment.class.getSimpleName();
 
 	public static final int SELECT_TRIGGER_REQUEST_CODE = 1001;
-	
+
+	private ObjectContainer db = null;
+
 	private long ruleId = -1;
-	
-	private IRuleDAO ruleDAO;
-	
-	private Rule rule;
-	
-	private ITriggerDAO triggerDAO;
 
-	private List<Trigger> triggers;
+	private List<Trigger> triggers = null;
 
-	private TriggerExpandableListAdapter expandableTriggerAdaper;
+	private TriggerExpandableListAdapter expandableTriggerAdaper = null;
 
-	private ExpandableListView elvTriggers;
+	private ExpandableListView elvTriggers = null;
 
-	private Listener listener;
+	private Listener listener = null;
 
-	private Activity hostingActivity;
+	private Activity hostingActivity = null;
 
 	/**
 	 * Listener interface for the fragment. Container Activity must implement
@@ -99,14 +96,14 @@ public class TriggerEditorFragment extends SherlockFragment {
 			throw new ClassCastException(activity.toString() + " must implement " + Listener.class.getSimpleName());
 		}
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		Log.d(TAG, "onSaveInstanceState(Bundle outState)");
-		
+
 		// Saves the rule id
 		outState.putLong(SmartDroid.Extra.EXTRA_RULE_ID, ruleId);
-		
+
 		// Calls the superclass so it can save the view hierarchy state
 		super.onSaveInstanceState(outState);
 	}
@@ -117,27 +114,35 @@ public class TriggerEditorFragment extends SherlockFragment {
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
 
 		setHasOptionsMenu(true);
+		
+		db = Db4oHelper.db(hostingActivity);
 
 		// During creation, if arguments have been supplied to the fragment
-	    // then parse those out
+		// then parse those out
 		Bundle args = getArguments();
 		if (args != null) {
 			ruleId = args.getLong(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
-		
+
 		// If recreating a previously destroyed instance
 		if (savedInstanceState != null) {
 			// Restore value of members from saved state
 			ruleId = savedInstanceState.getLong(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
-		
-		// Gets rule
-		ruleDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getRuleDAO(hostingActivity);
-		rule = ruleDAO.get(ruleId);
-		
+
+		// Gets the rule
+		List<Rule> rules = db.query(new Predicate<Rule>() {
+			public boolean match(Rule rule) {
+				return rule.getId() == ruleId;
+			}
+		});
+
 		// Gets rule's triggers
-		triggerDAO = SmartDAOFactory.getFactory(SmartDAOFactory.SQLITE).getTriggerDAO(hostingActivity);
-		triggers = (List<Trigger>) triggerDAO.list(ruleId);
+		if (!rules.isEmpty()) {
+			triggers = rules.get(0).getTriggers();
+		} else {
+			triggers = new ArrayList<Trigger>();
+		}
 	}
 
 	@Override
@@ -186,7 +191,6 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 				try {
 					trigger = (Trigger) Class.forName(SmartDroid.Triggers.PACKAGE + "." + triggerClassName).newInstance();
-					trigger.setRule(rule);
 				} catch (InstantiationException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
@@ -198,24 +202,38 @@ public class TriggerEditorFragment extends SherlockFragment {
 				}
 
 				triggers.add(trigger);
-//				elvTriggers.postDelayed(new Runnable() {
-//					@Override
-//					public void run() {
-//						elvTriggers.setSelection(expandableTriggerAdaper.getGroupCount() - 1);
-//					}
-//				}, 100L);
-//				elvTriggers.expandGroup(expandableTriggerAdaper.getGroupCount() - 1);
+				// elvTriggers.postDelayed(new Runnable() {
+				// @Override
+				// public void run() {
+				// elvTriggers.setSelection(expandableTriggerAdaper.getGroupCount()
+				// - 1);
+				// }
+				// }, 100L);
+				// elvTriggers.expandGroup(expandableTriggerAdaper.getGroupCount()
+				// - 1);
 				expandableTriggerAdaper.notifyDataSetChanged();
+				
+				listener.setTriggers(triggers);
 			}
 		}
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+
+		Log.d(TAG, "onResume()");
+
+		db = Db4oHelper.db(hostingActivity);
+	}
+
+	@Override
 	public void onPause() {
 		super.onPause();
+
 		Log.d(TAG, "onPause()");
-		
-		listener.setTriggers(triggers);
+
+		db.close();
 	}
 
 }

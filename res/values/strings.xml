@@ -14,6 +14,10 @@
     <string name="title_activity_rule_editor">Rule Editor</string>
     <string name="save_rule">Add Rule</string>
     
+    <!-- RuleEditorFragment -->
+    <string name="rule_name">NAME</string>
+    <string name="rule_description">DESCRIPTION</string>
+    
     <!-- SelectTriggerFragment -->
     <string name="title_activity_trigger_select">Select Trigger</string>
     <string name="add_trigger">Add Trigger</string>

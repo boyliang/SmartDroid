@@ -18,6 +18,7 @@ import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RuleEditorFragmentAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.fragments.ActionEditorFragment;
+import com.ranlior.smartdroid.fragments.RuleEditorFragment;
 import com.ranlior.smartdroid.fragments.TriggerEditorFragment;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.actions.Action;
@@ -26,7 +27,7 @@ import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class RuleEditorActivity extends SherlockFragmentActivity implements TriggerEditorFragment.Listener, ActionEditorFragment.Listener {
+public class RuleEditorActivity extends SherlockFragmentActivity implements TriggerEditorFragment.Listener, ActionEditorFragment.Listener, RuleEditorFragment.Listener {
 
 	private static final String TAG = RuleEditorActivity.class.getSimpleName();
 
@@ -47,7 +48,7 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 	 * Task Editor states enum. Inner class representing all the possiable state
 	 * the task editor may be in.
 	 * 
-	 * @author ran
+	 * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
 	 * 
 	 */
 	public enum State {
@@ -82,7 +83,7 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 
 		switch (state) {
 		case ADD_RULE:
-			rule = new Rule("Name", "Desc");
+			rule = new Rule(null, null);
 			break;
 		case EDIT_RULE:
 			final long ruleId = intent.getLongExtra(SmartDroid.Extra.EXTRA_RULE_ID, -1);
@@ -122,12 +123,20 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 
 		switch (item.getItemId()) {
 		case R.id.saveRule:
-			// Validates add rule workflow
-			if (!rule.getTriggers().isEmpty() && !rule.getActions().isEmpty()) {
+			// Validates rule add or edit workflow
+			if (rule.getTriggers().isEmpty()) {
+				Toast.makeText(appCtx, "Rule's triggers list is empty.", Toast.LENGTH_SHORT).show();
+			} else if (rule.getActions().isEmpty()) {
+				Toast.makeText(appCtx, "Rule's actions list is empty.", Toast.LENGTH_SHORT).show();
+			} else if (rule.getName() == null) {
+				Toast.makeText(appCtx, "Rule's name is empty.", Toast.LENGTH_SHORT).show();
+			} else if (rule.getDescription() == null) {
+				Toast.makeText(appCtx, "Rule's name is empty.", Toast.LENGTH_SHORT).show();
+			// If rule add or edit workflow valid
+			} else {
+				db.store(rule);
 				setResult(RESULT_OK);
 				finish();
-			} else {
-				Toast.makeText(appCtx, "Your triggers or actions list is empty.", Toast.LENGTH_SHORT).show();
 			}
 			return true;
 		default:
@@ -151,12 +160,22 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 
 	@Override
 	public void setTriggers(List<Trigger> triggers) {
-		rule.getTriggers().addAll(triggers);
+		rule.setTriggers(triggers);
 	}
 
 	@Override
 	public void setActions(List<Action> actions) {
-		rule.getActions().addAll(actions);
+		rule.setActions(actions);
+	}
+
+	@Override
+	public void setName(String name) {
+		rule.setName(name);
+	}
+
+	@Override
+	public void setDescription(String description) {
+		rule.setDescription(description);
 	}
 
 }

@@ -6,13 +6,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
 import com.ranlior.smartdroid.fragments.ActionEditorFragment;
+import com.ranlior.smartdroid.fragments.RuleEditorFragment;
 import com.ranlior.smartdroid.fragments.TriggerEditorFragment;
 
 public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 
 	private static final String TAG = RuleEditorFragmentAdapter.class.getSimpleName();
 
-	protected static final String[] CONTENT = new String[] { "Triggers", "Actions" };
+	protected static final String[] CONTENT = new String[] { "Triggers", "Actions", "Rule" };
 	
 	private long ruleId = -1;
 
@@ -32,6 +33,8 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 			return TriggerEditorFragment.newInstance(ruleId);
 		case 1:
 			return ActionEditorFragment.newInstance(ruleId);
+		case 2:
+			return new RuleEditorFragment();
 		default:
 			return null;
 		}

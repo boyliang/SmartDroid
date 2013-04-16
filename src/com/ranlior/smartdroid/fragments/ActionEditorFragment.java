@@ -167,17 +167,23 @@ public class ActionEditorFragment extends SherlockFragment {
 		}
 	}
 
-	// FIXME: check if needed or use onCreate only
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)");
 
-		expandableActionAdaper = new ActionExpandableListAdapter(hostingActivity, actions);
-		View view = inflater.inflate(R.layout.fragment_expandable_list_actions, null);
-		elvActions = (ExpandableListView) view.findViewById(R.id.expandableListView);
-		elvActions.setAdapter(expandableActionAdaper);
-
-		return view;
+		// If the container view is null,
+		// There is no need for us to create the fragment view
+		if (container == null) {
+			return null;
+		// If the container view isn't null,
+		// There is need for us to create the fragment view
+		} else {
+			expandableActionAdaper = new ActionExpandableListAdapter(hostingActivity, actions);
+			View view = inflater.inflate(R.layout.fragment_expandable_list_actions, null);
+			elvActions = (ExpandableListView) view.findViewById(R.id.expandableListView);
+			elvActions.setAdapter(expandableActionAdaper);
+			return view;
+		}
 	}
 
 	@Override

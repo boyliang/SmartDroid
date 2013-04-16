@@ -171,12 +171,19 @@ public class TriggerEditorFragment extends SherlockFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)");
 
-		expandableTriggerAdaper = new TriggerExpandableListAdapter(hostingActivity, triggers);
-		View view = inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
-		elvTriggers = (ExpandableListView) view.findViewById(R.id.expandableListView);
-		elvTriggers.setAdapter(expandableTriggerAdaper);
-
-		return view;
+		// If the container view is null,
+		// There is no need for us to create the fragment view
+		if (container == null) {
+			return null;
+		// If the container view isn't null,
+		// There is need for us to create the fragment view
+		} else {
+			expandableTriggerAdaper = new TriggerExpandableListAdapter(hostingActivity, triggers);
+			View view = inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
+			elvTriggers = (ExpandableListView) view.findViewById(R.id.expandableListView);
+			elvTriggers.setAdapter(expandableTriggerAdaper);
+			return view;
+		}
 	}
 
 	@Override

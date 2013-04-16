@@ -40,11 +40,9 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-		Log.d(TAG, "getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)");
-
 		String triggerClassName = triggers.get(groupPosition).getClass().getSimpleName();
-
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
 		if ("RingerModeTrigger".equals(triggerClassName)) {
 			convertView = inflater.inflate(R.layout.expand_ringer_trigger, null);
 		} else if ("BatteryLevelTrigger".equals(triggerClassName)) {
@@ -79,8 +77,6 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 	// TODO create holder for the view recycling
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-		Log.d(TAG, "getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)");
-
 		View view;
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.trigger_list_item, null);

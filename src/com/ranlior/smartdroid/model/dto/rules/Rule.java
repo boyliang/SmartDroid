@@ -19,6 +19,8 @@ import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 public class Rule {
 
 	private static final String TAG = Rule.class.getSimpleName();
+	
+	private static long idGen;
 
 	private long id = -1L;
 
@@ -38,6 +40,7 @@ public class Rule {
 	 */
 	public Rule(String name, String description) {
 		super();
+		this.id = idGen++;
 		this.name = name;
 		this.description = description;
 	}

@@ -175,8 +175,8 @@ public class ActionEditorFragment extends SherlockFragment {
 		// There is no need for us to create the fragment view
 		if (container == null) {
 			return null;
-		// If the container view isn't null,
-		// There is need for us to create the fragment view
+			// If the container view isn't null,
+			// There is need for us to create the fragment view
 		} else {
 			expandableActionAdaper = new ActionExpandableListAdapter(hostingActivity, actions);
 			View view = inflater.inflate(R.layout.fragment_expandable_list_actions, null);
@@ -209,15 +209,13 @@ public class ActionEditorFragment extends SherlockFragment {
 				}
 
 				actions.add(action);
-				// elvActions.postDelayed(new Runnable() {
-				// @Override
-				// public void run() {
-				// elvActions.setSelection(expandableActionAdaper.getGroupCount()
-				// - 1);
-				// }
-				// }, 100L);
-				// elvActions.expandGroup(expandableActionAdaper.getGroupCount()
-				// - 1);
+				elvActions.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						elvActions.setSelection(expandableActionAdaper.getGroupCount() - 1);
+					}
+				}, 100L);
+				elvActions.expandGroup(expandableActionAdaper.getGroupCount() - 1);
 				expandableActionAdaper.notifyDataSetChanged();
 				
 				listener.setActions(actions);
@@ -228,9 +226,7 @@ public class ActionEditorFragment extends SherlockFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-
 		Log.d(TAG, "onResume()");
-
 		db = Db4oHelper.db(hostingActivity);
 	}
 
@@ -238,7 +234,6 @@ public class ActionEditorFragment extends SherlockFragment {
 	public void onPause() {
 		super.onPause();
 		Log.d(TAG, "onPause()");
-
 		db.close();
 	}
 

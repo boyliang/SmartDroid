@@ -114,7 +114,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
 
 		setHasOptionsMenu(true);
-		
+
 		db = Db4oHelper.db(hostingActivity);
 
 		// During creation, if arguments have been supplied to the fragment
@@ -175,8 +175,8 @@ public class TriggerEditorFragment extends SherlockFragment {
 		// There is no need for us to create the fragment view
 		if (container == null) {
 			return null;
-		// If the container view isn't null,
-		// There is need for us to create the fragment view
+			// If the container view isn't null,
+			// There is need for us to create the fragment view
 		} else {
 			expandableTriggerAdaper = new TriggerExpandableListAdapter(hostingActivity, triggers);
 			View view = inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
@@ -209,17 +209,15 @@ public class TriggerEditorFragment extends SherlockFragment {
 				}
 
 				triggers.add(trigger);
-				// elvTriggers.postDelayed(new Runnable() {
-				// @Override
-				// public void run() {
-				// elvTriggers.setSelection(expandableTriggerAdaper.getGroupCount()
-				// - 1);
-				// }
-				// }, 100L);
-				// elvTriggers.expandGroup(expandableTriggerAdaper.getGroupCount()
-				// - 1);
+				elvTriggers.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						elvTriggers.setSelection(expandableTriggerAdaper.getGroupCount() - 1);
+					}
+				}, 100L);
+				elvTriggers.expandGroup(expandableTriggerAdaper.getGroupCount() - 1);
 				expandableTriggerAdaper.notifyDataSetChanged();
-				
+
 				listener.setTriggers(triggers);
 			}
 		}
@@ -228,18 +226,14 @@ public class TriggerEditorFragment extends SherlockFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-
 		Log.d(TAG, "onResume()");
-
 		db = Db4oHelper.db(hostingActivity);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-
 		Log.d(TAG, "onPause()");
-
 		db.close();
 	}
 

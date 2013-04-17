@@ -127,6 +127,8 @@ public class RuleActivity extends SherlockFragmentActivity {
 	protected void onActivityResult(int resultCode, int requestCode, Intent intent) {
 		Log.d(TAG, "onActivityResult(int resultCode, int requestCode, Intent intent)");
 
+		db = Db4oHelper.db(appCtx);
+
 		if (requestCode == RESULT_OK) {
 			db = Db4oHelper.db(appCtx);
 

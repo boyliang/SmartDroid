@@ -3,15 +3,20 @@ package com.ranlior.smartdroid.adapters;
 import java.util.List;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.actions.Action;
+import com.ranlior.smartdroid.model.dto.actions.ModifyRingerModeAction;
 
 public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -39,16 +44,39 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-		String triggerClassName = actions.get(groupPosition).getClass().getSimpleName();
+	public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+		String actionClassName = actions.get(groupPosition).getClass().getSimpleName();
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		if ("RingerModeTrigger".equals(triggerClassName)) {
-			convertView = inflater.inflate(R.layout.expand_ringer_trigger, null);
-		} else if ("BatteryLevelTrigger".equals(triggerClassName)) {
-			convertView = inflater.inflate(R.layout.expand_battery_trigger, null);
-		} else if ("BattryPluggedTrigger".equals(triggerClassName)) {
-			convertView = inflater.inflate(R.layout.expand_power_trigger, null);
+		if ("ModifyRingerModeAction".equals(actionClassName)) {
+			convertView = inflater.inflate(R.layout.expand_ringer_action, null);
+			final RadioGroup radioGroup = (RadioGroup)convertView.findViewById(R.id.rgRingerMode);
+			convertView.findViewById(R.id.btnSaveAction).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					int ringerMode = -1;
+					int what = radioGroup.getCheckedRadioButtonId();
+					switch (what) {
+					case R.id.rbSilent:
+						ringerMode = AudioManager.RINGER_MODE_SILENT;
+						break;
+					case R.id.rbVibrate:
+						ringerMode = AudioManager.RINGER_MODE_VIBRATE;
+						break;
+					case R.id.rbNormal:
+						ringerMode = AudioManager.RINGER_MODE_NORMAL;
+						break;
+					default:
+						ringerMode = AudioManager.RINGER_MODE_NORMAL;
+						break;
+					}
+					Toast.makeText(context, "Saving action of type ModifyRingerModeAction with value of: " + ringerMode, Toast.LENGTH_SHORT).show();
+					//TODO collapse the item after save(lior)
+					//TODO update or set the action's ringerMode 
+					ModifyRingerModeAction modifyRingerModeAction = (ModifyRingerModeAction) actions.get(groupPosition);
+					modifyRingerModeAction.setRingerMode(ringerMode);
+				}
+			});
 		}
 
 		return convertView;

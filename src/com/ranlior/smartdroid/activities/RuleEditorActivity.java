@@ -120,6 +120,8 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.d(TAG, "onOptionsItemSelected(MenuItem item)");
 		Log.d(TAG, "item selected: " + item.getTitle());
+		
+		db = Db4oHelper.db(appCtx);
 
 		switch (item.getItemId()) {
 		case R.id.saveRule:
@@ -128,10 +130,10 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 				Toast.makeText(appCtx, "Rule's triggers list is empty.", Toast.LENGTH_SHORT).show();
 			} else if (rule.getActions().isEmpty()) {
 				Toast.makeText(appCtx, "Rule's actions list is empty.", Toast.LENGTH_SHORT).show();
-			} else if (rule.getName() == null) {
+			} else if (rule.getName() == null || "".equals(rule.getName())) {
 				Toast.makeText(appCtx, "Rule's name is empty.", Toast.LENGTH_SHORT).show();
-			} else if (rule.getDescription() == null) {
-				Toast.makeText(appCtx, "Rule's name is empty.", Toast.LENGTH_SHORT).show();
+			} else if (rule.getDescription() == null || "".equals(rule.getDescription())) {
+				Toast.makeText(appCtx, "Rule's description is empty.", Toast.LENGTH_SHORT).show();
 			// If rule add or edit workflow valid
 			} else {
 				db.store(rule);
@@ -145,17 +147,17 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 	}
 
 	@Override
-	protected void onPause() {
-		super.onPause();
-		Log.d(TAG, "onPause()");
-		db.close();
-	}
-
-	@Override
 	protected void onResume() {
 		super.onResume();
 		Log.d(TAG, "onResume()");
 		db = Db4oHelper.db(appCtx);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.d(TAG, "onPause()");
+		db.close();
 	}
 
 	@Override

@@ -3,108 +3,66 @@
  */
 package com.ranlior.smartdroid.model.dto.triggers;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.table.DatabaseTable;
+import com.db4o.ObjectContainer;
+import com.db4o.ext.DatabaseClosedException;
+import com.db4o.ext.DatabaseReadOnlyException;
+import com.db4o.ext.Db4oIOException;
+import com.db4o.query.Predicate;
 import com.ranlior.smartdroid.config.SmartDroid;
-import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
-import com.ranlior.smartdroid.model.dao.logic.ITriggerDAO;
+import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
- * @author Ran Haveshush
- * Email:  ran.haveshush.shenkar@gmail.com
- *
+ * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
+ * 
  */
-@DatabaseTable(tableName = "battery_level_triggers")
 public class BatteryLevelTrigger extends Trigger {
 
-	/**
-	 * Holds logger's tag.
-	 */
-	private static final String TAG = "BatteryLevelTrigger";
-	
-	/**
-	 * The trigger's name. 
-	 */
+	private static final String TAG = BatteryLevelTrigger.class.getSimpleName();
+
 	public static final String NAME = "Battery level state changed";
-	
-	/**
-	 * The trigger's description.
-	 */
+
 	public static final String DESCRIPTION = "Trigged when the battery level state changes (low / okay)";
-	
+
 	/**
 	 * The contant representing battary level low.
 	 */
 	public static final int BATTERY_LEVEL_LOW = 0;
-	
+
 	/**
 	 * The contant representing battary level okay.
 	 */
 	public static final int BATTERY_LEVEL_OKAY = 1;
-	
-	/*
-     * Table definition.
-     */
-	
+
 	/**
-	 * The table name.
-	 */
-	public static final String TABLE_NAME = "battery_level_triggers";
-	
-	/*
-     * Column definitions.
-     */
-	
-	/**
-	 * Column name wanted state.
-	 * 
-	 * <P>Type: INTEGER</P>
-	 * <P>Constraint: NOT NULL</p>
-	 */
-	public static final String COLUMN_NAME_WANTED_LEVEL_STATE = "wanted_level_state";
-	
-	/*
-	 * Instance variables.
-	 */
-	
-	/**
-	 * Holds the trigger wanted state.<BR/><BR/>
+	 * Holds the trigger wanted state.<BR/>
+	 * <BR/>
 	 * 
 	 * @see android.os.BatteryManager
 	 */
-	@DatabaseField(columnName = BatteryLevelTrigger.COLUMN_NAME_WANTED_LEVEL_STATE, canBeNull = false)
 	private int wantedLevelState = 0;
-	
 
-	/**
-	 * Default constructor.
-	 * ORMLite needs a no-arg constructor.
-	 */
 	public BatteryLevelTrigger() {
-		super(BatteryLevelTrigger.class.getSimpleName(), NAME, DESCRIPTION);
+		super(NAME, DESCRIPTION);
 	}
 
 	/**
-	 * Minimal constructor.
+	 * Full constructor.
 	 * 
-	 * @param context				Context the context instantiating this action
-	 * @param rule					Rule represents trigger's rule
-	 * @param wantedLevelState		Integer contant represents the wanted battery level state
+	 * @param wantedLevelState
+	 *            Integer contant represents the wanted battery level state
 	 */
-	public BatteryLevelTrigger(Context context, Rule rule, int wantedLevelState) {
-		super(context, rule, BatteryLevelTrigger.class.getSimpleName(), NAME, DESCRIPTION);
+	public BatteryLevelTrigger(int wantedLevelState) {
+		super(NAME, DESCRIPTION);
 		this.wantedLevelState = wantedLevelState;
 	}
-	
+
 	/**
 	 * @return the wantedLevelState
 	 */
@@ -113,45 +71,53 @@ public class BatteryLevelTrigger extends Trigger {
 	}
 
 	/**
-	 * @param wantedLevelState the wantedLevelState to set
+	 * @param wantedLevelState
+	 *            the wantedLevelState to set
 	 */
 	public void setWantedLevelState(int wantedLevelState) {
 		this.wantedLevelState = wantedLevelState;
 	}
 
 	public static void handle(Context appCtx, Bundle stateExtras) {
-		// Loggers
 		Log.d(TAG, "handle(Context appCtx, Bundle stateExtras)");
-		
-		List<Trigger> triggers = null;
-		
+
 		int batteryLevel = stateExtras.getInt(SmartDroid.Extra.EXTRA_BATTERY_LEVEL, -1);
-		
-		ITriggerDAO triggerDAO = SmartDAOFactory
-				.getFactory(SmartDAOFactory.SQLITE)
-				.getTriggerDAO(appCtx);
+		if (batteryLevel == -1) {
+			return;
+		}
 
-		QueryBuilder<Trigger, Long> queryBuilder = triggerDAO.queryBuilder(BatteryLevelTrigger.class);
-		
+		ObjectContainer db = Db4oHelper.db(appCtx);
+
 		try {
-	       triggers = queryBuilder.query();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+			List<BatteryLevelTrigger> triggers = db.query(BatteryLevelTrigger.class);
 
-		for (Trigger trigger : triggers) {
-			BatteryLevelTrigger batteryLevelTrigger = (BatteryLevelTrigger) trigger;
-			if (batteryLevelTrigger.getWantedLevelState() == batteryLevel) {
-				batteryLevelTrigger.setSatisfied(true);
-			} else {
-				batteryLevelTrigger.setSatisfied(false);
+			for (BatteryLevelTrigger trigger : triggers) {
+				if (trigger.getWantedLevelState() == batteryLevel) {
+					trigger.setSatisfied(true);
+				} else {
+					trigger.setSatisfied(false);
+				}
+				db.store(trigger);
 			}
-			triggerDAO.update(batteryLevelTrigger);
-			Rule rule = batteryLevelTrigger.getRule();
-			if (rule.isSatisfied()) {
-				rule.setContext(appCtx);
-				rule.perform();
+
+			List<Rule> rules = db.query(new Predicate<Rule>() {
+				public boolean match(Rule rule) {
+					return rule.isSatisfied();
+				}
+			});
+
+			for (Rule rule : rules) {
+				rule.perform(appCtx);
 			}
+		} catch (Db4oIOException e) {
+			e.printStackTrace();
+		} catch (DatabaseClosedException e) {
+			e.printStackTrace();
+		} catch (DatabaseReadOnlyException e) {
+			e.printStackTrace();
+		} finally {
+			db.commit();
+			db.close();
 		}
 	}
 

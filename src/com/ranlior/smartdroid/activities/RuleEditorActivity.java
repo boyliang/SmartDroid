@@ -1,50 +1,61 @@
 package com.ranlior.smartdroid.activities;
 
+import java.util.List;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.db4o.ObjectContainer;
+import com.db4o.query.Predicate;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RuleEditorFragmentAdapter;
+import com.ranlior.smartdroid.config.SmartDroid;
+import com.ranlior.smartdroid.fragments.ActionEditorFragment;
+import com.ranlior.smartdroid.fragments.RuleEditorFragment;
+import com.ranlior.smartdroid.fragments.TriggerEditorFragment;
+import com.ranlior.smartdroid.model.database.Db4oHelper;
+import com.ranlior.smartdroid.model.dto.actions.Action;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class RuleEditorActivity extends SherlockFragmentActivity {
+public class RuleEditorActivity extends SherlockFragmentActivity implements TriggerEditorFragment.Listener, ActionEditorFragment.Listener, RuleEditorFragment.Listener {
+
+	private static final String TAG = RuleEditorActivity.class.getSimpleName();
+
+	private Context appCtx = null;
+
+	private ObjectContainer db = null;
+
+	private RuleEditorFragmentAdapter mAdapter = null;
+
+	private ViewPager mPager = null;
+
+	private PageIndicator mIndicator = null;
+
+	// FIXME: change visiability to private
+	static Rule rule = null;
 
 	/**
-	 * The logger's tag.
-	 */
-	private static final String TAG = "RuleEditorActivity";
-
-	/**
-	 * menu
+	 * Task Editor states enum. Inner class representing all the possiable state
+	 * the task editor may be in.
 	 * 
-	 * Holds the adapter that create pages of lists
+	 * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
+	 * 
 	 */
-	private RuleEditorFragmentAdapter mAdapter;
+	public enum State {
+		ADD_RULE, EDIT_RULE
+	}
 
-	/**
-	 * holds the ViewPgaer
-	 */
-	private ViewPager mPager;
-
-	/**
-	 * Holds the tabs indicator
-	 */
-	private PageIndicator mIndicator;
-
-	/**
-	 * Holds the current position of the pager
-	 */
-	private int pagePosition;
-
-	public static final int SELECT_TRIGGER_REQUEST_CODE = 1001;
-	public static final int SELECT_ACTION_REQUEST_CODE = 1002;
+	private State state = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,60 +65,119 @@ public class RuleEditorActivity extends SherlockFragmentActivity {
 
 		setContentView(R.layout.activity_rule_editor);
 
-		mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager());
+		appCtx = getApplicationContext();
+
+		db = Db4oHelper.db(appCtx);
+
+		// Gets the action from the intent
+		Intent intent = getIntent();
+		String action = intent.getAction();
+		Log.d(TAG, "action: " + action);
+
+		// Sets the state of the activity by the invoked action
+		if (SmartDroid.Action.ACTION_ADD_RULE.equals(action)) {
+			state = State.ADD_RULE;
+		} else if (SmartDroid.Action.ACTION_EDIT_RULE.equals(action)) {
+			state = State.EDIT_RULE;
+		}
+
+		switch (state) {
+		case ADD_RULE:
+			rule = new Rule(null, null);
+			break;
+		case EDIT_RULE:
+			final long ruleId = intent.getLongExtra(SmartDroid.Extra.EXTRA_RULE_ID, -1);
+			List<Rule> rules = db.query(new Predicate<Rule>() {
+				public boolean match(Rule rule) {
+					return rule.getId() == ruleId;
+				}
+			});
+			rule = rules.get(0);
+			break;
+		default:
+			throw new IllegalStateException(TAG + " caused by invalid action");
+		}
+
+		mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager(), rule.getId());
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPager.setAdapter(mAdapter);
 
 		mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
 		mIndicator.setViewPager(mPager);
-
-		pagePosition = 0;
-
-		mIndicator.setOnPageChangeListener(new OnPageChangeListener() {
-
-			@Override
-			public void onPageSelected(int position) {
-				Toast.makeText(RuleEditorActivity.this, "Changed to page " + position, Toast.LENGTH_SHORT).show();
-				pagePosition = position;
-
-			}
-
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int state) {
-			}
-		});
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public boolean onCreateOptionsMenu(Menu menu) {
+		Log.d(TAG, "onCreateOptionsMenu(Menu menu)");
 
-		Log.d(TAG, "onActivityResult(int requestCode, int resultCode, Intent data)");
+		getSupportMenuInflater().inflate(R.menu.activity_rule_editor, menu);
 
-		if (resultCode == RESULT_OK) {
-			if (requestCode == SELECT_TRIGGER_REQUEST_CODE) {
-				String triggerClassName = data.getStringExtra("triggerName");
-				Log.i(TAG, "the user selected: " + triggerClassName);
-				Trigger trigger = null;
-				try {
-					trigger = (Trigger) Class.forName(triggerClassName).newInstance();
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
-				// TODO: continue from here. add a trigger to the fragment generator.
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Log.d(TAG, "onOptionsItemSelected(MenuItem item)");
+		Log.d(TAG, "item selected: " + item.getTitle());
+		
+		db = Db4oHelper.db(appCtx);
+
+		switch (item.getItemId()) {
+		case R.id.saveRule:
+			// Validates rule add or edit workflow
+			if (rule.getTriggers().isEmpty()) {
+				Toast.makeText(appCtx, "Rule's triggers list is empty.", Toast.LENGTH_SHORT).show();
+			} else if (rule.getActions().isEmpty()) {
+				Toast.makeText(appCtx, "Rule's actions list is empty.", Toast.LENGTH_SHORT).show();
+			} else if (rule.getName() == null || "".equals(rule.getName())) {
+				Toast.makeText(appCtx, "Rule's name is empty.", Toast.LENGTH_SHORT).show();
+			} else if (rule.getDescription() == null || "".equals(rule.getDescription())) {
+				Toast.makeText(appCtx, "Rule's description is empty.", Toast.LENGTH_SHORT).show();
+			// If rule add or edit workflow valid
+			} else {
+				db.store(rule);
+				setResult(RESULT_OK);
+				finish();
 			}
-		} else {
-			Log.e(TAG, "there is a problem returning data from "
-					+ (requestCode == SELECT_TRIGGER_REQUEST_CODE ? "SelectTriggerActivity" : "SelectActionActivity"));
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.d(TAG, "onResume()");
+		db = Db4oHelper.db(appCtx);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.d(TAG, "onPause()");
+		db.close();
+	}
+
+	@Override
+	public void setTriggers(List<Trigger> triggers) {
+		rule.setTriggers(triggers);
+	}
+
+	@Override
+	public void setActions(List<Action> actions) {
+		rule.setActions(actions);
+	}
+
+	@Override
+	public void setName(String name) {
+		rule.setName(name);
+	}
+
+	@Override
+	public void setDescription(String description) {
+		rule.setDescription(description);
 	}
 
 }

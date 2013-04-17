@@ -27,6 +27,11 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".activities.RuleActivity"
+            android:label="@string/title_activity_rule"
+            android:theme="@style/Theme.Sherlock" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,31 +39,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.RuleActivity"
-            android:label="@string/title_activity_rule"
-            android:theme="@style/Theme.Sherlock" >
-        </activity>
-        <activity
             android:name=".activities.RuleEditorActivity"
-            android:label="Rule Editor"
+            android:label="@string/title_activity_rule_editor"
+            android:parentActivityName=".activities.RuleActivity"
             android:theme="@style/Theme.Sherlock" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.RuleActivity" />
+
             <intent-filter>
-                <action android:name="com.ranlior.smartdroid.ACTION_NEW_RULE" />
+                <action android:name="com.ranlior.smartdroid.ACTION_ADD_RULE" />
 
                 <category android:name="com.ranlior.smartdroid.ACTION_EDIT_RULE" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.TriggerSelectActivity"
-            android:label="@string/title_activity_trigger_select" >
+            android:label="@string/title_activity_trigger_select"
+            android:parentActivityName=".activities.RuleEditorActivity"
+            android:theme="@style/Theme.Sherlock" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.RuleEditorActivity" />
         </activity>
         <activity
             android:name=".activities.ActionSelectActivity"
-            android:label="@string/title_activity_action_select" >
-        </activity>
-        <activity
-            android:name=".sandbox.ExpandExample"
-            android:label="Triggers" >
+            android:label="@string/title_activity_action_select"
+            android:parentActivityName=".activities.RuleEditorActivity"
+            android:theme="@style/Theme.Sherlock" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.RuleEditorActivity" />
         </activity>
 
         <!-- Services -->

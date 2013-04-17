@@ -13,47 +13,35 @@ import android.widget.TextView;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 
-public class ActionAdapter extends ArrayAdapter<Action> {
+public class ActionSelectAdapter extends ArrayAdapter<Action> {
 
-	private static final String TAG = "ActionAdapter";
+	private static final String TAG = ActionSelectAdapter.class.getSimpleName();
 	
-	private static ActionAdapter instance = null;
+	private LayoutInflater inflater;
+
+	private int layoutResourceId = -1;
 
 	private List<Action> actions;
-	
-	Context context;
 
-	private ActionAdapter(Context context, int trigger_layout,  List<Action> actions) {
-		super(context, trigger_layout, actions);
+	public ActionSelectAdapter(Context context, int layoutResourceId, List<Action> actions) {
+		super(context, layoutResourceId, actions);
 		
-		Log.d(TAG, "constructor");
+		Log.d(TAG, "Constructor");
 		
-		this.context = context;
+		this.inflater = LayoutInflater.from(context);
+		this.layoutResourceId  = layoutResourceId;
 		this.actions = actions;
-		
 	}
 
-	public static ActionAdapter getInstance(Context context, int action_layout,  List<Action> actions) {
-		
-		Log.d(TAG, "getInstance(Context context, int action_layout, List<Rule> actions)");
-		
-		if (instance == null) {
-			instance = new ActionAdapter(context, action_layout, actions);
-		}
-		return instance;
-	}
-
+	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		final ViewHolder holder;
 		final Action action = actions.get(position);
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.trigger_item, null);
-
+			convertView = inflater.inflate(layoutResourceId, null);
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
 			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);
-		
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();

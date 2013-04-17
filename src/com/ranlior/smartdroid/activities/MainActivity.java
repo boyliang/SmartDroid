@@ -15,17 +15,11 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.ranlior.smartdroid.R;
 
 public class MainActivity extends SherlockActivity {
 	
-	/**
-	 * Holds the logger's tag.
-	 */
-	private final static String TAG = "MainActivity";
-
-	private MediaPlayer mp;
+	private final static String TAG = MainActivity.class.getSimpleName();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

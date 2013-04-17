@@ -13,44 +13,27 @@ import android.widget.TextView;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
-public class RuleAdapter extends ArrayAdapter<Rule> {
+public class RulesAdapter extends ArrayAdapter<Rule> {
 
-	private static final String TAG = "RuleAdapter";
-	
-	private static RuleAdapter instance = null;
+	private static final String TAG = RulesAdapter.class.getSimpleName();
 
 	private List<Rule> rules;
-	
-	Context context;
 
-
-	private RuleAdapter(Context context, int card_layout,  List<Rule> ruleList) {
-		super(context, card_layout, ruleList);
+	public RulesAdapter(Context context, int layoutResourceId,  List<Rule> rules) {
+		super(context, layoutResourceId, rules);
 		
-		Log.d(TAG, "constructor");
+		Log.d(TAG, "Constructor");
 		
-		this.context = context;
-		this.rules = ruleList;
-		
-	}
-
-	public static RuleAdapter getInstance(Context context, int card_layout, List<Rule> ruleList) {
-		Log.d(TAG, "getInstance(Context context, int card_layout, List<Rule> ruleList)");
-		
-		if (instance == null) {
-			instance = new RuleAdapter(context, card_layout, ruleList);
-		}
-		return instance;
+		this.rules = rules;
 	}
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		
 		final ViewHolder holder;
 		final Rule rule = rules.get(position);
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.rule_card_layout, null);
+			convertView = inflater.inflate(R.layout.rule_list_item, null);
 
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);

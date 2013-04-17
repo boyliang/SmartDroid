@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@drawable/sinked_expandable"
-    >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,8 +11,7 @@
         android:layout_marginTop="4dp"
         android:orientation="vertical"
         android:padding="2dp"
-        android:visibility="visible"
-         >
+        android:visibility="visible" >
 
         <RadioGroup
             android:id="@+id/rgRingerMode"
@@ -24,39 +22,34 @@
             android:paddingRight="25dp" >
 
             <RadioButton
-                android:id="@+id/rbNormal"
+                android:id="@+id/rbSilent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:button="@drawable/volume_silent_checked"
-                android:checked="true" />
+                android:button="@drawable/volume_silent_checked" />
 
             <RadioButton
-                android:id="@+id/rbSilent"
+                android:id="@+id/rbVibrate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:button="@drawable/volume_vibrate_checked" />
 
             <RadioButton
-                android:id="@+id/rbVibrate"
+                android:id="@+id/rbNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                
-                android:button="@drawable/volume_normal_checked" />
+                android:button="@drawable/volume_normal_checked"
+                android:checked="true" />
         </RadioGroup>
 
-        <TextView
-            android:id="@+id/tvSave"
+        <Button
+            android:id="@+id/btnSaveTrigger"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:text="Save"
-            android:textColor="#41c7f8"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:visibility="visible" />
-        
+            android:layout_gravity="center"
+            android:layout_marginTop="6dp"
+            android:text="Save" />
     </LinearLayout>
-	
+
 </LinearLayout>

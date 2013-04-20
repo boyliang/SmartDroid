@@ -10,12 +10,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.db4o.ObjectContainer;
+import com.db4o.ext.Db4oUUID;
 import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RulesAdapter;
@@ -26,9 +26,6 @@ import com.ranlior.smartdroid.model.dto.rules.Rule;
 public class RuleActivity extends SherlockFragmentActivity {
 
 	private final static String TAG = RuleActivity.class.getSimpleName();
-
-	public static final int ADD_RULE_REQUEST_CODE = 1001;
-	public static final int EDIT_RULE_REQUEST_CODE = 1002;
 
 	private Context appCtx = null;;
 
@@ -49,7 +46,7 @@ public class RuleActivity extends SherlockFragmentActivity {
 
 		appCtx = getApplicationContext();
 
-		db = Db4oHelper.db(appCtx);
+		db = Db4oHelper.db(appCtx);		
 
 		rules = db.query(Rule.class);
 
@@ -59,11 +56,17 @@ public class RuleActivity extends SherlockFragmentActivity {
 		lvRules.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// Gets the rule's uuid
+				Rule rule = rules.get(position);
+				Db4oUUID ruleUuid = db.ext().getObjectInfo(rule).getUUID();
+				long ruleIdLong = ruleUuid.getLongPart();
+				byte[] ruleIdSig = ruleUuid.getSignaturePart();
 				// Redirects the rule editor activiry with the selected rule id
 				Intent intent = new Intent(RuleActivity.this, RuleEditorActivity.class);
 				intent.setAction(SmartDroid.Action.ACTION_EDIT_RULE);
-				intent.putExtra(SmartDroid.Extra.EXTRA_RULE_ID, rules.get(position).getId());
-				startActivityForResult(intent, EDIT_RULE_REQUEST_CODE);
+				intent.putExtra("long", ruleIdLong);
+				intent.putExtra("signature", ruleIdSig);
+				startActivity(intent);
 			}
 		});
 
@@ -102,7 +105,7 @@ public class RuleActivity extends SherlockFragmentActivity {
 		case R.id.addRule:
 			Intent intent = new Intent(RuleActivity.this, RuleEditorActivity.class);
 			intent.setAction(SmartDroid.Action.ACTION_ADD_RULE);
-			startActivityForResult(intent, ADD_RULE_REQUEST_CODE);
+			startActivity(intent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -110,43 +113,10 @@ public class RuleActivity extends SherlockFragmentActivity {
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-		Log.d(TAG, "onResume()");
-		db = Db4oHelper.db(appCtx);
-	}
-
-	@Override
 	protected void onPause() {
 		super.onPause();
 		Log.d(TAG, "onPause()");
 		db.close();
-	}
-
-	@Override
-	protected void onActivityResult(int resultCode, int requestCode, Intent intent) {
-		Log.d(TAG, "onActivityResult(int resultCode, int requestCode, Intent intent)");
-
-		db = Db4oHelper.db(appCtx);
-
-		if (requestCode == RESULT_OK) {
-			db = Db4oHelper.db(appCtx);
-
-			// FIXME: Gets the rule from the rule editor
-			Rule rule = RuleEditorActivity.rule;
-
-			switch (resultCode) {
-			case ADD_RULE_REQUEST_CODE:
-				db.store(rule);
-				rules.add(rule);
-				Toast.makeText(appCtx, "Rule Saved", Toast.LENGTH_SHORT).show();
-				break;
-			case EDIT_RULE_REQUEST_CODE:
-				db.store(rule);
-				Toast.makeText(appCtx, "Rule Updated", Toast.LENGTH_SHORT).show();
-				break;
-			}
-		}
 	}
 
 }

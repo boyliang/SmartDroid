@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import com.db4o.ext.Db4oUUID;
+import com.ranlior.smartdroid.activities.RuleEditorActivity.State;
 import com.ranlior.smartdroid.fragments.ActionEditorFragment;
 import com.ranlior.smartdroid.fragments.RuleEditorFragment;
 import com.ranlior.smartdroid.fragments.TriggerEditorFragment;
@@ -14,29 +16,32 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 	private static final String TAG = RuleEditorFragmentAdapter.class.getSimpleName();
 
 	protected static final String[] CONTENT = new String[] { "Triggers", "Actions", "Rule" };
-	
-	private long ruleId = -1;
 
-	public RuleEditorFragmentAdapter(FragmentManager fm, long ruleId) {
+	private final State state;
+
+	private final Db4oUUID ruleUuid;
+
+	public RuleEditorFragmentAdapter(FragmentManager fm, State state, Db4oUUID ruleUuid) {
 		super(fm);
 		Log.d(TAG, "Constructor");
-		
-		this.ruleId = ruleId;
+
+		this.state = state;
+		this.ruleUuid = ruleUuid;
 	}
 
 	@Override
 	public Fragment getItem(int position) {
-		Log.d(TAG, "getItem(int position)");
+		Log.d(TAG, "getItem(int position: " + position + ")");
 
 		switch (position) {
 		case 0:
-			return TriggerEditorFragment.newInstance(ruleId);
+			return TriggerEditorFragment.newInstance(state, ruleUuid);
 		case 1:
-			return ActionEditorFragment.newInstance(ruleId);
+			return ActionEditorFragment.newInstance(state, ruleUuid);
 		case 2:
-			return new RuleEditorFragment();
+			return RuleEditorFragment.newInstance(state, ruleUuid);
 		default:
-			return null;
+			throw new IllegalArgumentException(TAG + "#getItem(int position: " + position + ") illegal position.");
 		}
 	}
 

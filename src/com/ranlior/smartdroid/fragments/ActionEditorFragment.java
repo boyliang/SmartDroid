@@ -20,9 +20,10 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.db4o.ObjectContainer;
-import com.db4o.query.Predicate;
+import com.db4o.ext.Db4oUUID;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.ActionSelectActivity;
+import com.ranlior.smartdroid.activities.RuleEditorActivity.State;
 import com.ranlior.smartdroid.adapters.ActionExpandableListAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
@@ -41,7 +42,11 @@ public class ActionEditorFragment extends SherlockFragment {
 
 	private ObjectContainer db = null;
 
-	private long ruleId = -1;
+	private State state;
+
+	private long ruleUuIdLong = -1L;
+
+	private byte[] ruleUuidSignatire = null;
 
 	private static List<Action> actions = null;
 
@@ -71,12 +76,17 @@ public class ActionEditorFragment extends SherlockFragment {
 	 * Create a new instance of the fargment, initialized to show the actions of
 	 * the rule by given rule id.
 	 */
-	public static ActionEditorFragment newInstance(long ruleId) {
+	public static ActionEditorFragment newInstance(State state, Db4oUUID ruleUuid) {
+		Log.d(TAG, "newInstance(State state, Db4oUUID ruleUuid)");
 		ActionEditorFragment fragment = new ActionEditorFragment();
 
 		// Supply rule id input as an argument.
 		Bundle args = new Bundle();
-		args.putLong(SmartDroid.Extra.EXTRA_RULE_ID, ruleId);
+		args.putSerializable("state", state);
+		if (ruleUuid != null) {
+			args.putLong("long", ruleUuid.getLongPart());
+			args.putByteArray("signature", ruleUuid.getSignaturePart());
+		}
 		fragment.setArguments(args);
 
 		return fragment;
@@ -101,8 +111,11 @@ public class ActionEditorFragment extends SherlockFragment {
 	public void onSaveInstanceState(Bundle outState) {
 		Log.d(TAG, "onSaveInstanceState(Bundle outState)");
 
-		// Saves the rule id
-		outState.putLong(SmartDroid.Extra.EXTRA_RULE_ID, ruleId);
+		// Saves the state
+		outState.putSerializable("state", state);
+		// Saves the rule's uuid
+		outState.putLong("long", ruleUuIdLong);
+		outState.putByteArray("signature", ruleUuidSignatire);
 
 		// Calls the superclass so it can save the view hierarchy state
 		super.onSaveInstanceState(outState);
@@ -121,27 +134,30 @@ public class ActionEditorFragment extends SherlockFragment {
 		// then parse those out
 		Bundle args = getArguments();
 		if (args != null) {
-			ruleId = args.getLong(SmartDroid.Extra.EXTRA_RULE_ID);
+			state = (State) args.getSerializable("state");
+			ruleUuIdLong = args.getLong("long");
+			ruleUuidSignatire = args.getByteArray("signature");
 		}
 
 		// If recreating a previously destroyed instance
 		if (savedInstanceState != null) {
 			// Restore value of members from saved state
-			ruleId = savedInstanceState.getLong(SmartDroid.Extra.EXTRA_RULE_ID);
+			state = (State) savedInstanceState.getSerializable("state");
+			ruleUuIdLong = savedInstanceState.getLong("long");
+			ruleUuidSignatire = savedInstanceState.getByteArray("signature");
 		}
 
-		// Gets the rule
-		List<Rule> rules = db.query(new Predicate<Rule>() {
-			public boolean match(Rule rule) {
-				return rule.getId() == ruleId;
-			}
-		});
-
-		// Gets rule's triggers
-		if (!rules.isEmpty()) {
-			actions = rules.get(0).getActions();
-		} else {
+		// Gets rule's actions
+		switch (state) {
+		case ADD_RULE:
 			actions = new ArrayList<Action>();
+			break;
+		case EDIT_RULE:
+			Db4oUUID ruleUuid = new Db4oUUID(ruleUuIdLong, ruleUuidSignatire);
+			Rule rule = db.ext().getByUUID(ruleUuid);
+			db.activate(rule, 3);
+			actions = rule.getActions();
+			break;
 		}
 	}
 
@@ -217,24 +233,10 @@ public class ActionEditorFragment extends SherlockFragment {
 				}, 100L);
 				elvActions.expandGroup(expandableActionAdaper.getGroupCount() - 1);
 				expandableActionAdaper.notifyDataSetChanged();
-				
+
 				listener.setActions(actions);
 			}
 		}
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		Log.d(TAG, "onResume()");
-		db = Db4oHelper.db(hostingActivity);
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		Log.d(TAG, "onPause()");
-		db.close();
 	}
 
 }

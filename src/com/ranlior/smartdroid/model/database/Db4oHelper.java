@@ -9,6 +9,7 @@ import android.util.Log;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.config.EmbeddedConfiguration;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -30,17 +31,17 @@ public abstract class Db4oHelper {
 
 		// Configures the behavior of the databse
 		EmbeddedConfiguration dbConfig = Db4oEmbedded.newConfiguration();
-		// configuration.common().objectClass(Exercise.class).objectField("name").indexed(true);
-		// configuration.common().objectClass(Exercise.class).cascadeOnUpdate(true);
-		// configuration.common().objectClass(Exercise.class).cascadeOnActivate(true);
+		dbConfig.common().messageLevel(3);
+		dbConfig.common().objectClass(Rule.class).generateUUIDs(true);
+		dbConfig.common().objectClass(Rule.class).cascadeOnActivate(true);
+		dbConfig.common().objectClass(Rule.class).cascadeOnUpdate(true);
+		dbConfig.common().objectClass(Rule.class).cascadeOnDelete(true);
 
 		String dbFilePath = context.getDir("data", 0) + "/" + DATABASE_NAME;
 
 		try {
 			if (OC == null || OC.ext().isClosed()) {
 				OC = Db4oEmbedded.openFile(dbConfig, dbFilePath);
-				// We first load the initial data from the database
-				// ExercisesLoader.load(context, oc);
 			}
 			return OC;
 		} catch (Exception ie) {
@@ -52,6 +53,8 @@ public abstract class Db4oHelper {
 	/**
 	 * Closes the database.
 	 */
+	// TODO: use this method smoewhere smart,
+	// maybe at the main activity destroy.
 	public static void close() {
 		if (OC != null) {
 			OC.close();

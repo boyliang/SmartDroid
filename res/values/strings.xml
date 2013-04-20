@@ -12,7 +12,7 @@
     
     <!-- RuleEditorAcitvity -->
     <string name="title_activity_rule_editor">Rule Editor</string>
-    <string name="save_rule">Add Rule</string>
+    <string name="save_rule">Save Rule</string>
     
     <!-- RuleEditorFragment -->
     <string name="rule_name">NAME</string>

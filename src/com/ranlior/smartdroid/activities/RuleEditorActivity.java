@@ -13,7 +13,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.db4o.ObjectContainer;
-import com.db4o.query.Predicate;
+import com.db4o.ext.Db4oUUID;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RuleEditorFragmentAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
@@ -27,7 +27,8 @@ import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class RuleEditorActivity extends SherlockFragmentActivity implements TriggerEditorFragment.Listener, ActionEditorFragment.Listener, RuleEditorFragment.Listener {
+public class RuleEditorActivity extends SherlockFragmentActivity implements TriggerEditorFragment.Listener, ActionEditorFragment.Listener,
+		RuleEditorFragment.Listener {
 
 	private static final String TAG = RuleEditorActivity.class.getSimpleName();
 
@@ -84,21 +85,19 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 		switch (state) {
 		case ADD_RULE:
 			rule = new Rule(null, null);
+			mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager(), State.ADD_RULE, null);
 			break;
 		case EDIT_RULE:
-			final long ruleId = intent.getLongExtra(SmartDroid.Extra.EXTRA_RULE_ID, -1);
-			List<Rule> rules = db.query(new Predicate<Rule>() {
-				public boolean match(Rule rule) {
-					return rule.getId() == ruleId;
-				}
-			});
-			rule = rules.get(0);
+			final long ruleUuIdLong = intent.getLongExtra("long", -1);
+			final byte[] ruleUuIdSignature = intent.getByteArrayExtra("signature");
+			Db4oUUID ruleUuid = new Db4oUUID(ruleUuIdLong, ruleUuIdSignature);
+			rule = db.ext().getByUUID(ruleUuid);
+			db.activate(rule, 3);
+			mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager(), State.EDIT_RULE, ruleUuid);
 			break;
 		default:
 			throw new IllegalStateException(TAG + " caused by invalid action");
 		}
-
-		mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager(), rule.getId());
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPager.setAdapter(mAdapter);
@@ -120,7 +119,7 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.d(TAG, "onOptionsItemSelected(MenuItem item)");
 		Log.d(TAG, "item selected: " + item.getTitle());
-		
+
 		db = Db4oHelper.db(appCtx);
 
 		switch (item.getItemId()) {
@@ -134,30 +133,17 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 				Toast.makeText(appCtx, "Rule's name is empty.", Toast.LENGTH_SHORT).show();
 			} else if (rule.getDescription() == null || "".equals(rule.getDescription())) {
 				Toast.makeText(appCtx, "Rule's description is empty.", Toast.LENGTH_SHORT).show();
-			// If rule add or edit workflow valid
+				// If rule add or edit workflow valid
 			} else {
 				db.store(rule);
-				setResult(RESULT_OK);
-				finish();
+				db.commit();
+				Log.d(TAG, "ruleUuid: " + db.ext().getObjectInfo(rule).getUUID());
+				Toast.makeText(appCtx, "Rule Saved", Toast.LENGTH_SHORT).show();
 			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		Log.d(TAG, "onResume()");
-		db = Db4oHelper.db(appCtx);
-	}
-	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		Log.d(TAG, "onPause()");
-		db.close();
 	}
 
 	@Override

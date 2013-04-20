@@ -108,9 +108,9 @@ public final class SmartDroid {
 		public static final String EXTRA_ACTION = APP_PACKAGE + ".EXTRA_ACTION";
 		
 		/**
-		 * Extra key for intent rule id long.
+		 * Extra key for intent rule id.
 		 *  
-		 * <P>Type: REAL</P>
+		 * <P>Type: long</P>
 		 */
 		public static final String EXTRA_RULE_ID = APP_PACKAGE + ".EXTRA_RULE_ID";
 		
@@ -159,6 +159,7 @@ public final class SmartDroid {
 		
 		/**
 		 * Argument key for the account picker dialog title.
+		 * 
 		 * <P>Type: int</P>
 		 */
 		// FIXME: Example only.

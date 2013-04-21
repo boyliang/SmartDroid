@@ -3,6 +3,9 @@
  */
 package com.ranlior.smartdroid.fragments;
 
+import java.util.List;
+import java.util.UUID;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,9 +18,10 @@ import android.widget.EditText;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.db4o.ObjectContainer;
-import com.db4o.ext.Db4oUUID;
+import com.db4o.query.Predicate;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.RuleEditorActivity.State;
+import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
@@ -33,9 +37,7 @@ public class RuleEditorFragment extends SherlockFragment {
 
 	private State state;
 
-	private long ruleUuIdLong = -1L;
-
-	private byte[] ruleUuidSignatire = null;
+	private UUID ruleUuId = null;
 
 	private Listener listener = null;
 
@@ -68,16 +70,15 @@ public class RuleEditorFragment extends SherlockFragment {
 	 * Create a new instance of the fargment, initialized to show the name and
 	 * description of the rule by given rule id, if exists.
 	 */
-	public static RuleEditorFragment newInstance(State state, Db4oUUID ruleUuid) {
-		Log.d(TAG, "newInstance(State state, Db4oUUID ruleUuid)");
+	public static RuleEditorFragment newInstance(State state, UUID ruleUuid) {
+		Log.d(TAG, "newInstance(State state, UUID ruleUuid)");
 		RuleEditorFragment fragment = new RuleEditorFragment();
 
 		// Supply rule id input as an argument.
 		Bundle args = new Bundle();
 		args.putSerializable("state", state);
 		if (ruleUuid != null) {
-			args.putLong("long", ruleUuid.getLongPart());
-			args.putByteArray("signature", ruleUuid.getSignaturePart());
+			args.putSerializable(SmartDroid.Extra.EXTRA_RULE_ID, ruleUuid);
 		}
 		fragment.setArguments(args);
 
@@ -103,11 +104,8 @@ public class RuleEditorFragment extends SherlockFragment {
 	public void onSaveInstanceState(Bundle outState) {
 		Log.d(TAG, "onSaveInstanceState(Bundle outState)");
 
-		// Saves the state
 		outState.putSerializable("state", state);
-		// Saves the rule's uuid
-		outState.putLong("long", ruleUuIdLong);
-		outState.putByteArray("signature", ruleUuidSignatire);
+		outState.putSerializable(SmartDroid.Extra.EXTRA_RULE_ID, ruleUuId);
 
 		// Calls the superclass so it can save the view hierarchy state
 		super.onSaveInstanceState(outState);
@@ -125,16 +123,14 @@ public class RuleEditorFragment extends SherlockFragment {
 		Bundle args = getArguments();
 		if (args != null) {
 			state = (State) args.getSerializable("state");
-			ruleUuIdLong = args.getLong("long");
-			ruleUuidSignatire = args.getByteArray("signature");
+			ruleUuId = (UUID) args.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 
 		// If recreating a previously destroyed instance
 		if (savedInstanceState != null) {
 			// Restore value of members from saved state
 			state = (State) savedInstanceState.getSerializable("state");
-			ruleUuIdLong = savedInstanceState.getLong("long");
-			ruleUuidSignatire = savedInstanceState.getByteArray("signature");
+			ruleUuId = (UUID) savedInstanceState.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 
 		// Gets rule's name and description
@@ -142,9 +138,14 @@ public class RuleEditorFragment extends SherlockFragment {
 		case ADD_RULE:
 			break;
 		case EDIT_RULE:
-			Db4oUUID ruleUuid = new Db4oUUID(ruleUuIdLong, ruleUuidSignatire);
-			Rule rule = db.ext().getByUUID(ruleUuid);
-			db.activate(rule, 1);
+			List<Rule> rules = db.query(new Predicate<Rule>() {
+				public boolean match(Rule rule) {
+					return ruleUuId.compareTo(rule.getId()) == 0;
+				}
+			});
+			Rule rule = rules.get(0);
+			// FIXME: check if needed
+			// db.activate(rule, 1);
 			ruleName = rule.getName();
 			ruleDescription = rule.getDescription();
 			break;

@@ -3,15 +3,17 @@
  */
 package com.ranlior.smartdroid.model.dto.triggers;
 
+import java.util.UUID;
+
 import android.content.Context;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
  * 
  */
-public abstract class Trigger implements Comparable<Trigger> {
+public abstract class Trigger {
 
-	private Long id = null;
+	private UUID id = null;
 
 	private String name = null;
 
@@ -29,6 +31,7 @@ public abstract class Trigger implements Comparable<Trigger> {
 	 */
 	public Trigger(String name, String description) {
 		super();
+		this.id = UUID.randomUUID();
 		this.name = name;
 		this.description = description;
 	}
@@ -36,16 +39,8 @@ public abstract class Trigger implements Comparable<Trigger> {
 	/**
 	 * @return the id
 	 */
-	public long getId() {
+	public UUID getId() {
 		return id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	/**
@@ -94,18 +89,5 @@ public abstract class Trigger implements Comparable<Trigger> {
 	 */
 	public void unregister(Context context) {
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	@Override
-	public int compareTo(Trigger another) {
-		if (another == null) {
-			return 1;
-		} else {
-			return (int) (id - another.getId());
-		}
-	};
+	
 }

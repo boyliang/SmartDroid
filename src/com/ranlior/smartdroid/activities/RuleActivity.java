@@ -15,7 +15,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.db4o.ObjectContainer;
-import com.db4o.ext.Db4oUUID;
 import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RulesAdapter;
@@ -27,7 +26,7 @@ public class RuleActivity extends SherlockFragmentActivity {
 
 	private final static String TAG = RuleActivity.class.getSimpleName();
 
-	private Context appCtx = null;;
+	private Context appCtx = null;
 
 	private ObjectContainer db = null;
 
@@ -46,7 +45,7 @@ public class RuleActivity extends SherlockFragmentActivity {
 
 		appCtx = getApplicationContext();
 
-		db = Db4oHelper.db(appCtx);		
+		db = Db4oHelper.db(appCtx);
 
 		rules = db.query(Rule.class);
 
@@ -58,14 +57,10 @@ public class RuleActivity extends SherlockFragmentActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// Gets the rule's uuid
 				Rule rule = rules.get(position);
-				Db4oUUID ruleUuid = db.ext().getObjectInfo(rule).getUUID();
-				long ruleIdLong = ruleUuid.getLongPart();
-				byte[] ruleIdSig = ruleUuid.getSignaturePart();
 				// Redirects the rule editor activiry with the selected rule id
 				Intent intent = new Intent(RuleActivity.this, RuleEditorActivity.class);
 				intent.setAction(SmartDroid.Action.ACTION_EDIT_RULE);
-				intent.putExtra("long", ruleIdLong);
-				intent.putExtra("signature", ruleIdSig);
+				intent.putExtra(SmartDroid.Extra.EXTRA_RULE_ID, rule.getId());
 				startActivity(intent);
 			}
 		});
@@ -73,9 +68,13 @@ public class RuleActivity extends SherlockFragmentActivity {
 		// set swipe to dismiss gesture and remove from the adapter the item
 		SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(lvRules,
 				new SwipeDismissListViewTouchListener.OnDismissCallback() {
+					@Override
 					public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+						Rule rule = null;
 						for (int position : reverseSortedPositions) {
-							rulesAdapter.remove(rulesAdapter.getItem(position));
+							rule = rulesAdapter.getItem(position);
+							rulesAdapter.remove(rule);
+							db.delete(rule);
 						}
 						rulesAdapter.notifyDataSetChanged();
 					}
@@ -110,13 +109,6 @@ public class RuleActivity extends SherlockFragmentActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		Log.d(TAG, "onPause()");
-		db.close();
 	}
 
 }

@@ -3,6 +3,7 @@ package com.ranlior.smartdroid.adapters;
 import java.util.List;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.media.AudioManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -127,5 +128,11 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
 	}
+	
+	// FIXME: see it needed.
+	@Override
+    public void registerDataSetObserver(DataSetObserver observer) {
+        super.registerDataSetObserver(observer);    
+    }
 
 }

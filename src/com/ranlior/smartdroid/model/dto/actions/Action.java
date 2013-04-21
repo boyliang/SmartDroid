@@ -3,6 +3,8 @@
  */
 package com.ranlior.smartdroid.model.dto.actions;
 
+import java.util.UUID;
+
 import android.content.Context;
 
 /**
@@ -11,7 +13,7 @@ import android.content.Context;
  */
 public abstract class Action {
 
-	private Long id = null;
+	private UUID id = null;
 
 	private String name = null;
 
@@ -25,23 +27,16 @@ public abstract class Action {
 	 */
 	public Action(String name, String description) {
 		super();
+		this.id = UUID.randomUUID();
 		this.name = name;
 		this.description = description;
 	}
 
 	/**
-	 * @return the identifier
+	 * @return the id
 	 */
-	public long getId() {
+	public UUID getId() {
 		return id;
-	}
-
-	/**
-	 * @param id
-	 *            the identifier to set
-	 */
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	/**

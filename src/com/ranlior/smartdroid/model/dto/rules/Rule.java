@@ -5,6 +5,7 @@ package com.ranlior.smartdroid.model.dto.rules;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import android.content.Context;
 import android.util.Log;
@@ -16,13 +17,11 @@ import com.ranlior.smartdroid.model.dto.triggers.Trigger;
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
  * 
  */
-public class Rule {
+public class Rule implements Comparable<Rule> {
 
 	private static final String TAG = Rule.class.getSimpleName();
-	
-	private static long idGen;
 
-	private long id = -1L;
+	private UUID id = null;
 
 	private String name = null;
 
@@ -40,25 +39,17 @@ public class Rule {
 	 */
 	public Rule(String name, String description) {
 		super();
-		this.id = idGen++;
+		this.id = UUID.randomUUID();
 		this.name = name;
 		this.description = description;
 	}
 
-//	/**
-//	 * @return the id
-//	 */
-//	public long getId() {
-//		return id;
-//	}
-//
-//	/**
-//	 * @param id
-//	 *            the id to set
-//	 */
-//	public void setId(long id) {
-//		this.id = id;
-//	}
+	/**
+	 * @return the id
+	 */
+	public UUID getId() {
+		return id;
+	}
 
 	/**
 	 * @return the name
@@ -160,5 +151,19 @@ public class Rule {
 			action.perform(context);
 		}
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(Rule another) {
+		if (another == null) {
+			return 1;
+		} else {
+			return this.getName().compareTo(another.getName());
+		}
+	};
 
 }

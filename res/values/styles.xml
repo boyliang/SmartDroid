@@ -17,4 +17,9 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="AppTheme" parent="Theme.Sherlock">
+    <item name="switchStyle">@style/switch_dark</item>
+    <item name="textAppearance">@style/TextAppearance</item>
+</style>
+    
 </resources>

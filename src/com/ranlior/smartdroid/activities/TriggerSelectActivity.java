@@ -30,6 +30,7 @@ public class TriggerSelectActivity extends ListActivity {
 
 		TriggerSelectAdapter triggerAdapter = new TriggerSelectAdapter(this, R.layout.trigger_list_item, SmartDroid.Triggers.LIST);
 		setListAdapter(triggerAdapter);
+		
 	}
 
 	@Override

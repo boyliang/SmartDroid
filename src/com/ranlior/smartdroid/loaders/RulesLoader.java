@@ -5,13 +5,14 @@ package com.ranlior.smartdroid.loaders;
 
 import java.util.List;
 
-import com.ranlior.smartdroid.model.dao.SmartDAOFactory;
-import com.ranlior.smartdroid.model.dao.logic.IRuleDAO;
-import com.ranlior.smartdroid.model.dto.rules.Rule;
-
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
+
+import com.db4o.ObjectContainer;
+import com.db4o.query.Predicate;
+import com.ranlior.smartdroid.model.database.Db4oHelper;
+import com.ranlior.smartdroid.model.dto.rules.Rule;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -21,7 +22,7 @@ public class RulesLoader extends AsyncTaskLoader<List<Rule>> {
 
 	private static final String TAG = "RulesLoader";
 
-	private IRuleDAO ruleDAO = null;
+	private ObjectContainer db = null;
 
 	private List<Rule> rules = null;
 
@@ -30,7 +31,7 @@ public class RulesLoader extends AsyncTaskLoader<List<Rule>> {
 
 		Log.d(TAG, "RulesLoader(Context context)");
 
-		ruleDAO = SmartDAOFactory.getFactory(SmartDAOFactory.DB4O).getRuleDAO(getContext());
+		db = Db4oHelper.db(context);
 	}
 
 	/**
@@ -42,7 +43,13 @@ public class RulesLoader extends AsyncTaskLoader<List<Rule>> {
 	public List<Rule> loadInBackground() {
 		Log.d(TAG, "loadInBackground()");
 
-		return ruleDAO.list();
+		rules = db.query(new Predicate<Rule>() {
+			public boolean match(Rule rule) {
+				return true;
+			}
+		});
+
+		return rules;
 	}
 
 	/**

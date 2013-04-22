@@ -136,10 +136,12 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 				Toast.makeText(appCtx, "Rule's name is empty.", Toast.LENGTH_SHORT).show();
 			} else if (rule.getDescription() == null || "".equals(rule.getDescription())) {
 				Toast.makeText(appCtx, "Rule's description is empty.", Toast.LENGTH_SHORT).show();
-				// If rule add or edit workflow valid
+			// If rule add or edit workflow valid
 			} else {
+				// Saves the rule to the db
 				db.store(rule);
 				db.commit();
+				finish();
 				Toast.makeText(appCtx, "Rule Saved", Toast.LENGTH_SHORT).show();
 			}
 			return true;

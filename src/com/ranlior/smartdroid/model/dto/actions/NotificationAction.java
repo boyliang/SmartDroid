@@ -165,7 +165,8 @@ public class NotificationAction extends Action {
 		notification.flags |= flags;
 
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.notify((int) getId(), notification);
+		// FIXME: check if the id need to be changed.
+		notificationManager.notify(0, notification);
 	}
 
 }

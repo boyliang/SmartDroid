@@ -5,6 +5,7 @@ package com.ranlior.smartdroid.fragments;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,7 +21,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.db4o.ObjectContainer;
-import com.db4o.ext.Db4oUUID;
+import com.db4o.query.Predicate;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.RuleEditorActivity.State;
 import com.ranlior.smartdroid.activities.TriggerSelectActivity;
@@ -44,13 +45,11 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 	private State state;
 
-	private long ruleUuIdLong = -1L;
-
-	private byte[] ruleUuidSignatire = null;
+	private UUID ruleUuId = null;
 
 	private List<Trigger> triggers = null;
 
-	private TriggerExpandableListAdapter expandableTriggerAdaper = null;
+	private TriggerExpandableListAdapter triggersAdaper = null;
 
 	private ExpandableListView elvTriggers = null;
 
@@ -76,16 +75,15 @@ public class TriggerEditorFragment extends SherlockFragment {
 	 * Create a new instance of the fargment, initialized to show the triggers
 	 * of the rule by given rule id.
 	 */
-	public static TriggerEditorFragment newInstance(State state, Db4oUUID ruleUuid) {
-		Log.d(TAG, "newInstance(State state, Db4oUUID ruleUuid)");
+	public static TriggerEditorFragment newInstance(State state, UUID ruleUuid) {
+		Log.d(TAG, "newInstance(State state, UUID ruleUuid)");
 		TriggerEditorFragment fragment = new TriggerEditorFragment();
 
 		// Supply rule id input as an argument.
 		Bundle args = new Bundle();
 		args.putSerializable("state", state);
 		if (ruleUuid != null) {
-			args.putLong("long", ruleUuid.getLongPart());
-			args.putByteArray("signature", ruleUuid.getSignaturePart());
+			args.putSerializable(SmartDroid.Extra.EXTRA_RULE_ID, ruleUuid);
 		}
 		fragment.setArguments(args);
 
@@ -111,11 +109,8 @@ public class TriggerEditorFragment extends SherlockFragment {
 	public void onSaveInstanceState(Bundle outState) {
 		Log.d(TAG, "onSaveInstanceState(Bundle outState)");
 
-		// Saves the state
 		outState.putSerializable("state", state);
-		// Saves the rule's uuid
-		outState.putLong("long", ruleUuIdLong);
-		outState.putByteArray("signature", ruleUuidSignatire);
+		outState.putSerializable(SmartDroid.Extra.EXTRA_RULE_ID, ruleUuId);
 
 		// Calls the superclass so it can save the view hierarchy state
 		super.onSaveInstanceState(outState);
@@ -135,16 +130,14 @@ public class TriggerEditorFragment extends SherlockFragment {
 		Bundle args = getArguments();
 		if (args != null) {
 			state = (State) args.getSerializable("state");
-			ruleUuIdLong = args.getLong("long");
-			ruleUuidSignatire = args.getByteArray("signature");
+			ruleUuId = (UUID) args.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 
 		// If recreating a previously destroyed instance
 		if (savedInstanceState != null) {
 			// Restore value of members from saved state
 			state = (State) savedInstanceState.getSerializable("state");
-			ruleUuIdLong = savedInstanceState.getLong("long");
-			ruleUuidSignatire = savedInstanceState.getByteArray("signature");
+			ruleUuId = (UUID) savedInstanceState.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 
 		// Gets rule's triggers
@@ -153,11 +146,14 @@ public class TriggerEditorFragment extends SherlockFragment {
 			triggers = new ArrayList<Trigger>();
 			break;
 		case EDIT_RULE:
-			Db4oUUID ruleUuid = new Db4oUUID(ruleUuIdLong, ruleUuidSignatire);
-			Log.d(TAG, "ruleUuid: " + ruleUuid);
-			Rule rule = db.ext().getByUUID(ruleUuid);
-			db.activate(rule, 3);
-			triggers = rule.getTriggers();
+			List<Rule> rules = db.query(new Predicate<Rule>() {
+				public boolean match(Rule rule) {
+					return ruleUuId.compareTo(rule.getId()) == 0;
+				}
+			});
+			// FIXME: check if needed activation.
+			//db.activate(rule, 3);
+			triggers = rules.get(0).getTriggers();
 			break;
 		}
 	}
@@ -195,10 +191,10 @@ public class TriggerEditorFragment extends SherlockFragment {
 			// If the container view isn't null,
 			// There is need for us to create the fragment view
 		} else {
-			expandableTriggerAdaper = new TriggerExpandableListAdapter(hostingActivity, triggers);
+			triggersAdaper = new TriggerExpandableListAdapter(hostingActivity, triggers);
 			View view = inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
 			elvTriggers = (ExpandableListView) view.findViewById(R.id.expandableListView);
-			elvTriggers.setAdapter(expandableTriggerAdaper);
+			elvTriggers.setAdapter(triggersAdaper);
 			return view;
 		}
 	}
@@ -229,11 +225,11 @@ public class TriggerEditorFragment extends SherlockFragment {
 				elvTriggers.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						elvTriggers.setSelection(expandableTriggerAdaper.getGroupCount() - 1);
+						elvTriggers.setSelection(triggersAdaper.getGroupCount() - 1);
 					}
 				}, 100L);
-				elvTriggers.expandGroup(expandableTriggerAdaper.getGroupCount() - 1);
-				expandableTriggerAdaper.notifyDataSetChanged();
+				elvTriggers.expandGroup(triggersAdaper.getGroupCount() - 1);
+				triggersAdaper.notifyDataSetChanged();
 
 				listener.setTriggers(triggers);
 			}

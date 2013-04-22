@@ -4,6 +4,7 @@
 package com.ranlior.smartdroid.model.dto.triggers;
 
 import java.util.List;
+import java.util.UUID;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -175,7 +176,7 @@ public class LocationProximityTrigger extends Trigger {
 
 		Trigger trigger = null;
 
-		final long triggerId = stateExtras.getLong(SmartDroid.Extra.EXTRA_TRIGGER_ID, -1);
+		final UUID triggerUuid = (UUID) stateExtras.getSerializable(SmartDroid.Extra.EXTRA_TRIGGER_ID);
 		boolean isProximityEntering = stateExtras.getBoolean(LocationManager.KEY_PROXIMITY_ENTERING);
 
 		ObjectContainer db = Db4oHelper.db(appCtx);
@@ -183,7 +184,7 @@ public class LocationProximityTrigger extends Trigger {
 		try {
 			List<LocationProximityTrigger> triggers = db.query(new Predicate<LocationProximityTrigger>() {
 				public boolean match(LocationProximityTrigger trigger) {
-					return trigger.getId() == triggerId;
+					return triggerUuid.compareTo(trigger.getId()) == 0;
 				}
 			});
 

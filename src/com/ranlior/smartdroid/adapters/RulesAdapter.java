@@ -19,11 +19,11 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 
 	private List<Rule> rules;
 
-	public RulesAdapter(Context context, int layoutResourceId,  List<Rule> rules) {
+	public RulesAdapter(Context context, int layoutResourceId, List<Rule> rules) {
 		super(context, layoutResourceId, rules);
-		
+
 		Log.d(TAG, "Constructor");
-		
+
 		this.rules = rules;
 	}
 
@@ -38,16 +38,15 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
 			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);
-	
+
 			convertView.setTag(holder);
 
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
+
 		holder.tvTitle.setText(rule.getName());
 		holder.tvDesc.setText(rule.getDescription());
-
 
 		return convertView;
 	}
@@ -57,5 +56,3 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 		TextView tvDesc;
 	}
 }
-	
-

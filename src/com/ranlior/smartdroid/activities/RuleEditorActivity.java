@@ -1,6 +1,7 @@
 package com.ranlior.smartdroid.activities;
 
 import java.util.List;
+import java.util.UUID;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +14,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.db4o.ObjectContainer;
-import com.db4o.ext.Db4oUUID;
+import com.db4o.query.Predicate;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RuleEditorFragmentAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
@@ -88,12 +89,14 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 			mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager(), State.ADD_RULE, null);
 			break;
 		case EDIT_RULE:
-			final long ruleUuIdLong = intent.getLongExtra("long", -1);
-			final byte[] ruleUuIdSignature = intent.getByteArrayExtra("signature");
-			Db4oUUID ruleUuid = new Db4oUUID(ruleUuIdLong, ruleUuIdSignature);
-			rule = db.ext().getByUUID(ruleUuid);
-			db.activate(rule, 3);
-			mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager(), State.EDIT_RULE, ruleUuid);
+			final UUID ruleUuId = (UUID) intent.getSerializableExtra(SmartDroid.Extra.EXTRA_RULE_ID);
+			List<Rule> rules = db.query(new Predicate<Rule>() {
+				public boolean match(Rule rule) {
+					return ruleUuId.compareTo(rule.getId()) == 0;
+				}
+			});
+			rule = rules.get(0);
+			mAdapter = new RuleEditorFragmentAdapter(getSupportFragmentManager(), State.EDIT_RULE, ruleUuId);
 			break;
 		default:
 			throw new IllegalStateException(TAG + " caused by invalid action");
@@ -133,11 +136,12 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 				Toast.makeText(appCtx, "Rule's name is empty.", Toast.LENGTH_SHORT).show();
 			} else if (rule.getDescription() == null || "".equals(rule.getDescription())) {
 				Toast.makeText(appCtx, "Rule's description is empty.", Toast.LENGTH_SHORT).show();
-				// If rule add or edit workflow valid
+			// If rule add or edit workflow valid
 			} else {
+				// Saves the rule to the db
 				db.store(rule);
 				db.commit();
-				Log.d(TAG, "ruleUuid: " + db.ext().getObjectInfo(rule).getUUID());
+				finish();
 				Toast.makeText(appCtx, "Rule Saved", Toast.LENGTH_SHORT).show();
 			}
 			return true;

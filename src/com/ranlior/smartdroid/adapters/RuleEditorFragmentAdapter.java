@@ -1,11 +1,12 @@
 package com.ranlior.smartdroid.adapters;
 
+import java.util.UUID;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
-import com.db4o.ext.Db4oUUID;
 import com.ranlior.smartdroid.activities.RuleEditorActivity.State;
 import com.ranlior.smartdroid.fragments.ActionEditorFragment;
 import com.ranlior.smartdroid.fragments.RuleEditorFragment;
@@ -19,9 +20,9 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 
 	private final State state;
 
-	private final Db4oUUID ruleUuid;
+	private final UUID ruleUuid;
 
-	public RuleEditorFragmentAdapter(FragmentManager fm, State state, Db4oUUID ruleUuid) {
+	public RuleEditorFragmentAdapter(FragmentManager fm, State state, UUID ruleUuid) {
 		super(fm);
 		Log.d(TAG, "Constructor");
 

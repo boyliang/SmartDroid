@@ -152,7 +152,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 				}
 			});
 			// FIXME: check if needed activation.
-			//db.activate(rule, 3);
+			// db.activate(rule, 3);
 			triggers = rules.get(0).getTriggers();
 			break;
 		}
@@ -191,10 +191,18 @@ public class TriggerEditorFragment extends SherlockFragment {
 			// If the container view isn't null,
 			// There is need for us to create the fragment view
 		} else {
+
+			View view = null;
+
 			triggersAdaper = new TriggerExpandableListAdapter(hostingActivity, triggers);
-			View view = inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
+			view = inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
 			elvTriggers = (ExpandableListView) view.findViewById(R.id.expandableListView);
 			elvTriggers.setAdapter(triggersAdaper);
+			
+			View emptyView = inflater.inflate(R.layout.empty_trigger_list, null);
+			((ViewGroup)elvTriggers.getParent()).addView(emptyView);
+			elvTriggers.setEmptyView(emptyView);
+
 			return view;
 		}
 	}

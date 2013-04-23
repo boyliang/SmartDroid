@@ -78,10 +78,6 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 				}
 			});
 		}
-		
-		if ("ChangeBluetoothStateAction".equals(actionClassName)) {
-			convertView = inflater.inflate(R.layout.expand_blue_tooth_action, null);
-		}
 
 		return convertView;
 	}

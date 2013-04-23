@@ -90,7 +90,7 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View emptyView = inflater.inflate(R.layout.empty_rule_list, null);
-		((ViewGroup)lvRules.getParent()).addView(emptyView);
+		((ViewGroup) lvRules.getParent()).addView(emptyView);
 		lvRules.setEmptyView(emptyView);
 
 		// this is a special listener that preventing from swiping to dismiss to
@@ -139,7 +139,6 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 		// Set the new data in the adapter.
 		if (rulesAdapter != null) {
 			rulesAdapter.clear();
-			// FIXME: no such method
 			rulesAdapter.addAll(data);
 		}
 	}

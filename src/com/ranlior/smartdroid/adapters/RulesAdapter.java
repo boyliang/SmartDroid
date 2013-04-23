@@ -1,5 +1,7 @@
 package com.ranlior.smartdroid.adapters;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -55,4 +57,13 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 		TextView tvTitle;
 		TextView tvDesc;
 	}
+
+	@Override
+	public void addAll(Collection<? extends Rule> collection) {
+		Iterator<? extends Rule> iterator = collection.iterator();
+		while (iterator.hasNext()) {
+			add(iterator.next());
+		}
+	}
+
 }

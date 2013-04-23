@@ -191,10 +191,17 @@ public class ActionEditorFragment extends SherlockFragment {
 			// If the container view isn't null,
 			// There is need for us to create the fragment view
 		} else {
+			View view = null;
+
 			expandableActionAdaper = new ActionExpandableListAdapter(hostingActivity, actions);
-			View view = inflater.inflate(R.layout.fragment_expandable_list_actions, null);
+			view = inflater.inflate(R.layout.fragment_expandable_list_actions, null);
 			elvActions = (ExpandableListView) view.findViewById(R.id.expandableListView);
 			elvActions.setAdapter(expandableActionAdaper);
+
+			View emptyView = inflater.inflate(R.layout.empty_action_list, null);
+			((ViewGroup)elvActions.getParent()).addView(emptyView);
+			elvActions.setEmptyView(emptyView);
+			
 			return view;
 		}
 	}

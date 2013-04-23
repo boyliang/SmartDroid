@@ -52,7 +52,7 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 		if ("RingerModeTrigger".equals(triggerClassName)) {
 			convertView = inflater.inflate(R.layout.expand_ringer_trigger, null);
 			final RadioGroup radioGroup = (RadioGroup) convertView.findViewById(R.id.rgRingerMode);
-			convertView.findViewById(R.id.btnSaveTrigger).setOnClickListener(new OnClickListener() {
+			convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					int ringerMode = -1;
@@ -110,6 +110,7 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 		View view;
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.trigger_list_item, null);
+		view.setBackgroundResource(R.drawable.top_round_shadow_expand);
 		TextView title = (TextView) view.findViewById(R.id.title);
 		TextView desc = (TextView) view.findViewById(R.id.description);
 

@@ -16,8 +16,8 @@
             android:layout_height="fill_parent"
             android:layout_margin="4dp"
             android:layout_weight="1"
-            android:background="@color/Honeydew"
-            android:text="Rules" />
+            android:background="@drawable/rules_button"
+            />
 
         <Button
             android:id="@+id/btnStore"

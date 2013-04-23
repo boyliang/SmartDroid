@@ -132,6 +132,7 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 		// Set the new data in the adapter.
 		if (rulesAdapter != null) {
 			rulesAdapter.clear();
+			// FIXME: no such method
 			rulesAdapter.addAll(data);
 		}
 	}

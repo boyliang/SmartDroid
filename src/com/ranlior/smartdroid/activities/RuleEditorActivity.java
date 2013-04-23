@@ -43,8 +43,7 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 
 	private PageIndicator mIndicator = null;
 
-	// FIXME: change visiability to private
-	static Rule rule = null;
+	private Rule rule = null;
 
 	/**
 	 * Task Editor states enum. Inner class representing all the possiable state
@@ -136,11 +135,15 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 				Toast.makeText(appCtx, "Rule's name is empty.", Toast.LENGTH_SHORT).show();
 			} else if (rule.getDescription() == null || "".equals(rule.getDescription())) {
 				Toast.makeText(appCtx, "Rule's description is empty.", Toast.LENGTH_SHORT).show();
-			// If rule add or edit workflow valid
+				// If rule add or edit workflow valid
 			} else {
 				// Saves the rule to the db
 				db.store(rule);
 				db.commit();
+				// Returns result ok to the invoking rule activity
+				Intent resIntent = new Intent();
+				resIntent.putExtra(SmartDroid.Extra.EXTRA_RULE_ID, rule.getId());
+				setResult(RESULT_OK, resIntent);
 				finish();
 				Toast.makeText(appCtx, "Rule Saved", Toast.LENGTH_SHORT).show();
 			}

@@ -51,7 +51,7 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 		if ("ModifyRingerModeAction".equals(actionClassName)) {
 			convertView = inflater.inflate(R.layout.expand_ringer_action, null);
 			final RadioGroup radioGroup = (RadioGroup)convertView.findViewById(R.id.rgRingerMode);
-			convertView.findViewById(R.id.btnSaveAction).setOnClickListener(new OnClickListener() {
+			convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					int ringerMode = -1;
@@ -77,6 +77,10 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 					modifyRingerModeAction.setRingerMode(ringerMode);
 				}
 			});
+		}
+		
+		if ("ChangeBluetoothStateAction".equals(actionClassName)) {
+			convertView = inflater.inflate(R.layout.expand_blue_tooth_action, null);
 		}
 
 		return convertView;
@@ -108,6 +112,7 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 		View view;
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.action_list_item, null);
+		view.setBackgroundResource(R.drawable.top_round_shadow_expand);
 		TextView title = (TextView) view.findViewById(R.id.title);
 		TextView desc = (TextView) view.findViewById(R.id.description);
 

@@ -2,13 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/sinked_expandable"
+    android:background="@drawable/sinked_expandable_handle"
     android:orientation="vertical" >
+
+    <TextView android:layout_marginTop="4dp"
+        android:id="@+id/save"
+        android:layout_width="57dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:text="SAVE"
+        android:textStyle="bold"
+        android:textColor="#0099cc" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
         android:padding="2dp"
         android:visibility="visible" >
@@ -42,14 +52,6 @@
                 android:button="@drawable/volume_normal_checked"
                 android:checked="true" />
         </RadioGroup>
-
-        <Button
-            android:id="@+id/btnSaveTrigger"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="6dp"
-            android:text="Save" />
     </LinearLayout>
 
 </LinearLayout>

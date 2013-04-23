@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    
+    <item android:state_enabled="true">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <gradient android:angle="90" android:endColor="#111111" android:startColor="#555555" />
+                    <stroke android:width="2dp" android:color="#AAAAAA" />
+                 
+                </shape>
+            </item>
+        
+            <item>
+                <bitmap android:gravity="center_vertical" android:src="@drawable/box"
+                     android:antialias="true" /> 
+            </item>
+            <item>
+                <bitmap  android:src="@drawable/gloss"
+                    android:antialias="true" />
+            </item>
+        </layer-list>
+    </item>
+
+</selector>

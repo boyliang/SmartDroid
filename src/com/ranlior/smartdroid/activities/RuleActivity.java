@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -85,6 +87,11 @@ public class RuleActivity extends SherlockFragmentActivity implements LoaderMana
 				});
 
 		lvRules.setOnTouchListener(touchListener);
+
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View emptyView = inflater.inflate(R.layout.empty_rule_list, null);
+		((ViewGroup)lvRules.getParent()).addView(emptyView);
+		lvRules.setEmptyView(emptyView);
 
 		// this is a special listener that preventing from swiping to dismiss to
 		// trigger while scrolling

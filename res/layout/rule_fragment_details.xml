@@ -2,38 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#DDDDDD"
     android:orientation="vertical"
-    android:padding="16dp" >
+    android:padding="8dp" >
 
     <TextView
         android:id="@+id/tvRuleNameLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="0dp"
         android:layout_marginTop="4dp"
+        android:background="@drawable/top_round_shadow"
+        android:paddingLeft="10dp"
+        android:paddingTop="16dp"
         android:text="@string/rule_name"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#333333" />
 
     <EditText
         android:id="@+id/etRuleName"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:ems="10" >
-    </EditText>
+        android:background="@drawable/sinked_expandable"
+        android:ems="10"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/tvRuleDescriptionLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:background="@drawable/top_round_shadow"
+        android:paddingLeft="10dp"
+        android:paddingTop="16dp"
         android:text="@string/rule_description"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#333333" />
 
     <EditText
         android:id="@+id/etRuleDescription"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:ems="10" />
+        android:background="@drawable/sinked_expandable"
+        android:ems="10"
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>

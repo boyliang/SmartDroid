@@ -9,6 +9,7 @@
     <!-- RulesActivity -->
     <string name="title_activity_rule">Rules</string>
     <string name="add_rule">Add Rule</string>
+    <string name="delete_rule">Delete Rule</string>
     
     <!-- RuleEditorAcitvity -->
     <string name="title_activity_rule_editor">Rule Editor</string>
@@ -18,11 +19,17 @@
     <string name="rule_name">NAME</string>
     <string name="rule_description">DESCRIPTION</string>
     
-    <!-- SelectTriggerFragment -->
+    <!-- TriggerEditorFragment -->
+    <string name="delete_trigger">Delete Trigger</string>
+    
+    <!-- ActionEditorFragment -->
+    <string name="delete_action">Delete Action</string>
+    
+    <!-- TriggerSelectActivity -->
     <string name="title_activity_trigger_select">Select Trigger</string>
     <string name="add_trigger">Add Trigger</string>
     
-    <!-- SelectActionFragment -->
+    <!-- ActionSelectActivity -->
     <string name="title_activity_action_select">Select Action</string>
     <string name="add_action">Add Action</string>
 

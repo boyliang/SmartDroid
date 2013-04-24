@@ -14,9 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ExpandableListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -57,6 +60,10 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 	private Activity hostingActivity = null;
 
+	private ActionMode actionMode = null;
+
+	private List<Trigger> selectedTriggers = null;
+
 	/**
 	 * Listener interface for the fragment. Container Activity must implement
 	 * this interface.
@@ -81,7 +88,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 		// Supply rule id input as an argument.
 		Bundle args = new Bundle();
-		args.putSerializable("state", state);
+		args.putSerializable(SmartDroid.Extra.EXTRA_STATE, state);
 		if (ruleUuid != null) {
 			args.putSerializable(SmartDroid.Extra.EXTRA_RULE_ID, ruleUuid);
 		}
@@ -109,7 +116,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 	public void onSaveInstanceState(Bundle outState) {
 		Log.d(TAG, "onSaveInstanceState(Bundle outState)");
 
-		outState.putSerializable("state", state);
+		outState.putSerializable(SmartDroid.Extra.EXTRA_STATE, state);
 		outState.putSerializable(SmartDroid.Extra.EXTRA_RULE_ID, ruleUuId);
 
 		// Calls the superclass so it can save the view hierarchy state
@@ -129,14 +136,14 @@ public class TriggerEditorFragment extends SherlockFragment {
 		// then parse those out
 		Bundle args = getArguments();
 		if (args != null) {
-			state = (State) args.getSerializable("state");
+			state = (State) args.getSerializable(SmartDroid.Extra.EXTRA_STATE);
 			ruleUuId = (UUID) args.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 
 		// If recreating a previously destroyed instance
 		if (savedInstanceState != null) {
 			// Restore value of members from saved state
-			state = (State) savedInstanceState.getSerializable("state");
+			state = (State) savedInstanceState.getSerializable(SmartDroid.Extra.EXTRA_STATE);
 			ruleUuId = (UUID) savedInstanceState.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 
@@ -163,7 +170,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 		super.onCreateOptionsMenu(menu, inflater);
 		Log.d(TAG, "onCreateOptionsMenu(Menu menu, MenuInflater inflater)");
 
-		inflater.inflate(R.menu.activity_trigger_select, menu);
+		inflater.inflate(R.menu.fragment_trigger_editor_menu, menu);
 	}
 
 	@Override
@@ -191,16 +198,34 @@ public class TriggerEditorFragment extends SherlockFragment {
 			// If the container view isn't null,
 			// There is need for us to create the fragment view
 		} else {
-
-			View view = null;
-
+			View view = inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
 			triggersAdaper = new TriggerExpandableListAdapter(hostingActivity, triggers);
-			view = inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
 			elvTriggers = (ExpandableListView) view.findViewById(R.id.expandableListView);
 			elvTriggers.setAdapter(triggersAdaper);
-			
+			elvTriggers.setOnItemLongClickListener(new OnItemLongClickListener() {
+				@Override
+				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+					Trigger selectedTrigger = triggers.get(position);
+					if (actionMode == null) {
+						actionMode = getSherlockActivity().startActionMode(actionModeCallback);
+					}
+					if (selectedTriggers == null) {
+						selectedTriggers = new ArrayList<Trigger>();
+					}
+					if (view.isSelected()) {
+						view.setSelected(false);
+						selectedTriggers.remove(selectedTrigger);
+					} else {
+						view.setSelected(true);
+						selectedTriggers.add(selectedTrigger);
+					}
+					// FIXME: was false but i changed to true to check.
+					return true;
+				}
+			});
+
 			View emptyView = inflater.inflate(R.layout.empty_trigger_list, null);
-			((ViewGroup)elvTriggers.getParent()).addView(emptyView);
+			((ViewGroup) elvTriggers.getParent()).addView(emptyView);
 			elvTriggers.setEmptyView(emptyView);
 
 			return view;
@@ -233,15 +258,57 @@ public class TriggerEditorFragment extends SherlockFragment {
 				elvTriggers.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						elvTriggers.setSelection(triggersAdaper.getGroupCount() - 1);
+						elvTriggers.setSelection(triggers.size() - 1);
 					}
 				}, 100L);
-				elvTriggers.expandGroup(triggersAdaper.getGroupCount() - 1);
+				elvTriggers.expandGroup(triggers.size() - 1);
 				triggersAdaper.notifyDataSetChanged();
 
 				listener.setTriggers(triggers);
 			}
 		}
 	}
+
+	private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			Log.d(TAG, "onCreateActionMode(ActionMode mode, Menu menu)");
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.fragment_trigger_editor_action_mode, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			Log.d(TAG, "onPrepareActionMode(ActionMode mode, Menu menu)");
+			return false;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			Log.d(TAG, "onActionItemClicked(ActionMode mode, MenuItem item)");
+			switch (item.getItemId()) {
+			case R.id.deleteRule:
+				db = Db4oHelper.db(hostingActivity);
+				for (Trigger trigger : selectedTriggers) {
+					db.delete(trigger);
+					triggers.remove(trigger);
+					selectedTriggers.remove(trigger);
+				}
+				triggersAdaper.notifyDataSetChanged();
+				mode.finish();
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			Log.d(TAG, "onDestroyActionMode(ActionMode mode)");
+			actionMode = null;
+			selectedTriggers = null;
+		}
+	};
 
 }

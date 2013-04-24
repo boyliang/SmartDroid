@@ -49,7 +49,7 @@ public class ActionEditorFragment extends SherlockFragment {
 
 	private static List<Action> actions = null;
 
-	private ActionExpandableListAdapter expandableActionAdaper = null;
+	private ActionExpandableListAdapter actionsAdapter = null;
 
 	private ExpandableListView elvActions = null;
 
@@ -81,7 +81,7 @@ public class ActionEditorFragment extends SherlockFragment {
 
 		// Supply rule id input as an argument.
 		Bundle args = new Bundle();
-		args.putSerializable("state", state);
+		args.putSerializable(SmartDroid.Extra.EXTRA_STATE, state);
 		if (ruleUuid != null) {
 			args.putSerializable(SmartDroid.Extra.EXTRA_RULE_ID, ruleUuid);
 		}
@@ -109,7 +109,7 @@ public class ActionEditorFragment extends SherlockFragment {
 	public void onSaveInstanceState(Bundle outState) {
 		Log.d(TAG, "onSaveInstanceState(Bundle outState)");
 
-		outState.putSerializable("state", state);
+		outState.putSerializable(SmartDroid.Extra.EXTRA_STATE, state);
 		outState.putSerializable(SmartDroid.Extra.EXTRA_RULE_ID, ruleUuId);
 
 		// Calls the superclass so it can save the view hierarchy state
@@ -129,14 +129,14 @@ public class ActionEditorFragment extends SherlockFragment {
 		// then parse those out
 		Bundle args = getArguments();
 		if (args != null) {
-			state = (State) args.getSerializable("state");
+			state = (State) args.getSerializable(SmartDroid.Extra.EXTRA_STATE);
 			ruleUuId = (UUID) args.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 
 		// If recreating a previously destroyed instance
 		if (savedInstanceState != null) {
 			// Restore value of members from saved state
-			state = (State) savedInstanceState.getSerializable("state");
+			state = (State) savedInstanceState.getSerializable(SmartDroid.Extra.EXTRA_STATE);
 			ruleUuId = (UUID) savedInstanceState.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 
@@ -163,7 +163,7 @@ public class ActionEditorFragment extends SherlockFragment {
 		super.onCreateOptionsMenu(menu, inflater);
 		Log.d(TAG, "onCreateOptionsMenu(Menu menu, MenuInflater inflater)");
 
-		inflater.inflate(R.menu.activity_action_select, menu);
+		inflater.inflate(R.menu.fragment_action_editor_menu, menu);
 	}
 
 	@Override
@@ -191,12 +191,10 @@ public class ActionEditorFragment extends SherlockFragment {
 			// If the container view isn't null,
 			// There is need for us to create the fragment view
 		} else {
-			View view = null;
-
-			expandableActionAdaper = new ActionExpandableListAdapter(hostingActivity, actions);
-			view = inflater.inflate(R.layout.fragment_expandable_list_actions, null);
+			View view = inflater.inflate(R.layout.fragment_expandable_list_actions, null);
+			actionsAdapter = new ActionExpandableListAdapter(hostingActivity, actions);
 			elvActions = (ExpandableListView) view.findViewById(R.id.expandableListView);
-			elvActions.setAdapter(expandableActionAdaper);
+			elvActions.setAdapter(actionsAdapter);
 
 			View emptyView = inflater.inflate(R.layout.empty_action_list, null);
 			((ViewGroup)elvActions.getParent()).addView(emptyView);
@@ -232,11 +230,11 @@ public class ActionEditorFragment extends SherlockFragment {
 				elvActions.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						elvActions.setSelection(expandableActionAdaper.getGroupCount() - 1);
+						elvActions.setSelection(actions.size() - 1);
 					}
 				}, 100L);
-				elvActions.expandGroup(expandableActionAdaper.getGroupCount() - 1);
-				expandableActionAdaper.notifyDataSetChanged();
+				elvActions.expandGroup(actions.size() - 1);
+				actionsAdapter.notifyDataSetChanged();
 
 				listener.setActions(actions);
 			}

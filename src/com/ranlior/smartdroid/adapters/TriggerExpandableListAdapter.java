@@ -3,7 +3,6 @@ package com.ranlior.smartdroid.adapters;
 import java.util.List;
 
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.media.AudioManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,9 +130,9 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 	}
 	
 	// FIXME: see it needed.
-	@Override
-    public void registerDataSetObserver(DataSetObserver observer) {
-        super.registerDataSetObserver(observer);    
-    }
+//	@Override
+//    public void registerDataSetObserver(DataSetObserver observer) {
+//        super.registerDataSetObserver(observer);    
+//    }
 
 }

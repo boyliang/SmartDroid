@@ -13,14 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.db4o.ObjectContainer;
 import com.db4o.query.Predicate;
-import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.adapters.RulesAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
@@ -45,6 +47,10 @@ public class RuleActivity extends SherlockFragmentActivity {
 
 	private ListView lvRules = null;
 
+	private ActionMode actionMode = null;
+
+	private List<Rule> selectedRules = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,47 +70,45 @@ public class RuleActivity extends SherlockFragmentActivity {
 		lvRules.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// Gets the rule's uuid
 				Rule rule = rules.get(position);
-				// Redirects the rule editor activiry with the selected rule id
 				Intent intent = new Intent(RuleActivity.this, RuleEditorActivity.class);
 				intent.setAction(SmartDroid.Action.ACTION_EDIT_RULE);
 				intent.putExtra(SmartDroid.Extra.EXTRA_RULE_ID, rule.getId());
 				startActivityForResult(intent, EDIT_RULE_REQUEST_CODE);
 			}
 		});
-
-		// set swipe to dismiss gesture and remove from the adapter the item
-		SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(lvRules,
-				new SwipeDismissListViewTouchListener.OnDismissCallback() {
-					@Override
-					public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-						for (int position : reverseSortedPositions) {
-							Rule rule = rules.get(position);
-							db.delete(rule);
-							rules.remove(position);
-						}
-						rulesAdapter.notifyDataSetChanged();
-					}
-				});
-
-		lvRules.setOnTouchListener(touchListener);
+		lvRules.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				Rule selectedRule = rules.get(position);
+				if (actionMode == null) {
+					actionMode = RuleActivity.this.startActionMode(actionModeCallback);
+				}
+				if (selectedRules == null) {
+					selectedRules = new ArrayList<Rule>();
+				}
+				if (view.isSelected()) {
+					view.setSelected(false);
+					selectedRules.remove(selectedRule);
+				} else {
+					view.setSelected(true);
+					selectedRules.add(selectedRule);
+				}
+				return true;
+			}
+		});
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View emptyView = inflater.inflate(R.layout.empty_rule_list, null);
 		((ViewGroup) lvRules.getParent()).addView(emptyView);
 		lvRules.setEmptyView(emptyView);
-
-		// this is a special listener that preventing from swiping to dismiss to
-		// trigger while scrolling
-		lvRules.setOnScrollListener(touchListener.makeScrollListener());
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Log.d(TAG, "onCreateOptionsMenu(Menu menu)");
 
-		getSupportMenuInflater().inflate(R.menu.activity_rule, menu);
+		getSupportMenuInflater().inflate(R.menu.activity_rule_menu, menu);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -136,6 +140,7 @@ public class RuleActivity extends SherlockFragmentActivity {
 					return ruleId.compareTo(rule.getId()) == 0;
 				}
 			});
+
 			Rule rule = rules.get(0);
 
 			switch (requestCode) {
@@ -154,5 +159,47 @@ public class RuleActivity extends SherlockFragmentActivity {
 			rulesAdapter.notifyDataSetChanged();
 		}
 	}
+
+	private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			Log.d(TAG, "onCreateActionMode(ActionMode mode, Menu menu)");
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.activity_rule_action_mode, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			Log.d(TAG, "onPrepareActionMode(ActionMode mode, Menu menu)");
+			return false;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			Log.d(TAG, "onActionItemClicked(ActionMode mode, MenuItem item)");
+			switch (item.getItemId()) {
+			case R.id.deleteRule:
+				db = Db4oHelper.db(appCtx);
+				for (Rule rule : selectedRules) {
+					db.delete(rule);
+					rules.remove(rule);
+				}
+				rulesAdapter.notifyDataSetChanged();
+				mode.finish();
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			Log.d(TAG, "onDestroyActionMode(ActionMode mode)");
+			actionMode = null;
+			selectedRules.clear();
+			selectedRules = null;
+		}
+	};
 
 }

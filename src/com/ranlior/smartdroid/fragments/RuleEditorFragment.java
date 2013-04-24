@@ -76,7 +76,7 @@ public class RuleEditorFragment extends SherlockFragment {
 
 		// Supply rule id input as an argument.
 		Bundle args = new Bundle();
-		args.putSerializable("state", state);
+		args.putSerializable(SmartDroid.Extra.EXTRA_STATE, state);
 		if (ruleUuid != null) {
 			args.putSerializable(SmartDroid.Extra.EXTRA_RULE_ID, ruleUuid);
 		}
@@ -104,7 +104,7 @@ public class RuleEditorFragment extends SherlockFragment {
 	public void onSaveInstanceState(Bundle outState) {
 		Log.d(TAG, "onSaveInstanceState(Bundle outState)");
 
-		outState.putSerializable("state", state);
+		outState.putSerializable(SmartDroid.Extra.EXTRA_STATE, state);
 		outState.putSerializable(SmartDroid.Extra.EXTRA_RULE_ID, ruleUuId);
 
 		// Calls the superclass so it can save the view hierarchy state
@@ -122,14 +122,14 @@ public class RuleEditorFragment extends SherlockFragment {
 		// then parse those out
 		Bundle args = getArguments();
 		if (args != null) {
-			state = (State) args.getSerializable("state");
+			state = (State) args.getSerializable(SmartDroid.Extra.EXTRA_STATE);
 			ruleUuId = (UUID) args.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 
 		// If recreating a previously destroyed instance
 		if (savedInstanceState != null) {
 			// Restore value of members from saved state
-			state = (State) savedInstanceState.getSerializable("state");
+			state = (State) savedInstanceState.getSerializable(SmartDroid.Extra.EXTRA_STATE);
 			ruleUuId = (UUID) savedInstanceState.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 

@@ -112,7 +112,7 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Log.d(TAG, "onCreateOptionsMenu(Menu menu)");
 
-		getSupportMenuInflater().inflate(R.menu.activity_rule_editor, menu);
+		getSupportMenuInflater().inflate(R.menu.activity_rule_editor_menu, menu);
 
 		return super.onCreateOptionsMenu(menu);
 	}

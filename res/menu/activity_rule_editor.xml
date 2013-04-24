@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/saveRule"
-        android:icon="@drawable/ic_action_save"
+        android:icon="@drawable/ic_save_rule"
         android:showAsAction="ifRoom"
         android:title="@string/save_rule"/>
 

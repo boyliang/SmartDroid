@@ -24,4 +24,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#555555" />
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/empty_action_list_image" />
+
 </LinearLayout>

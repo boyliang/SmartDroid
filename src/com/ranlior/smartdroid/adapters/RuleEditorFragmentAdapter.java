@@ -16,7 +16,7 @@ public class RuleEditorFragmentAdapter extends FragmentPagerAdapter {
 
 	private static final String TAG = RuleEditorFragmentAdapter.class.getSimpleName();
 
-	protected static final String[] CONTENT = new String[] { "Triggers", "Actions", "Rule" };
+	protected static final String[] CONTENT = new String[] { "TRIGGERS", "ACTIONS", "RULE" };
 
 	private final State state;
 

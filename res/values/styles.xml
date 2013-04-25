@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -19,5 +19,16 @@
 
     <style name="AppTheme" parent="Theme.Sherlock" />
     
+    
+
+    <style name="Theme.MyStyled" parent="Theme.Sherlock.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
+    </style>
+    
+    <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="background">#FFFF00</item>
+        <item name="android:textColor">#AA00CC</item>
+    </style>
+
 
 </resources>

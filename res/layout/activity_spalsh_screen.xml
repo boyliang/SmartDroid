@@ -1,0 +1,46 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DDDDDD" >
+
+    <RelativeLayout
+        android:id="@+id/fullSplash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/smartdroid_splash_image" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="52dp"
+            android:src="@drawable/splash_text" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/empty_splash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".SpalshScreen" >
+
+        <ImageView
+            android:id="@+id/emptySplash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/splash_empty" />
+    </RelativeLayout>
+
+</FrameLayout>

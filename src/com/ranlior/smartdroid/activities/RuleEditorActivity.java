@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.db4o.ObjectContainer;
 import com.db4o.query.Predicate;
 import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.R.menu;
 import com.ranlior.smartdroid.adapters.RuleEditorFragmentAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.fragments.ActionEditorFragment;
@@ -110,6 +112,44 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPager.setAdapter(mAdapter);
+		
+		
+		//TODO this might be the place to enable\disable menu items to avoid  the click while paging on menu item
+		mPager.setOnPageChangeListener(new OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int position) {
+				/*
+				 * This method will be invoked when a new page becomes selected. Animation is not necessarily complete.
+				 *
+				 * Parameters
+		         * position	   Position index of the new selected page.
+				 */
+			}
+			
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				/*
+				 * This method will be invoked when the current page is scrolled, either as part of a programmatically initiated smooth scroll or a user initiated touch scroll.
+				 *
+				 * Parameters
+				 * position	Position index of the first page currently being displayed. Page position+1 will be visible if positionOffset is nonzero.
+				 * positionOffset	Value from [0, 1) indicating the offset from the page at position.
+				 * positionOffsetPixels	Value in pixels indicating the offset from position.
+				 */
+			}
+			
+			@Override
+			public void onPageScrollStateChanged(int state) {
+				/*
+				 * Called when the scroll state changes.
+				 *
+				 * ViewPager.SCROLL_STATE_DRAGGING - Indicates that the pager is currently being dragged by the user. 
+				 * ViewPager.SCROLL_STATE_IDLE - Indicates that the pager is in an idle, settled state. The current page is fully in view and no animation is in progress.
+				 * ViewPager.SCROLL_STATE_SETTLING - Indicates that the pager is in the process of settling to a final position.
+				 */				
+			}
+		});
 
 		mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
 		mIndicator.setViewPager(mPager);
@@ -136,12 +176,16 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 			// Validates rule add or edit workflow
 			if (rule.getTriggers().isEmpty()) {
 				Toast.makeText(appCtx, "Rule's triggers list is empty.", Toast.LENGTH_SHORT).show();
+				mPager.setCurrentItem(0, true);
 			} else if (rule.getActions().isEmpty()) {
 				Toast.makeText(appCtx, "Rule's actions list is empty.", Toast.LENGTH_SHORT).show();
+				mPager.setCurrentItem(1, true);
 			} else if (rule.getName() == null || "".equals(rule.getName())) {
 				Toast.makeText(appCtx, "Rule's name is empty.", Toast.LENGTH_SHORT).show();
+				mPager.setCurrentItem(2, true);
 			} else if (rule.getDescription() == null || "".equals(rule.getDescription())) {
 				Toast.makeText(appCtx, "Rule's description is empty.", Toast.LENGTH_SHORT).show();
+				mPager.setCurrentItem(2, true);
 				// If rule add or edit workflow valid
 			} else {
 				// Saves the rule to the db

@@ -15,8 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ExpandableListView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ExpandableListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.ActionMode;
@@ -33,7 +33,6 @@ import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
-import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -58,7 +57,7 @@ public class ActionEditorFragment extends SherlockFragment {
 	private Listener listener = null;
 
 	private Activity hostingActivity = null;
-	
+
 	private ActionMode actionMode = null;
 
 	/**
@@ -255,7 +254,7 @@ public class ActionEditorFragment extends SherlockFragment {
 			}
 		}
 	}
-	
+
 	private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
 		@Override
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {

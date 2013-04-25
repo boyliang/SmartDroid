@@ -3,49 +3,34 @@
 
     <string name="app_name">Sm@rtDroid</string>
 
-    <!-- MainActivity -->
-    <string name="action_settings">Settings</string>
+    <!-- SplashScreenActivity -->
+    <string name="title_activity_spalsh_screen">SpalshScreen</string>
 
     <!-- RulesActivity -->
     <string name="title_activity_rule">Rules</string>
     <string name="add_rule">Add Rule</string>
-<<<<<<< HEAD
     <string name="delete_rule">Delete Rule</string>
-    
-=======
 
->>>>>>> fa04e701c1c3c09e728baf42d57f267120e7cc0e
     <!-- RuleEditorAcitvity -->
     <string name="title_activity_rule_editor">Rule Editor</string>
     <string name="save_rule">Save Rule</string>
 
+    <!-- TriggerEditorFragment -->
+    <string name="add_trigger">Add Trigger</string>
+    <string name="delete_trigger">Delete Trigger</string>
+
+    <!-- ActionEditorFragment -->
+    <string name="add_action">Add Action</string>
+    <string name="delete_action">Delete Action</string>
+
     <!-- RuleEditorFragment -->
     <string name="rule_name">NAME</string>
     <string name="rule_description">DESCRIPTION</string>
-<<<<<<< HEAD
-    
-    <!-- TriggerEditorFragment -->
-    <string name="delete_trigger">Delete Trigger</string>
-    
-    <!-- ActionEditorFragment -->
-    <string name="delete_action">Delete Action</string>
-    
+
     <!-- TriggerSelectActivity -->
     <string name="title_activity_trigger_select">Select Trigger</string>
-    <string name="add_trigger">Add Trigger</string>
-    
+
     <!-- ActionSelectActivity -->
-=======
-
-    <!-- SelectTriggerFragment -->
-    <string name="title_activity_trigger_select">Select Trigger</string>
-    <string name="add_trigger">Add Trigger</string>
-
-    <!-- SelectActionFragment -->
->>>>>>> fa04e701c1c3c09e728baf42d57f267120e7cc0e
     <string name="title_activity_action_select">Select Action</string>
-    <string name="add_action">Add Action</string>
-    <string name="title_activity_spalsh_screen">SpalshScreen</string>
-    <string name="hello_world">Hello world!</string>
 
 </resources>

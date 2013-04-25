@@ -43,13 +43,9 @@ public class RuleActivity extends SherlockFragmentActivity {
 
 	private RulesAdapter rulesAdapter = null;
 
-	private List<Rule> rules = null;
-
 	private ListView lvRules = null;
 
 	private ActionMode actionMode = null;
-
-	private List<Rule> selectedRules = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +58,7 @@ public class RuleActivity extends SherlockFragmentActivity {
 
 		db = Db4oHelper.db(appCtx);
 
-		rules = new ArrayList<Rule>(db.query(Rule.class));
+		List<Rule> rules = new ArrayList<Rule>(db.query(Rule.class));
 
 		rulesAdapter = new RulesAdapter(this, R.layout.rule_list_item, rules);
 		lvRules = (ListView) findViewById(R.id.lvRules);
@@ -70,7 +66,7 @@ public class RuleActivity extends SherlockFragmentActivity {
 		lvRules.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Rule rule = rules.get(position);
+				Rule rule = rulesAdapter.getItem(position);
 				Intent intent = new Intent(RuleActivity.this, RuleEditorActivity.class);
 				intent.setAction(SmartDroid.Action.ACTION_EDIT_RULE);
 				intent.putExtra(SmartDroid.Extra.EXTRA_RULE_ID, rule.getId());
@@ -80,20 +76,10 @@ public class RuleActivity extends SherlockFragmentActivity {
 		lvRules.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				Rule selectedRule = rules.get(position);
 				if (actionMode == null) {
 					actionMode = RuleActivity.this.startActionMode(actionModeCallback);
 				}
-				if (selectedRules == null) {
-					selectedRules = new ArrayList<Rule>();
-				}
-				if (view.isSelected()) {
-					view.setSelected(false);
-					selectedRules.remove(selectedRule);
-				} else {
-					view.setSelected(true);
-					selectedRules.add(selectedRule);
-				}
+				rulesAdapter.toggleSelected(position);
 				return true;
 			}
 		});
@@ -107,9 +93,8 @@ public class RuleActivity extends SherlockFragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Log.d(TAG, "onCreateOptionsMenu(Menu menu)");
-
+		
 		getSupportMenuInflater().inflate(R.menu.activity_rule_menu, menu);
-
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -140,23 +125,18 @@ public class RuleActivity extends SherlockFragmentActivity {
 					return ruleId.compareTo(rule.getId()) == 0;
 				}
 			});
-
 			Rule rule = rules.get(0);
-
 			switch (requestCode) {
 			case ADD_RULE_REQUEST_CODE:
-				this.rules.add(rule);
+				rulesAdapter.add(rule);
 				break;
 			case EDIT_RULE_REQUEST_CODE:
-				int pos = this.rules.indexOf(rule);
-				this.rules.remove(pos);
-				this.rules.add(pos, rule);
+				rulesAdapter.remove(rule);
+				rulesAdapter.add(rule);
 				break;
 			default:
 				throw new IllegalStateException(TAG + " caused by invalid request code");
 			}
-
-			rulesAdapter.notifyDataSetChanged();
 		}
 	}
 
@@ -181,11 +161,11 @@ public class RuleActivity extends SherlockFragmentActivity {
 			switch (item.getItemId()) {
 			case R.id.deleteRule:
 				db = Db4oHelper.db(appCtx);
+				List<Rule> selectedRules = rulesAdapter.getSelected();
 				for (Rule rule : selectedRules) {
 					db.delete(rule);
-					rules.remove(rule);
+					rulesAdapter.remove(rule);
 				}
-				rulesAdapter.notifyDataSetChanged();
 				mode.finish();
 				return true;
 			default:
@@ -197,8 +177,7 @@ public class RuleActivity extends SherlockFragmentActivity {
 		public void onDestroyActionMode(ActionMode mode) {
 			Log.d(TAG, "onDestroyActionMode(ActionMode mode)");
 			actionMode = null;
-			selectedRules.clear();
-			selectedRules = null;
+			rulesAdapter.clearSelected();
 		}
 	};
 

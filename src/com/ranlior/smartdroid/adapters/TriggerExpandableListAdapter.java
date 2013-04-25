@@ -1,5 +1,6 @@
 package com.ranlior.smartdroid.adapters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -24,7 +25,9 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 
 	private Context context = null;
 
-	List<Trigger> triggers;
+	private List<Trigger> triggers = null;
+
+	private List<Trigger> selectedTriggers = null;
 
 	public TriggerExpandableListAdapter(Context context, List<Trigger> triggers) {
 		Log.d(TAG, "Constructor");
@@ -129,10 +132,56 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 	
-	// FIXME: see it needed.
-//	@Override
-//    public void registerDataSetObserver(DataSetObserver observer) {
-//        super.registerDataSetObserver(observer);    
-//    }
+	public void add(Trigger trigger) {
+		if (triggers != null) {
+			triggers.add(trigger);
+			notifyDataSetChanged();
+		}
+	}
+
+	public void remove(Trigger trigger) {
+		if (triggers != null) {
+			triggers.remove(trigger);
+			notifyDataSetChanged();
+		}
+	}
+	
+	public List<Trigger> getTriggers() {
+		return triggers;
+	}
+	
+	private boolean isSelected(int position) {
+		if (selectedTriggers == null || selectedTriggers.isEmpty()) {
+			return false;
+		}
+		return selectedTriggers.contains(triggers.get(position));
+	}
+
+	private void setSelected(int position, boolean toSelect) {
+		if (selectedTriggers == null) {
+			selectedTriggers = new ArrayList<Trigger>();
+		}
+		if (toSelect && !isSelected(position)) {
+			selectedTriggers.add(triggers.get(position));
+		} else if (!toSelect && isSelected(position)) {
+			selectedTriggers.remove(triggers.get(position));
+		}
+	}
+
+	public void toggleSelected(int position) {
+		if (isSelected(position)) {
+			setSelected(position, false);
+		} else {
+			setSelected(position, true);
+		}
+	}
+	
+	public List<Trigger> getSelected() {
+		return selectedTriggers;
+	}
+	
+	public void clearSelected() {
+		selectedTriggers = null;
+	}
 
 }

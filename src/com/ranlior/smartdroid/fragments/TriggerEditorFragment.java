@@ -50,9 +50,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 	private UUID ruleUuId = null;
 
-	private List<Trigger> triggers = null;
-
-	private TriggerExpandableListAdapter triggersAdaper = null;
+	private TriggerExpandableListAdapter triggersAdapter = null;
 
 	private ExpandableListView elvTriggers = null;
 
@@ -61,8 +59,6 @@ public class TriggerEditorFragment extends SherlockFragment {
 	private Activity hostingActivity = null;
 
 	private ActionMode actionMode = null;
-
-	private List<Trigger> selectedTriggers = null;
 
 	/**
 	 * Listener interface for the fragment. Container Activity must implement
@@ -147,6 +143,8 @@ public class TriggerEditorFragment extends SherlockFragment {
 			ruleUuId = (UUID) savedInstanceState.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 
+		List<Trigger> triggers = null;
+
 		// Gets rule's triggers
 		switch (state) {
 		case ADD_RULE:
@@ -158,11 +156,11 @@ public class TriggerEditorFragment extends SherlockFragment {
 					return ruleUuId.compareTo(rule.getId()) == 0;
 				}
 			});
-			// FIXME: check if needed activation.
-			// db.activate(rule, 3);
 			triggers = rules.get(0).getTriggers();
 			break;
 		}
+
+		triggersAdapter = new TriggerExpandableListAdapter(hostingActivity, triggers);
 	}
 
 	@Override
@@ -199,27 +197,15 @@ public class TriggerEditorFragment extends SherlockFragment {
 			// There is need for us to create the fragment view
 		} else {
 			View view = inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
-			triggersAdaper = new TriggerExpandableListAdapter(hostingActivity, triggers);
 			elvTriggers = (ExpandableListView) view.findViewById(R.id.expandableListView);
-			elvTriggers.setAdapter(triggersAdaper);
+			elvTriggers.setAdapter(triggersAdapter);
 			elvTriggers.setOnItemLongClickListener(new OnItemLongClickListener() {
 				@Override
 				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-					Trigger selectedTrigger = triggers.get(position);
 					if (actionMode == null) {
 						actionMode = getSherlockActivity().startActionMode(actionModeCallback);
 					}
-					if (selectedTriggers == null) {
-						selectedTriggers = new ArrayList<Trigger>();
-					}
-					if (view.isSelected()) {
-						view.setSelected(false);
-						selectedTriggers.remove(selectedTrigger);
-					} else {
-						view.setSelected(true);
-						selectedTriggers.add(selectedTrigger);
-					}
-					// FIXME: was false but i changed to true to check.
+					triggersAdapter.toggleSelected(position);
 					return true;
 				}
 			});
@@ -254,17 +240,17 @@ public class TriggerEditorFragment extends SherlockFragment {
 					e.printStackTrace();
 				}
 
-				triggers.add(trigger);
+				triggersAdapter.add(trigger);
 				elvTriggers.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						elvTriggers.setSelection(triggers.size() - 1);
+						elvTriggers.setSelection(triggersAdapter.getGroupCount() - 1);
 					}
 				}, 100L);
-				elvTriggers.expandGroup(triggers.size() - 1);
-				triggersAdaper.notifyDataSetChanged();
+				elvTriggers.expandGroup(triggersAdapter.getGroupCount() - 1);
+				triggersAdapter.notifyDataSetChanged();
 
-				listener.setTriggers(triggers);
+				listener.setTriggers(triggersAdapter.getTriggers());
 			}
 		}
 	}
@@ -288,14 +274,13 @@ public class TriggerEditorFragment extends SherlockFragment {
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			Log.d(TAG, "onActionItemClicked(ActionMode mode, MenuItem item)");
 			switch (item.getItemId()) {
-			case R.id.deleteRule:
+			case R.id.deleteTrigger:
 				db = Db4oHelper.db(hostingActivity);
+				List<Trigger> selectedTriggers = triggersAdapter.getSelected();
 				for (Trigger trigger : selectedTriggers) {
 					db.delete(trigger);
-					triggers.remove(trigger);
-					selectedTriggers.remove(trigger);
+					triggersAdapter.remove(trigger);
 				}
-				triggersAdaper.notifyDataSetChanged();
 				mode.finish();
 				return true;
 			default:
@@ -307,7 +292,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 		public void onDestroyActionMode(ActionMode mode) {
 			Log.d(TAG, "onDestroyActionMode(ActionMode mode)");
 			actionMode = null;
-			selectedTriggers = null;
+			triggersAdapter.clearSelected();
 		}
 	};
 

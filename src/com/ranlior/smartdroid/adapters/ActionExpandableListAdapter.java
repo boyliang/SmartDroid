@@ -1,5 +1,6 @@
 package com.ranlior.smartdroid.adapters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -24,7 +25,9 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 
 	private Context context = null;
 
-	List<Action> actions;
+	private List<Action> actions = null;
+	
+	private List<Action> selectedActions = null;
 
 	public ActionExpandableListAdapter(Context context, List<Action> actions) {
 		Log.d(TAG, "Constructor");
@@ -126,6 +129,58 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
+	}
+	
+	public void add(Action action) {
+		if (actions != null) {
+			actions.add(action);
+			notifyDataSetChanged();
+		}
+	}
+
+	public void remove(Action action) {
+		if (actions != null) {
+			actions.remove(action);
+			notifyDataSetChanged();
+		}
+	}
+	
+	public List<Action> getActions() {
+		return actions;
+	}
+	
+	private boolean isSelected(int position) {
+		if (selectedActions == null || selectedActions.isEmpty()) {
+			return false;
+		}
+		return selectedActions.contains(actions.get(position));
+	}
+
+	private void setSelected(int position, boolean toSelect) {
+		if (selectedActions == null) {
+			selectedActions = new ArrayList<Action>();
+		}
+		if (toSelect && !isSelected(position)) {
+			selectedActions.add(actions.get(position));
+		} else if (!toSelect && isSelected(position)) {
+			selectedActions.remove(actions.get(position));
+		}
+	}
+
+	public void toggleSelected(int position) {
+		if (isSelected(position)) {
+			setSelected(position, false);
+		} else {
+			setSelected(position, true);
+		}
+	}
+	
+	public List<Action> getSelected() {
+		return selectedActions;
+	}
+	
+	public void clearSelected() {
+		selectedActions = null;
 	}
 
 }

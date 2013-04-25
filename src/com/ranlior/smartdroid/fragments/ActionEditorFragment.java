@@ -14,9 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -30,6 +33,7 @@ import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
+import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -47,8 +51,6 @@ public class ActionEditorFragment extends SherlockFragment {
 
 	private UUID ruleUuId = null;
 
-	private static List<Action> actions = null;
-
 	private ActionExpandableListAdapter actionsAdapter = null;
 
 	private ExpandableListView elvActions = null;
@@ -56,6 +58,8 @@ public class ActionEditorFragment extends SherlockFragment {
 	private Listener listener = null;
 
 	private Activity hostingActivity = null;
+	
+	private ActionMode actionMode = null;
 
 	/**
 	 * Listener interface for the fragment. Container Activity must implement
@@ -140,6 +144,8 @@ public class ActionEditorFragment extends SherlockFragment {
 			ruleUuId = (UUID) savedInstanceState.getSerializable(SmartDroid.Extra.EXTRA_RULE_ID);
 		}
 
+		List<Action> actions = null;
+
 		// Gets rule's actions
 		switch (state) {
 		case ADD_RULE:
@@ -151,11 +157,11 @@ public class ActionEditorFragment extends SherlockFragment {
 					return ruleUuId.compareTo(rule.getId()) == 0;
 				}
 			});
-			// FIXME: check if needed
-			// db.activate(rule, 3);
 			actions = rules.get(0).getActions();
 			break;
 		}
+
+		actionsAdapter = new ActionExpandableListAdapter(hostingActivity, actions);
 	}
 
 	@Override
@@ -192,14 +198,23 @@ public class ActionEditorFragment extends SherlockFragment {
 			// There is need for us to create the fragment view
 		} else {
 			View view = inflater.inflate(R.layout.fragment_expandable_list_actions, null);
-			actionsAdapter = new ActionExpandableListAdapter(hostingActivity, actions);
 			elvActions = (ExpandableListView) view.findViewById(R.id.expandableListView);
 			elvActions.setAdapter(actionsAdapter);
+			elvActions.setOnItemLongClickListener(new OnItemLongClickListener() {
+				@Override
+				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+					if (actionMode == null) {
+						actionMode = getSherlockActivity().startActionMode(actionModeCallback);
+					}
+					actionsAdapter.toggleSelected(position);
+					return true;
+				}
+			});
 
 			View emptyView = inflater.inflate(R.layout.empty_action_list, null);
-			((ViewGroup)elvActions.getParent()).addView(emptyView);
+			((ViewGroup) elvActions.getParent()).addView(emptyView);
 			elvActions.setEmptyView(emptyView);
-			
+
 			return view;
 		}
 	}
@@ -226,19 +241,60 @@ public class ActionEditorFragment extends SherlockFragment {
 					e.printStackTrace();
 				}
 
-				actions.add(action);
+				actionsAdapter.add(action);
 				elvActions.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						elvActions.setSelection(actions.size() - 1);
+						elvActions.setSelection(actionsAdapter.getGroupCount() - 1);
 					}
 				}, 100L);
-				elvActions.expandGroup(actions.size() - 1);
+				elvActions.expandGroup(actionsAdapter.getGroupCount() - 1);
 				actionsAdapter.notifyDataSetChanged();
 
-				listener.setActions(actions);
+				listener.setActions(actionsAdapter.getActions());
 			}
 		}
 	}
+	
+	private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			Log.d(TAG, "onCreateActionMode(ActionMode mode, Menu menu)");
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.fragment_action_editor_action_mode, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			Log.d(TAG, "onPrepareActionMode(ActionMode mode, Menu menu)");
+			return false;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			Log.d(TAG, "onActionItemClicked(ActionMode mode, MenuItem item)");
+			switch (item.getItemId()) {
+			case R.id.deleteAction:
+				db = Db4oHelper.db(hostingActivity);
+				List<Action> selectedActions = actionsAdapter.getSelected();
+				for (Action action : selectedActions) {
+					db.delete(action);
+					actionsAdapter.remove(action);
+				}
+				mode.finish();
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			Log.d(TAG, "onDestroyActionMode(ActionMode mode)");
+			actionMode = null;
+			actionsAdapter.clearSelected();
+		}
+	};
 
 }

@@ -5,8 +5,11 @@ import java.util.UUID;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -66,6 +69,10 @@ public class RuleEditorActivity extends SherlockFragmentActivity implements Trig
 
 		setContentView(R.layout.activity_rule_editor);
 
+		
+		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DDDDDD")));
+		getSupportActionBar().setTitle(Html.fromHtml("<font color='#555555'>Rule Editor</font>"));
+		
 		appCtx = getApplicationContext();
 
 		db = Db4oHelper.db(appCtx);

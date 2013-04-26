@@ -30,6 +30,9 @@ public class RingerModeTrigger extends Trigger {
 
 	private static final String DESCRIPTION = "Trigged when the ringer mode changes (normal/silent/vibrate)";
 
+	private final String ICON = "ic_list_volume";
+	
+
 	/**
 	 * Holds the trigger wanted ringer mode.
 	 */
@@ -106,6 +109,11 @@ public class RingerModeTrigger extends Trigger {
 			db.commit();
 			db.close();
 		}
+	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
 	}
 
 }

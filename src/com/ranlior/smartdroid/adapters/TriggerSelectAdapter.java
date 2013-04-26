@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ranlior.smartdroid.R;
@@ -23,11 +24,13 @@ public class TriggerSelectAdapter extends ArrayAdapter<Trigger> {
 
 	private List<Trigger> triggers;
 	
+	private Context context;
+	
 	public TriggerSelectAdapter(Context context, int layoutResourceId,  List<Trigger> triggers) {
 		super(context, layoutResourceId, triggers);
 		
 		Log.d(TAG, "Constructor");
-		
+		this.context = context;
 		this.inflater = LayoutInflater.from(context);
 		this.layoutResourceId = layoutResourceId;
 		this.triggers = triggers;
@@ -41,14 +44,18 @@ public class TriggerSelectAdapter extends ArrayAdapter<Trigger> {
 			convertView = inflater.inflate(layoutResourceId, null);
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
-			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);		
+			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);	
+			holder.ivIcon = (ImageView) convertView.findViewById(R.id.contentImage);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
+		int resID = context.getResources().getIdentifier(trigger.getIconName() , "drawable", context.getPackageName());
+		
 		holder.tvTitle.setText(trigger.getName());
 		holder.tvDesc.setText(trigger.getDescription());
+		holder.ivIcon.setImageResource(resID);
 
 		return convertView;
 	}
@@ -56,6 +63,7 @@ public class TriggerSelectAdapter extends ArrayAdapter<Trigger> {
 	private static class ViewHolder {
 		TextView tvTitle;
 		TextView tvDesc;
+		ImageView ivIcon;
 	}
 
 	

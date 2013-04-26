@@ -90,4 +90,6 @@ public abstract class Trigger {
 	public void unregister(Context context) {
 	}
 	
+	public abstract String getIconName();
+	
 }

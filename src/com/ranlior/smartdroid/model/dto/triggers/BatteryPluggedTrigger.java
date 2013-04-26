@@ -32,6 +32,9 @@ public class BatteryPluggedTrigger extends Trigger {
 
 	private static final String DESCRIPTION = "Trigged when the battery plug state changes (not pluged / ac plugged / usb plugged / wireless plugged)";
 
+	private final String ICON = "ic_list_plugged";
+
+
 	/**
 	 * Holds the trigger wanted pluged state.<BR/>
 	 * <BR/>
@@ -116,6 +119,11 @@ public class BatteryPluggedTrigger extends Trigger {
 			db.commit();
 			db.close();
 		}
+	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
 	}
 
 }

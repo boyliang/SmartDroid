@@ -19,6 +19,10 @@ public class ModifyVolumeAction extends Action {
 
 	private static final String DESCRIPTION = "Modifies audio volume of audio streams like alarm, DTMF, music, notification, ring, system and voice call";
 
+	private final String ICON = "ic_list_volume";
+
+
+
 	/**
 	 * Holds the audio stream.
 	 * 
@@ -168,6 +172,11 @@ public class ModifyVolumeAction extends Action {
 		if (volume <= maxVolume) {
 			audioManager.setStreamVolume(audioStream, volume, flags);
 		}
+	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
 	}
 
 }

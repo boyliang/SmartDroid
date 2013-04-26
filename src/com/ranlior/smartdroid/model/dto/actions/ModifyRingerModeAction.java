@@ -19,6 +19,9 @@ public class ModifyRingerModeAction extends Action {
 
 	private static final String DESCRIPTION = "Modifies ringer mode (Normal / Silent / Vibrate)";
 
+	private final String ICON = "ic_list_volume";
+	
+
 	/**
 	 * Holds the wanted ringer mode.
 	 * 
@@ -81,5 +84,11 @@ public class ModifyRingerModeAction extends Action {
 		// Changes ringer mode settings
 		audioManager.setRingerMode(ringerMode);
 	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
+	}
+
 
 }

@@ -19,6 +19,9 @@ public class ChangeBluetoothStateAction extends Action {
 	private static final String NAME = "Change bluetooth state";
 
 	private static final String DESCRIPTION = "Changes bluetooth state (enabled / disabled)";
+	
+	private final String ICON = "ic_list_bluetooth";
+	
 
 	/**
 	 * Holds the wanted bluetooth state.
@@ -90,5 +93,12 @@ public class ChangeBluetoothStateAction extends Action {
 			}
 		}
 	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
+	}
+
+
 
 }

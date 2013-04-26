@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:background="@color/Gray"
-            android:src="@drawable/abs__ic_menu_share_holo_dark" />
+            android:src="@drawable/ic_list_placeholder" />
 
     </FrameLayout>
 

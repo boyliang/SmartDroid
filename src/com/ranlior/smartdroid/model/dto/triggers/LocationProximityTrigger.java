@@ -47,7 +47,7 @@ public class LocationProximityTrigger extends Trigger {
 	/**
 	 * Holds the radius of the central point of the alert region, in meters.
 	 */
-	private float radius = 500.0F;
+	private float radius = 0.0F;
 
 	/**
 	 * Holds time for this proximity alert, in milliseconds, or -1 to indicate

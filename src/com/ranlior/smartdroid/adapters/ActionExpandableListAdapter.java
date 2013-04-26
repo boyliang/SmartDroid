@@ -3,8 +3,12 @@ package com.ranlior.smartdroid.adapters;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import android.support.v4.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,15 +28,18 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 	private static final String TAG = ActionExpandableListAdapter.class.getSimpleName();
 
 	private Context context = null;
+	
+	private Fragment fragment = null;
 
 	private List<Action> actions = null;
 	
 	private List<Action> selectedActions = null;
 
-	public ActionExpandableListAdapter(Context context, List<Action> actions) {
+	public ActionExpandableListAdapter(Context context, Fragment fragment, List<Action> actions) {
 		Log.d(TAG, "Constructor");
 
 		this.context = context;
+		this.fragment = fragment;
 		this.actions = actions;
 	}
 
@@ -78,6 +85,38 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 					//TODO update or set the action's ringerMode 
 					ModifyRingerModeAction modifyRingerModeAction = (ModifyRingerModeAction) actions.get(groupPosition);
 					modifyRingerModeAction.setRingerMode(ringerMode);
+				}
+			});
+		} else if ("SetWallpaperAction".equals(actionClassName)) {
+			convertView = inflater.inflate(R.layout.expand_wallpaper_action, null);
+
+			final TextView filePath = (TextView) convertView.findViewById(R.id.tvFilePath);
+			
+			filePath.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent pickIntent = new Intent();
+					pickIntent.setType("image/*");
+					pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+					Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+					String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
+					Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+					chooserIntent.putExtra ( Intent.EXTRA_INITIAL_INTENTS, new Intent[] { takePhotoIntent } );
+
+					fragment.startActivityForResult(chooserIntent, 12);
+					
+				}
+			});
+			
+			
+			
+			convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					
 				}
 			});
 		}

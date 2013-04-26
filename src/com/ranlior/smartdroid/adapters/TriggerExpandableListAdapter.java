@@ -10,12 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.R.id;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
@@ -79,6 +83,55 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 					// TODO: update or set the trigger's ringerMode
 					RingerModeTrigger ringerModeTrigger = (RingerModeTrigger) triggers.get(groupPosition);
 					ringerModeTrigger.setWantedRingerMode(ringerMode);
+				}
+			});
+		} else if ("LocationProximityTrigger".equals(triggerClassName)) {
+			convertView = inflater.inflate(R.layout.expand_location_trigger, null);
+			final RadioGroup radioGroup = (RadioGroup) convertView.findViewById(R.id.radio_group_notify_when);
+			final AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) convertView.findViewById(R.id.auto_complete_text_view_location);
+			final SeekBar seekBar = (SeekBar) convertView.findViewById(R.id.sbRadius);
+			final TextView tvRadiusValue = (TextView) convertView.findViewById(R.id.sbValue);
+			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+				
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+					tvRadiusValue.setText(String.valueOf(progress) + " m");
+				}
+			});
+			
+			convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					int inOut = -1;
+					int what = radioGroup.getCheckedRadioButtonId();
+					switch (what) {
+					case R.id.radio_button_entering:
+						inOut = 0; //TODO set static final
+						break;
+					case R.id.rbVibrate:
+						inOut = 1; //TODO set static final
+						break;
+					default:
+						inOut = 0; //TODO set static final
+						break;
+					}
+					
+					int radiusValue = seekBar.getProgress();
+					
+					
+					
 				}
 			});
 		}

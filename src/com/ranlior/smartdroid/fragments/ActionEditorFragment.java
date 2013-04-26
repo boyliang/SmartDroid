@@ -9,6 +9,8 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.ActionMode;
@@ -160,7 +164,7 @@ public class ActionEditorFragment extends SherlockFragment {
 			break;
 		}
 
-		actionsAdapter = new ActionExpandableListAdapter(hostingActivity, actions);
+		actionsAdapter = new ActionExpandableListAdapter(hostingActivity, this, actions);
 	}
 
 	@Override
@@ -251,6 +255,23 @@ public class ActionEditorFragment extends SherlockFragment {
 				actionsAdapter.notifyDataSetChanged();
 
 				listener.setActions(actionsAdapter.getActions());
+			}
+			if (requestCode == 12 && data != null && data.getData() != null) {
+				Uri _uri = data.getData();
+
+				if (_uri != null) {
+					// User had pick an image.
+					Cursor cursor = hostingActivity.getContentResolver().query(_uri,
+							new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+					cursor.moveToFirst();
+
+					// Link to the image
+					final String imageFilePath = cursor.getString(0);
+					cursor.close();
+					Toast.makeText(hostingActivity, imageFilePath, Toast.LENGTH_LONG).show();
+			
+				}
+
 			}
 		}
 	}

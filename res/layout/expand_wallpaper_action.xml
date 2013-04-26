@@ -28,19 +28,21 @@
             android:id="@+id/tvFilePath"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1"
             android:background="@drawable/custom_et"
+            android:paddingLeft="10dp"
             android:text="Select Image"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF" 
-            android:layout_weight="1"
-            android:layout_gravity="bottom"
-            android:layout_marginRight="12dp"/>
+            android:textColor="#FFFFFF" />
 
         <ImageView
             android:id="@+id/ivPreview"
             android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/preview" />
+            android:layout_height="84dp"
+            android:src="@drawable/preview"
+            android:background="#DDDDDD" />
     </LinearLayout>
 
 </LinearLayout>

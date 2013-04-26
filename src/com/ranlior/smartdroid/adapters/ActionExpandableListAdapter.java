@@ -212,7 +212,8 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 		View view;
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.action_list_item, null);
-		view.setBackgroundResource(R.drawable.top_round_shadow_expand);
+		view.findViewById(R.id.content).setBackgroundResource(R.drawable.top_round_shadow_expand);
+
 		TextView title = (TextView) view.findViewById(R.id.title);
 		TextView desc = (TextView) view.findViewById(R.id.description);
 

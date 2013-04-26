@@ -79,6 +79,8 @@ public class ChangeBluetoothStateAction extends Action {
 
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
+		//XXX
+		
 		// Changes bluetooth state
 		if (mBluetoothAdapter != null) {
 			if (bluetoothState == BluetoothAdapter.STATE_ON && !mBluetoothAdapter.isEnabled()) {

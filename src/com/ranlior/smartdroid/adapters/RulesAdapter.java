@@ -36,14 +36,19 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		final ViewHolder holder;
 		final Rule rule = rules.get(position);
+		
+		boolean isRuleSelected = false;
+		if (selectedRules != null) {
+			isRuleSelected = selectedRules.contains(rule);
+		}
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.rule_list_item, null);
-
+			 
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
 			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);
-
+		
 			convertView.setTag(holder);
 
 		} else {
@@ -52,6 +57,10 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 
 		holder.tvTitle.setText(rule.getName());
 		holder.tvDesc.setText(rule.getDescription());
+		
+		View view  = convertView.findViewById(R.id.content);
+		view.setSelected(isRuleSelected);
+
 
 		return convertView;
 	}
@@ -93,6 +102,7 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 		} else {
 			setSelected(position, true);
 		}
+		notifyDataSetChanged();
 	}
 
 	public List<Rule> getSelected() {
@@ -101,6 +111,7 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 
 	public void clearSelected() {
 		selectedRules = null;
+		notifyDataSetChanged();
 	}
 
 }

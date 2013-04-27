@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.R.id;
 import com.ranlior.smartdroid.adapters.ActionExpandableListAdapter.ViewHolder;
+import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
@@ -61,6 +62,8 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 
 		if ("RingerModeTrigger".equals(triggerClassName)) {
 			convertView = inflater.inflate(R.layout.expand_ringer_trigger, null);
+			boolean isParentSelected = parent.isSelected();
+			convertView.setSelected(parent.isSelected());
 			final RadioGroup radioGroup = (RadioGroup) convertView.findViewById(R.id.rgRingerMode);
 			convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
 				@Override
@@ -167,7 +170,13 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 		final ViewHolder holder;
+		final Trigger trigger = triggers.get(groupPosition);
 
+		boolean isTriggerSelected = false;
+		if (selectedTriggers != null) {
+			isTriggerSelected = selectedTriggers.contains(trigger);
+		}
+		
 		if (convertView == null) {
 
 			convertView = inflater.inflate(R.layout.action_list_item, null);
@@ -186,6 +195,10 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 		holder.tvTitle.setText(triggers.get(groupPosition).getName());
 		holder.tvDesc.setText(triggers.get(groupPosition).getDescription());
 		holder.ivIcon.setImageResource(resID);
+		
+		View view  = convertView.findViewById(R.id.content);
+		view.setSelected(isTriggerSelected);
+		
 		return convertView;
 	}
 
@@ -247,6 +260,7 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 		} else {
 			setSelected(position, true);
 		}
+		notifyDataSetChanged();
 	}
 	
 	public List<Trigger> getSelected() {
@@ -255,6 +269,7 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 	
 	public void clearSelected() {
 		selectedTriggers = null;
+		notifyDataSetChanged();
 	}
 
 }

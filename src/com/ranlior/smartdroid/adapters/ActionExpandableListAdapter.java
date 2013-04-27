@@ -214,7 +214,13 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 		final ViewHolder holder;
+		final Action action = actions.get(groupPosition);
 
+		boolean isActionSelected = false;
+		if (selectedActions != null) {
+			isActionSelected = selectedActions.contains(action);
+		}
+		
 		if (convertView == null) {
 
 			convertView = inflater.inflate(R.layout.action_list_item, null);
@@ -230,9 +236,12 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 
 		int resID = context.getResources().getIdentifier(actions.get(groupPosition).getIconName(), "drawable", context.getPackageName());
 
-		holder.tvTitle.setText(actions.get(groupPosition).getName());
-		holder.tvDesc.setText(actions.get(groupPosition).getDescription());
+		holder.tvTitle.setText(action.getName());
+		holder.tvDesc.setText(action.getDescription());
 		holder.ivIcon.setImageResource(resID);
+		
+		View view  = convertView.findViewById(R.id.content);
+		view.setSelected(isActionSelected);
 		return convertView;
 	}
 
@@ -294,6 +303,7 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 		} else {
 			setSelected(position, true);
 		}
+		notifyDataSetChanged();
 	}
 
 	public List<Action> getSelected() {
@@ -302,6 +312,7 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 
 	public void clearSelected() {
 		selectedActions = null;
+		notifyDataSetChanged();
 	}
 
 }

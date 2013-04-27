@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.R.id;
+import com.ranlior.smartdroid.adapters.ActionExpandableListAdapter.ViewHolder;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
@@ -33,10 +35,13 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 
 	private List<Trigger> selectedTriggers = null;
 
+	private LayoutInflater inflater;
+
 	public TriggerExpandableListAdapter(Context context, List<Trigger> triggers) {
 		Log.d(TAG, "Constructor");
 
 		this.context = context;
+		this.inflater = LayoutInflater.from(context);
 		this.triggers = triggers;
 	}
 
@@ -53,7 +58,6 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		String triggerClassName = triggers.get(groupPosition).getClass().getSimpleName();
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		if ("RingerModeTrigger".equals(triggerClassName)) {
 			convertView = inflater.inflate(R.layout.expand_ringer_trigger, null);
@@ -162,18 +166,33 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 	// TODO create holder for the view recycling
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-		View view;
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		view = inflater.inflate(R.layout.trigger_list_item, null);
-		view.findViewById(R.id.content).setBackgroundResource(R.drawable.top_round_shadow_expand);
-		
-		TextView title = (TextView) view.findViewById(R.id.title);
-		TextView desc = (TextView) view.findViewById(R.id.description);
+		final ViewHolder holder;
 
-		title.setText(triggers.get(groupPosition).getName());
-		desc.setText(triggers.get(groupPosition).getDescription());
+		if (convertView == null) {
 
-		return view;
+			convertView = inflater.inflate(R.layout.action_list_item, null);
+			convertView.findViewById(R.id.content).setBackgroundResource(R.drawable.top_round_shadow_expand);
+			holder = new ViewHolder();
+			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
+			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);
+			holder.ivIcon = (ImageView) convertView.findViewById(R.id.contentImage);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		int resID = context.getResources().getIdentifier(triggers.get(groupPosition).getIconName(), "drawable", context.getPackageName());
+
+		holder.tvTitle.setText(triggers.get(groupPosition).getName());
+		holder.tvDesc.setText(triggers.get(groupPosition).getDescription());
+		holder.ivIcon.setImageResource(resID);
+		return convertView;
+	}
+
+	static class ViewHolder {
+		TextView tvTitle;
+		TextView tvDesc;
+		ImageView ivIcon;
 	}
 
 	@Override

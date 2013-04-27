@@ -18,14 +18,14 @@ public class ActionSelectAdapter extends ArrayAdapter<Action> {
 
 	private static final String TAG = ActionSelectAdapter.class.getSimpleName();
 	
-	private LayoutInflater inflater;
-
 	private int layoutResourceId = -1;
 
 	private List<Action> actions;
 	
 	private Context context;
-
+	
+	private LayoutInflater inflater;
+	
 	public ActionSelectAdapter(Context context, int layoutResourceId, List<Action> actions) {
 		super(context, layoutResourceId, actions);
 		

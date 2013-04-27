@@ -28,6 +28,9 @@ public class BootCompletedTrigger extends Trigger {
 	private static final String NAME = "Boot completed";
 
 	private static final String DESCRIPTION = "Trigged when the device boot completes";
+	
+	private final String ICON = "ic_list_boot";
+
 
 	/**
 	 * Full constructor.
@@ -74,5 +77,10 @@ public class BootCompletedTrigger extends Trigger {
 			db.commit();
 			db.close();
 		}
+	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
 	}
 }

@@ -10,12 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.R.id;
+import com.ranlior.smartdroid.adapters.ActionExpandableListAdapter.ViewHolder;
+import com.ranlior.smartdroid.model.dto.actions.Action;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
 import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
@@ -29,10 +36,13 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 
 	private List<Trigger> selectedTriggers = null;
 
+	private LayoutInflater inflater;
+
 	public TriggerExpandableListAdapter(Context context, List<Trigger> triggers) {
 		Log.d(TAG, "Constructor");
 
 		this.context = context;
+		this.inflater = LayoutInflater.from(context);
 		this.triggers = triggers;
 	}
 
@@ -49,10 +59,11 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		String triggerClassName = triggers.get(groupPosition).getClass().getSimpleName();
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		if ("RingerModeTrigger".equals(triggerClassName)) {
 			convertView = inflater.inflate(R.layout.expand_ringer_trigger, null);
+			boolean isParentSelected = parent.isSelected();
+			convertView.setSelected(parent.isSelected());
 			final RadioGroup radioGroup = (RadioGroup) convertView.findViewById(R.id.rgRingerMode);
 			convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
 				@Override
@@ -79,6 +90,55 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 					// TODO: update or set the trigger's ringerMode
 					RingerModeTrigger ringerModeTrigger = (RingerModeTrigger) triggers.get(groupPosition);
 					ringerModeTrigger.setWantedRingerMode(ringerMode);
+				}
+			});
+		} else if ("LocationProximityTrigger".equals(triggerClassName)) {
+			convertView = inflater.inflate(R.layout.expand_location_trigger, null);
+			final RadioGroup radioGroup = (RadioGroup) convertView.findViewById(R.id.radio_group_notify_when);
+			final AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) convertView.findViewById(R.id.auto_complete_text_view_location);
+			final SeekBar seekBar = (SeekBar) convertView.findViewById(R.id.sbRadius);
+			final TextView tvRadiusValue = (TextView) convertView.findViewById(R.id.sbValue);
+			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+				
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+					tvRadiusValue.setText(String.valueOf(progress) + " m");
+				}
+			});
+			
+			convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					int inOut = -1;
+					int what = radioGroup.getCheckedRadioButtonId();
+					switch (what) {
+					case R.id.radio_button_entering:
+						inOut = 0; //TODO set static final
+						break;
+					case R.id.rbVibrate:
+						inOut = 1; //TODO set static final
+						break;
+					default:
+						inOut = 0; //TODO set static final
+						break;
+					}
+					
+					int radiusValue = seekBar.getProgress();
+					
+					
+					
 				}
 			});
 		}
@@ -109,17 +169,43 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 	// TODO create holder for the view recycling
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-		View view;
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		view = inflater.inflate(R.layout.trigger_list_item, null);
-		view.setBackgroundResource(R.drawable.top_round_shadow_expand);
-		TextView title = (TextView) view.findViewById(R.id.title);
-		TextView desc = (TextView) view.findViewById(R.id.description);
+		final ViewHolder holder;
+		final Trigger trigger = triggers.get(groupPosition);
 
-		title.setText(triggers.get(groupPosition).getName());
-		desc.setText(triggers.get(groupPosition).getDescription());
+		boolean isTriggerSelected = false;
+		if (selectedTriggers != null) {
+			isTriggerSelected = selectedTriggers.contains(trigger);
+		}
+		
+		if (convertView == null) {
 
-		return view;
+			convertView = inflater.inflate(R.layout.action_list_item, null);
+			convertView.findViewById(R.id.content).setBackgroundResource(R.drawable.expandable_list_item_selector);
+			holder = new ViewHolder();
+			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
+			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);
+			holder.ivIcon = (ImageView) convertView.findViewById(R.id.contentImage);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		int resID = context.getResources().getIdentifier(triggers.get(groupPosition).getIconName(), "drawable", context.getPackageName());
+
+		holder.tvTitle.setText(triggers.get(groupPosition).getName());
+		holder.tvDesc.setText(triggers.get(groupPosition).getDescription());
+		holder.ivIcon.setImageResource(resID);
+		
+		View view  = convertView.findViewById(R.id.content);
+		view.setSelected(isTriggerSelected);
+		
+		return convertView;
+	}
+
+	static class ViewHolder {
+		TextView tvTitle;
+		TextView tvDesc;
+		ImageView ivIcon;
 	}
 
 	@Override
@@ -174,6 +260,7 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 		} else {
 			setSelected(position, true);
 		}
+		notifyDataSetChanged();
 	}
 	
 	public List<Trigger> getSelected() {
@@ -182,6 +269,7 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 	
 	public void clearSelected() {
 		selectedTriggers = null;
+		notifyDataSetChanged();
 	}
 
 }

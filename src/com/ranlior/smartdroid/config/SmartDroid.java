@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.R;
 import android.provider.BaseColumns;
 
 import com.ranlior.smartdroid.model.dto.actions.ChangeBluetoothStateAction;
@@ -456,6 +457,7 @@ public final class SmartDroid {
 		public static final List<Trigger> LIST = new ArrayList<Trigger>(Arrays.asList(new BatteryLevelTrigger(),
 				new BatteryPluggedTrigger(), new BootCompletedTrigger(), new LocationProximityTrigger(), new RingerModeTrigger(),
 				new WiredHeadsetPluggedTrigger()));
+		
 
 	}
 
@@ -554,7 +556,7 @@ public final class SmartDroid {
 		public static final List<com.ranlior.smartdroid.model.dto.actions.Action> LIST = new ArrayList<com.ranlior.smartdroid.model.dto.actions.Action>(
 				Arrays.asList(new ChangeBluetoothStateAction(), new ChangeWIFIStateAction(), new ModifyRingerModeAction(),
 						new ModifyVolumeAction(), new NotificationAction(), new SetWallpaperAction(), new StartAppAction()));
-
+		
 	}
 
 }

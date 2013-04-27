@@ -29,6 +29,10 @@ public class BatteryLevelTrigger extends Trigger {
 	public static final String NAME = "Battery level state changed";
 
 	public static final String DESCRIPTION = "Trigged when the battery level state changes (low / okay)";
+	
+	private final String ICON = "ic_list_battery";
+
+
 
 	/**
 	 * The contant representing battary level low.
@@ -119,6 +123,11 @@ public class BatteryLevelTrigger extends Trigger {
 			db.commit();
 			db.close();
 		}
+	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
 	}
 
 }

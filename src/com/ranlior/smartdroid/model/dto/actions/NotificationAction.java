@@ -24,6 +24,12 @@ public class NotificationAction extends Action {
 	private static final String NAME = "Notification";
 
 	private static final String DESCRIPTION = "Fires a notification";
+	
+	private final String ICON = "ic_list_notification";
+
+	public String getICON() {
+		return ICON;
+	}
 
 	/**
 	 * Holds the notification's title.
@@ -167,6 +173,11 @@ public class NotificationAction extends Action {
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		// FIXME: check if the id need to be changed.
 		notificationManager.notify(0, notification);
+	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
 	}
 
 }

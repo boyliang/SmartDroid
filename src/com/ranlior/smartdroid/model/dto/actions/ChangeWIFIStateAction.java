@@ -18,6 +18,9 @@ public class ChangeWIFIStateAction extends Action {
 	private static final String NAME = "Change wifi state";
 
 	private static final String DESCRIPTION = "Changes wifi state (enabled / disabled)";
+	
+	private final String ICON = "ic_list_wifi";
+
 
 	/**
 	 * Holds the wanted wifi state.
@@ -82,6 +85,11 @@ public class ChangeWIFIStateAction extends Action {
 		} else {
 			wifiManager.setWifiEnabled(false);
 		}
+	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
 	}
 
 }

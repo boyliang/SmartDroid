@@ -26,13 +26,14 @@ public class SplashScreen extends Activity {
 		View view = findViewById(R.id.fullSplash);
 
 		Animation fadeInAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
-		fadeInAnimation.setDuration(5000);
+		fadeInAnimation.setStartOffset(1000);
+		fadeInAnimation.setDuration(2000);
 		// Now Set your animation
 		view.startAnimation(fadeInAnimation);
 
 		Handler handler = new Handler();
 
-		// run a thread after 2 seconds to start the home screen
+		// run a thread after 5 seconds to start the home screen
 		handler.postDelayed(new Runnable() {
 
 			@Override

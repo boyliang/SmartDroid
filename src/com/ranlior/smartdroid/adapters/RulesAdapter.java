@@ -34,8 +34,8 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		final ViewHolder holder;
-		final Rule rule = rules.get(position);
+		ViewHolder holder;
+		Rule rule = rules.get(position);
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.rule_list_item, null);

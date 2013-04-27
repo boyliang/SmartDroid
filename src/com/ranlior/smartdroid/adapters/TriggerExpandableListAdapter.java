@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.triggers.RingerModeTrigger;
@@ -52,33 +51,29 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		if ("RingerModeTrigger".equals(triggerClassName)) {
+			final RingerModeTrigger ringerModeTrigger = (RingerModeTrigger) triggers.get(groupPosition);
 			convertView = inflater.inflate(R.layout.expand_ringer_trigger, null);
 			final RadioGroup radioGroup = (RadioGroup) convertView.findViewById(R.id.rgRingerMode);
-			convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
+			radioGroup.check(ringerModeTrigger.getWantedRingerMode());
+			TextView tvSave = (TextView) convertView.findViewById(R.id.save);
+			tvSave.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					int ringerMode = -1;
 					int what = radioGroup.getCheckedRadioButtonId();
 					switch (what) {
 					case R.id.rbSilent:
-						ringerMode = AudioManager.RINGER_MODE_SILENT;
+						ringerModeTrigger.setWantedRingerMode(AudioManager.RINGER_MODE_SILENT);
 						break;
 					case R.id.rbVibrate:
-						ringerMode = AudioManager.RINGER_MODE_VIBRATE;
+						ringerModeTrigger.setWantedRingerMode(AudioManager.RINGER_MODE_VIBRATE);
 						break;
 					case R.id.rbNormal:
-						ringerMode = AudioManager.RINGER_MODE_NORMAL;
+						ringerModeTrigger.setWantedRingerMode(AudioManager.RINGER_MODE_NORMAL);
 						break;
 					default:
-						ringerMode = AudioManager.RINGER_MODE_NORMAL;
+						ringerModeTrigger.setWantedRingerMode(AudioManager.RINGER_MODE_NORMAL);
 						break;
 					}
-					Toast.makeText(context, "Saving trigger of type RingerModeTrigger with value of: " + ringerMode, Toast.LENGTH_SHORT)
-							.show();
-					// TODO: collapse the item after save (lior)
-					// TODO: update or set the trigger's ringerMode
-					RingerModeTrigger ringerModeTrigger = (RingerModeTrigger) triggers.get(groupPosition);
-					ringerModeTrigger.setWantedRingerMode(ringerMode);
 				}
 			});
 		}
@@ -131,7 +126,7 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
 	}
-	
+
 	public void add(Trigger trigger) {
 		if (triggers != null) {
 			triggers.add(trigger);
@@ -145,11 +140,11 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 			notifyDataSetChanged();
 		}
 	}
-	
+
 	public List<Trigger> getTriggers() {
 		return triggers;
 	}
-	
+
 	private boolean isSelected(int position) {
 		if (selectedTriggers == null || selectedTriggers.isEmpty()) {
 			return false;
@@ -175,11 +170,11 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 			setSelected(position, true);
 		}
 	}
-	
+
 	public List<Trigger> getSelected() {
 		return selectedTriggers;
 	}
-	
+
 	public void clearSelected() {
 		selectedTriggers = null;
 	}

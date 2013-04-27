@@ -13,8 +13,9 @@
         android:cacheColorHint="#00000000"
         android:childDivider="@null"
         android:childIndicator="@null"
+        
         android:divider="#00000000"
         android:groupIndicator="@null"
-        android:listSelector="@null" />
+        android:listSelector="@drawable/list_selector"/>
 
 </LinearLayout>

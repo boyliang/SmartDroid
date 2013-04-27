@@ -171,7 +171,7 @@ public class TriggerExpandableListAdapter extends BaseExpandableListAdapter {
 		if (convertView == null) {
 
 			convertView = inflater.inflate(R.layout.action_list_item, null);
-			convertView.findViewById(R.id.content).setBackgroundResource(R.drawable.top_round_shadow_expand);
+			convertView.findViewById(R.id.content).setBackgroundResource(R.drawable.expandable_list_item_selector);
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
 			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);

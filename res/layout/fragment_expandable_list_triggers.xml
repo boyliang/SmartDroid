@@ -15,7 +15,7 @@
         android:childIndicator="@null"
         android:divider="#00000000"
         android:groupIndicator="@null"
-        android:listSelector="@null"
+        android:listSelector="@drawable/list_selector"
         android:requiresFadingEdge="horizontal" />
 
 </LinearLayout>

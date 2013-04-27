@@ -21,6 +21,9 @@ public class StartAppAction extends Action {
 
 	private static final String DESCRIPTION = "Starts an application";
 
+	private final String ICON = "ic_list_application";	
+	
+
 	/**
 	 * Holds the application to start package.
 	 */
@@ -75,6 +78,11 @@ public class StartAppAction extends Action {
 		} catch (ActivityNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
 	}
 
 }

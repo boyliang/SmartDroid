@@ -24,34 +24,37 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 
 	private List<Rule> selectedRules = null;
 
+	private LayoutInflater inflater = null;
+
 	public RulesAdapter(Context context, int layoutResourceId, List<Rule> rules) {
 		super(context, layoutResourceId, rules);
 
 		Log.d(TAG, "Constructor");
 
 		this.rules = rules;
+		this.inflater  = LayoutInflater.from(context);
 	}
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		Rule rule = rules.get(position);
-		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.rule_list_item, null);
+		boolean isRuleSelected = (selectedRules != null) ? selectedRules.contains(rule) : false;
 
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.rule_list_item, null);
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
 			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);
-
 			convertView.setTag(holder);
-
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
 		holder.tvTitle.setText(rule.getName());
 		holder.tvDesc.setText(rule.getDescription());
+		
+		convertView.findViewById(R.id.content).setSelected(isRuleSelected);
 
 		return convertView;
 	}
@@ -93,6 +96,7 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 		} else {
 			setSelected(position, true);
 		}
+		notifyDataSetChanged();
 	}
 
 	public List<Rule> getSelected() {
@@ -101,6 +105,7 @@ public class RulesAdapter extends ArrayAdapter<Rule> {
 
 	public void clearSelected() {
 		selectedRules = null;
+		notifyDataSetChanged();
 	}
 
 }

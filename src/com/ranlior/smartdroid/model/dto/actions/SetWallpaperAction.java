@@ -23,6 +23,9 @@ public class SetWallpaperAction extends Action {
 
 	private static final String DESCRIPTION = "Changes wallpaper";
 
+	private final String ICON = "ic_list_wallpaper";
+
+
 	/**
 	 * Holds the wanted bitmap.
 	 */
@@ -73,6 +76,11 @@ public class SetWallpaperAction extends Action {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
 	}
 
 }

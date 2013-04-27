@@ -28,6 +28,9 @@ public class WiredHeadsetPluggedTrigger extends Trigger {
 	private static final String NAME = "Wired headset plug state";
 
 	private static final String DESCRIPTION = "Trigged when wired headset plug state changes (plugged / unplugged)";
+	
+	private final String ICON = "ic_list_headphones";
+	
 
 	public static final int HEADSET_PLUGGED = 1;
 
@@ -111,5 +114,10 @@ public class WiredHeadsetPluggedTrigger extends Trigger {
 			db.commit();
 			db.close();
 		}
+	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
 	}
 }

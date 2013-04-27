@@ -18,6 +18,8 @@ public abstract class Action {
 	private String name = null;
 
 	private String description = null;
+	
+	private String icon = null;
 
 	/**
 	 * Full constructor.
@@ -60,5 +62,7 @@ public abstract class Action {
 	 * @param context
 	 */
 	public abstract void perform(Context context);
+	
+	public abstract String getIconName();
 
 }

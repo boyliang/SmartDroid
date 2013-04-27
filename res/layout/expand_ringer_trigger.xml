@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/sinked_expandable_handle"
+    android:background="@drawable/expandable_child_item_selector"
     android:orientation="vertical" >
 
     <TextView

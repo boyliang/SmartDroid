@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ranlior.smartdroid.R;
@@ -17,17 +18,20 @@ public class ActionSelectAdapter extends ArrayAdapter<Action> {
 
 	private static final String TAG = ActionSelectAdapter.class.getSimpleName();
 	
-	private LayoutInflater inflater;
-
 	private int layoutResourceId = -1;
 
 	private List<Action> actions;
-
+	
+	private Context context;
+	
+	private LayoutInflater inflater;
+	
 	public ActionSelectAdapter(Context context, int layoutResourceId, List<Action> actions) {
 		super(context, layoutResourceId, actions);
 		
 		Log.d(TAG, "Constructor");
 		
+		this.context = context;
 		this.inflater = LayoutInflater.from(context);
 		this.layoutResourceId  = layoutResourceId;
 		this.actions = actions;
@@ -42,13 +46,17 @@ public class ActionSelectAdapter extends ArrayAdapter<Action> {
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
 			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);
+			holder.ivIcon = (ImageView) convertView.findViewById(R.id.contentImage);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
+		int resID = context.getResources().getIdentifier(action.getIconName() , "drawable", context.getPackageName());
+		
 		holder.tvTitle.setText(action.getName());
 		holder.tvDesc.setText(action.getDescription());
+		holder.ivIcon.setImageResource(resID);
 
 		return convertView;
 	}
@@ -56,6 +64,7 @@ public class ActionSelectAdapter extends ArrayAdapter<Action> {
 	static class ViewHolder {
 		TextView tvTitle;
 		TextView tvDesc;
+		ImageView ivIcon;
 	}
 
 	

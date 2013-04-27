@@ -19,6 +19,9 @@ public class ChangeBluetoothStateAction extends Action {
 	private static final String NAME = "Change bluetooth state";
 
 	private static final String DESCRIPTION = "Changes bluetooth state (enabled / disabled)";
+	
+	private final String ICON = "ic_list_bluetooth";
+	
 
 	/**
 	 * Holds the wanted bluetooth state.
@@ -79,15 +82,23 @@ public class ChangeBluetoothStateAction extends Action {
 
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
+		//XXX
+		
 		// Changes bluetooth state
 		if (mBluetoothAdapter != null) {
 			if (bluetoothState == BluetoothAdapter.STATE_ON && !mBluetoothAdapter.isEnabled()) {
-				Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-				context.startActivity(intent);
+				mBluetoothAdapter.enable();
 			} else if (bluetoothState == BluetoothAdapter.STATE_OFF) {
 				mBluetoothAdapter.disable();
 			}
 		}
 	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
+	}
+
+
 
 }

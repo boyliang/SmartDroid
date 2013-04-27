@@ -33,6 +33,10 @@ public class LocationProximityTrigger extends Trigger {
 	private static final String NAME = "Location proximity";
 
 	private static final String DESCRIPTION = "Trigged when entering and exiting a location";
+	
+	private final String ICON = "ic_list_location";
+
+
 
 	/**
 	 * Holds the latitude of the central point of the alert region.
@@ -47,7 +51,7 @@ public class LocationProximityTrigger extends Trigger {
 	/**
 	 * Holds the radius of the central point of the alert region, in meters.
 	 */
-	private float radius = 500.0F;
+	private float radius = 0.0F;
 
 	/**
 	 * Holds time for this proximity alert, in milliseconds, or -1 to indicate
@@ -217,6 +221,11 @@ public class LocationProximityTrigger extends Trigger {
 			db.commit();
 			db.close();
 		}
+	}
+
+	@Override
+	public String getIconName() {
+		return ICON;
 	}
 
 }

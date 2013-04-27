@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sinked_expandable_handle"
+    android:orientation="vertical" >
+
+    <TextView android:layout_marginTop="4dp"
+        android:id="@+id/save"
+        android:layout_width="57dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:text="SAVE"
+        android:textStyle="bold"
+        android:textColor="#0099cc" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:padding="2dp"
+        android:visibility="visible" >
+
+       <RadioGroup
+            android:id="@+id/rgBluetoothState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/rbBluetoothOn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:checked="true"
+                android:text="Bluetooth ON"
+                android:textColor="#FFFFFF" />
+
+            <RadioButton
+                android:id="@+id/rbBluetoothOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Bluetooth OFF"
+                android:textColor="#FFFFFF" />
+        </RadioGroup>
+    </LinearLayout>
+
+</LinearLayout>

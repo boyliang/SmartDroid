@@ -51,11 +51,9 @@ public class TriggerSelectAdapter extends ArrayAdapter<Trigger> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-		int resID = context.getResources().getIdentifier(trigger.getIconName() , "drawable", context.getPackageName());
-		
 		holder.tvTitle.setText(trigger.getName());
 		holder.tvDesc.setText(trigger.getDescription());
-		holder.ivIcon.setImageResource(resID);
+		holder.ivIcon.setImageResource(trigger.getIconId());
 
 		return convertView;
 	}

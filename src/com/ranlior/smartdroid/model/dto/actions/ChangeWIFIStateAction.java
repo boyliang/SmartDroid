@@ -6,6 +6,12 @@ package com.ranlior.smartdroid.model.dto.actions;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RadioGroup;
+
+import com.ranlior.smartdroid.R;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -18,9 +24,8 @@ public class ChangeWIFIStateAction extends Action {
 	private static final String NAME = "Change wifi state";
 
 	private static final String DESCRIPTION = "Changes wifi state (enabled / disabled)";
-	
-	private final String ICON = "ic_list_wifi";
 
+	private final String ICON = "ic_list_wifi";
 
 	/**
 	 * Holds the wanted wifi state.
@@ -90,6 +95,30 @@ public class ChangeWIFIStateAction extends Action {
 	@Override
 	public String getIconName() {
 		return ICON;
+	}
+
+	@Override
+	public View getChildView(Context context, View convertView) {
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		convertView = inflater.inflate(R.layout.expand_wifi_action, null);
+		final RadioGroup radioGroup = (RadioGroup) convertView.findViewById(R.id.rgWiFiSate);
+		convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int wifiState = WifiManager.WIFI_STATE_ENABLED;
+				int wifiSelectedSate = radioGroup.getCheckedRadioButtonId();
+				switch (wifiSelectedSate) {
+				case R.id.rbWifiOn:
+					wifiState = WifiManager.WIFI_STATE_ENABLED;
+					break;
+				case R.id.rbVibrate:
+					wifiState = WifiManager.WIFI_STATE_DISABLED;
+					break;
+				}
+				setWifiState(wifiState);
+			}
+		});
+		return convertView;
 	}
 
 }

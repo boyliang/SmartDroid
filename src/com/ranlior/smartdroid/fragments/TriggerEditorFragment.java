@@ -15,8 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.ActionMode;
@@ -28,7 +29,7 @@ import com.db4o.query.Predicate;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.RuleEditorActivity.State;
 import com.ranlior.smartdroid.activities.TriggerSelectActivity;
-import com.ranlior.smartdroid.adapters.TriggerExpandableListAdapter;
+import com.ranlior.smartdroid.adapters.TriggersAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
@@ -42,7 +43,9 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 	private static final String TAG = TriggerEditorFragment.class.getSimpleName();
 
-	public static final int SELECT_TRIGGER_REQUEST_CODE = 1001;
+	public static final int ADD_TRIGGER_REQUEST_CODE = 1001;
+
+	public static final int EDIT_TRIGGER_REQUEST_CODE = 1002;
 
 	private ObjectContainer db = null;
 
@@ -50,9 +53,9 @@ public class TriggerEditorFragment extends SherlockFragment {
 
 	private UUID ruleUuId = null;
 
-	private TriggerExpandableListAdapter triggersAdapter = null;
+	private TriggersAdapter triggersAdapter = null;
 
-	private ExpandableListView elvTriggers = null;
+	private ListView lvTriggers = null;
 
 	private Listener listener = null;
 
@@ -160,7 +163,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 			break;
 		}
 
-		triggersAdapter = new TriggerExpandableListAdapter(hostingActivity, triggers);
+		triggersAdapter = new TriggersAdapter(hostingActivity, R.layout.trigger_list_item, triggers);
 	}
 
 	@Override
@@ -178,7 +181,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 		switch (item.getItemId()) {
 		case R.id.addTrigger:
 			Intent intent = new Intent(hostingActivity, TriggerSelectActivity.class);
-			startActivityForResult(intent, SELECT_TRIGGER_REQUEST_CODE);
+			startActivityForResult(intent, ADD_TRIGGER_REQUEST_CODE);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -197,9 +200,22 @@ public class TriggerEditorFragment extends SherlockFragment {
 			// There is need for us to create the fragment view
 		} else {
 			View view = inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
-			elvTriggers = (ExpandableListView) view.findViewById(R.id.expandableListView);
-			elvTriggers.setAdapter(triggersAdapter);
-			elvTriggers.setOnItemLongClickListener(new OnItemLongClickListener() {
+			lvTriggers = (ListView) view.findViewById(R.id.listView);
+			lvTriggers.setAdapter(triggersAdapter);
+			lvTriggers.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					Trigger trigger = triggersAdapter.getTrigger(position);
+					Log.d(TAG, "Trigger clicked position: " + position);
+					Class<? extends Activity> triggerEditorClass = trigger.getTriggerEditor();
+					Intent intent = new Intent(hostingActivity, triggerEditorClass);
+					// FIXME: search google not position
+					intent.putExtra("position", position);
+					intent.putExtras(trigger.getExtras());
+					startActivityForResult(intent, EDIT_TRIGGER_REQUEST_CODE);
+				}
+			});
+			lvTriggers.setOnItemLongClickListener(new OnItemLongClickListener() {
 				@Override
 				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 					if (actionMode == null) {
@@ -211,8 +227,8 @@ public class TriggerEditorFragment extends SherlockFragment {
 			});
 
 			View emptyView = inflater.inflate(R.layout.empty_trigger_list, null);
-			((ViewGroup) elvTriggers.getParent()).addView(emptyView);
-			elvTriggers.setEmptyView(emptyView);
+			((ViewGroup) lvTriggers.getParent()).addView(emptyView);
+			lvTriggers.setEmptyView(emptyView);
 
 			return view;
 		}
@@ -222,11 +238,13 @@ public class TriggerEditorFragment extends SherlockFragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(TAG, "onActivityResult(int requestCode, int resultCode, Intent data)");
 
+		Trigger trigger = null;
+
 		if (resultCode == hostingActivity.RESULT_OK) {
-			if (requestCode == SELECT_TRIGGER_REQUEST_CODE) {
+			switch (requestCode) {
+			case ADD_TRIGGER_REQUEST_CODE:
 				String triggerClassName = data.getStringExtra(SmartDroid.Extra.EXTRA_TRIGGER_CLASS_NAME);
-				Log.d(TAG, "triggerClassName: " + triggerClassName);
-				Trigger trigger = null;
+				Log.d(TAG, "Added Trigger: " + triggerClassName);
 
 				try {
 					trigger = (Trigger) Class.forName(SmartDroid.Triggers.PACKAGE + "." + triggerClassName).newInstance();
@@ -241,16 +259,29 @@ public class TriggerEditorFragment extends SherlockFragment {
 				}
 
 				triggersAdapter.add(trigger);
-				elvTriggers.postDelayed(new Runnable() {
+
+				lvTriggers.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						elvTriggers.setSelection(triggersAdapter.getGroupCount() - 1);
+						lvTriggers.setSelection(triggersAdapter.getCount() - 1);
 					}
 				}, 100L);
-				elvTriggers.expandGroup(triggersAdapter.getGroupCount() - 1);
-				triggersAdapter.notifyDataSetChanged();
 
 				listener.setTriggers(triggersAdapter.getTriggers());
+				break;
+			case EDIT_TRIGGER_REQUEST_CODE:
+				final int position = data.getIntExtra("position", -1);
+				Log.d(TAG, "Edited Trigger in position: " + position);
+				trigger = triggersAdapter.getTrigger(position);
+				trigger.setExtras(data.getExtras());
+				lvTriggers.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						lvTriggers.setSelection(position);
+					}
+				}, 100L);
+			default:
+				break;
 			}
 		}
 	}
@@ -279,6 +310,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 				List<Trigger> selectedTriggers = triggersAdapter.getSelected();
 				for (Trigger trigger : selectedTriggers) {
 					db.delete(trigger);
+					db.commit();
 					triggersAdapter.remove(trigger);
 				}
 				mode.finish();

@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="7"
         android:targetSdkVersion="17" />
 
     <!-- Permissions -->
@@ -18,8 +18,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.CAMERA" />
-	
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -28,7 +28,7 @@
 
         <!-- Activities -->
         <activity
-            android:name=".activities.SplashScreen"
+            android:name="com.ranlior.smartdroid.activities.SplashScreen"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,12 +37,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.RuleActivity"
+            android:name="com.ranlior.smartdroid.activities.RuleActivity"
             android:label="@string/title_activity_rule"
             android:theme="@style/Theme.Sherlock" >
         </activity>
         <activity
-            android:name=".activities.RuleEditorActivity"
+            android:name="com.ranlior.smartdroid.activities.RuleEditorActivity"
             android:label="@string/title_activity_rule_editor"
             android:parentActivityName=".activities.RuleActivity"
             android:theme="@style/Theme.Sherlock" >
@@ -57,7 +57,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.TriggerSelectActivity"
+            android:name="com.ranlior.smartdroid.activities.TriggerSelectActivity"
             android:label="@string/title_activity_trigger_select"
             android:parentActivityName=".activities.RuleEditorActivity"
             android:theme="@style/Theme.Sherlock" >
@@ -66,7 +66,7 @@
                 android:value=".activities.RuleEditorActivity" />
         </activity>
         <activity
-            android:name=".activities.ActionSelectActivity"
+            android:name="com.ranlior.smartdroid.activities.ActionSelectActivity"
             android:label="@string/title_activity_action_select"
             android:parentActivityName=".activities.RuleEditorActivity"
             android:theme="@style/Theme.Sherlock" >
@@ -75,11 +75,40 @@
                 android:value=".activities.RuleEditorActivity" />
         </activity>
 
+        <!-- Triggers Editors Activities -->
+        <activity
+            android:name="com.ranlior.smartdroid.activities.triggers.editors.BatteryLevelTriggerEditorActivity"
+            android:label="@string/title_activity_battery_level_trigger_editor" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.BatteryPluggedTriggerEditorActivity"
+            android:label="@string/title_activity_battery_plugged_trigger_editor" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.triggers.editors.BootCompletedTriggerEditorActivity"
+            android:label="@string/title_activity_boot_completed_trigger_editor" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.triggers.editors.RingerModeTriggerEditorActivity"
+            android:label="@string/title_activity_ringer_mode_trigger_editor" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.triggers.editors.LocationProximityTriggerEditorActivity"
+            android:label="@string/title_activity_location_proximity_trigger_editor" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.triggers.editors.WiredHeadsetPluggedTriggerEditorActivity"
+            android:label="@string/title_activity_wired_headset_plugged_trigger_editor" >
+        </activity>
+
+        <!-- Actions Editors Activities -->
+
+
         <!-- Services -->
-        <service android:name=".services.SysEventHandleIntentService" />
+        <service android:name="com.ranlior.smartdroid.services.SysEventHandleIntentService" />
 
         <!-- BroadcastReceivers -->
-        <receiver android:name=".broadcastreceivers.SysEventReceiver" >
+        <receiver android:name="com.ranlior.smartdroid.broadcastreceivers.SysEventReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.ACTION_BATTERY_LOW" />

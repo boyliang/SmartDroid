@@ -5,6 +5,7 @@ package com.ranlior.smartdroid.model.dto.triggers;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,8 @@ import com.db4o.ext.DatabaseClosedException;
 import com.db4o.ext.DatabaseReadOnlyException;
 import com.db4o.ext.Db4oIOException;
 import com.db4o.query.Predicate;
+import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.activities.triggers.editors.WiredHeadsetPluggedTriggerEditorActivity;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
@@ -28,9 +31,8 @@ public class WiredHeadsetPluggedTrigger extends Trigger {
 	private static final String NAME = "Wired headset plug state";
 
 	private static final String DESCRIPTION = "Trigged when wired headset plug state changes (plugged / unplugged)";
-	
-	private final String ICON = "ic_list_headphones";
-	
+
+	private final int ICON = R.drawable.ic_list_headphones;
 
 	public static final int HEADSET_PLUGGED = 1;
 
@@ -117,7 +119,25 @@ public class WiredHeadsetPluggedTrigger extends Trigger {
 	}
 
 	@Override
-	public String getIconName() {
+	public int getIconId() {
 		return ICON;
 	}
+
+	@Override
+	public Bundle getExtras() {
+		Bundle extras = new Bundle();
+		extras.putInt("wantedPluggedState", wantedPluggedState);
+		return extras;
+	}
+
+	@Override
+	public void setExtras(Bundle extras) {
+		setWantedPluggedState(extras.getInt("wantedPluggedState", -1));
+	}
+
+	@Override
+	public Class<? extends Activity> getTriggerEditor() {
+		return WiredHeadsetPluggedTriggerEditorActivity.class;
+	}
+
 }

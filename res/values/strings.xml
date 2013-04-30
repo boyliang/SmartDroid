@@ -7,7 +7,7 @@
     <string name="title_activity_spalsh_screen">SpalshScreen</string>
 
     <!-- RulesActivity -->
-    <string name="title_activity_rule">Rules</string>
+    <string name="title_activity_rule">Sm@rtDroid</string>
     <string name="add_rule">Add Rule</string>
     <string name="delete_rule">Delete Rule</string>
 
@@ -32,5 +32,17 @@
 
     <!-- ActionSelectActivity -->
     <string name="title_activity_action_select">Select Action</string>
+
+    <!-- All TriggerEditorActivities -->
+    <string name="save_trigger">Save Trigger</string>
+    <string name="title_activity_battery_level_trigger_editor">Battery Level Trigger Editor</string>
+    <string name="title_activity_battery_plugged_trigger_editor">Battery Plugged Trigger Editor</string>
+    <string name="title_activity_boot_completed_trigger_editor">BootCompletedTriggerEditorActivity</string>
+    <string name="title_activity_location_proximity_trigger_editor">LocationProximityTriggerEditorActivity</string>
+    <string name="title_activity_ringer_mode_trigger_editor">Ringer Mode Trigger Editor</string>
+    <string name="title_activity_wired_headset_plugged_trigger_editor">WiredHeadsetPluggedTriggerEditorActivity</string>
+
+    <!-- All ActionEditorActivities -->
+    <string name="save_action">Save Action</string>
 
 </resources>

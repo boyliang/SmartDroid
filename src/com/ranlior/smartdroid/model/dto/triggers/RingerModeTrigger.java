@@ -5,6 +5,7 @@ package com.ranlior.smartdroid.model.dto.triggers;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import com.db4o.ext.DatabaseClosedException;
 import com.db4o.ext.DatabaseReadOnlyException;
 import com.db4o.ext.Db4oIOException;
 import com.db4o.query.Predicate;
+import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.activities.triggers.editors.RingerModeTriggerEditorActivity;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
@@ -30,8 +33,7 @@ public class RingerModeTrigger extends Trigger {
 
 	private static final String DESCRIPTION = "Trigged when the ringer mode changes (normal/silent/vibrate)";
 
-	private final String ICON = "ic_list_volume";
-	
+	private static final int ICON = R.drawable.ic_list_volume;
 
 	/**
 	 * Holds the trigger wanted ringer mode.
@@ -112,8 +114,25 @@ public class RingerModeTrigger extends Trigger {
 	}
 
 	@Override
-	public String getIconName() {
+	public int getIconId() {
 		return ICON;
+	}
+
+	@Override
+	public Bundle getExtras() {
+		Bundle extras = new Bundle();
+		extras.putInt("wantedRingerMode", wantedRingerMode);
+		return extras;
+	}
+
+	@Override
+	public void setExtras(Bundle extras) {
+		setWantedRingerMode(extras.getInt("wantedRingerMode", -1));
+	}
+
+	@Override
+	public Class<? extends Activity> getTriggerEditor() {
+		return RingerModeTriggerEditorActivity.class;
 	}
 
 }

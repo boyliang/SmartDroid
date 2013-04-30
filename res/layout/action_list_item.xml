@@ -14,9 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-             android:background="@drawable/list_item_selector"
-            android:orientation="vertical"
-             >
+            android:background="@drawable/list_item_selector"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/title"
@@ -57,7 +56,6 @@
             android:layout_marginLeft="10dp"
             android:background="@color/Gray"
             android:src="@drawable/ic_list_placeholder" />
-
     </FrameLayout>
 
 </LinearLayout>

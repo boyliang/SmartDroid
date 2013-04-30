@@ -57,6 +57,7 @@ public class RuleActivity extends SherlockFragmentActivity {
 
 		setContentView(R.layout.activity_rule);
 
+		// FIXME: move this code xml
 		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DDDDDD")));
 		getSupportActionBar().setTitle(Html.fromHtml("<font color='#555555'>Rule Editor</font>"));
 		
@@ -170,6 +171,7 @@ public class RuleActivity extends SherlockFragmentActivity {
 				List<Rule> selectedRules = rulesAdapter.getSelected();
 				for (Rule rule : selectedRules) {
 					db.delete(rule);
+					db.commit();
 					rulesAdapter.remove(rule);
 				}
 				mode.finish();

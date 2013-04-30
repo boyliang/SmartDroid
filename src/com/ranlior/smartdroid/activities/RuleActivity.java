@@ -171,6 +171,7 @@ public class RuleActivity extends SherlockFragmentActivity {
 				List<Rule> selectedRules = rulesAdapter.getSelected();
 				for (Rule rule : selectedRules) {
 					db.delete(rule);
+					db.commit();
 					rulesAdapter.remove(rule);
 				}
 				mode.finish();

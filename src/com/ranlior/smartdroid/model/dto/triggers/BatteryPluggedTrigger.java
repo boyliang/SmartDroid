@@ -5,6 +5,7 @@ package com.ranlior.smartdroid.model.dto.triggers;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.BatteryManager;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import com.db4o.ext.DatabaseClosedException;
 import com.db4o.ext.DatabaseReadOnlyException;
 import com.db4o.ext.Db4oIOException;
 import com.db4o.query.Predicate;
+import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.activities.triggers.editors.BatteryPluggedTriggerEditorActivity;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
@@ -32,8 +35,7 @@ public class BatteryPluggedTrigger extends Trigger {
 
 	private static final String DESCRIPTION = "Trigged when the battery plug state changes (not pluged / ac plugged / usb plugged / wireless plugged)";
 
-	private final String ICON = "ic_list_plugged";
-
+	private static final int ICON = R.drawable.ic_list_plugged;
 
 	/**
 	 * Holds the trigger wanted pluged state.<BR/>
@@ -122,8 +124,25 @@ public class BatteryPluggedTrigger extends Trigger {
 	}
 
 	@Override
-	public String getIconName() {
+	public int getIconId() {
 		return ICON;
+	}
+
+	@Override
+	public Bundle getExtras() {
+		Bundle extras = new Bundle();
+		extras.putInt("wantedPluggedState", wantedPluggedState);
+		return extras;
+	}
+
+	@Override
+	public void setExtras(Bundle extras) {
+		setWantedPluggedState(extras.getInt("wantedPluggedState", -1));
+	}
+
+	@Override
+	public Class<? extends Activity> getTriggerEditor() {
+		return BatteryPluggedTriggerEditorActivity.class;
 	}
 
 }

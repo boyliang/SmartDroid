@@ -6,6 +6,7 @@ package com.ranlior.smartdroid.model.dto.actions;
 import java.util.UUID;
 
 import android.content.Context;
+import android.view.View;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -18,8 +19,6 @@ public abstract class Action {
 	private String name = null;
 
 	private String description = null;
-	
-	private String icon = null;
 
 	/**
 	 * Full constructor.
@@ -62,7 +61,9 @@ public abstract class Action {
 	 * @param context
 	 */
 	public abstract void perform(Context context);
-	
+
 	public abstract String getIconName();
+
+	public abstract View getChildView(Context context, View convertView);
 
 }

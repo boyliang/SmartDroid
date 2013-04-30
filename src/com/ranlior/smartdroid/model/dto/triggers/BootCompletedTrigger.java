@@ -5,6 +5,7 @@ package com.ranlior.smartdroid.model.dto.triggers;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,8 @@ import com.db4o.ext.DatabaseClosedException;
 import com.db4o.ext.DatabaseReadOnlyException;
 import com.db4o.ext.Db4oIOException;
 import com.db4o.query.Predicate;
+import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.activities.triggers.editors.BootCompletedTriggerEditorActivity;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
 
@@ -28,9 +31,8 @@ public class BootCompletedTrigger extends Trigger {
 	private static final String NAME = "Boot completed";
 
 	private static final String DESCRIPTION = "Trigged when the device boot completes";
-	
-	private final String ICON = "ic_list_boot";
 
+	private static final int ICON = R.drawable.ic_list_boot;
 
 	/**
 	 * Full constructor.
@@ -80,7 +82,22 @@ public class BootCompletedTrigger extends Trigger {
 	}
 
 	@Override
-	public String getIconName() {
+	public int getIconId() {
 		return ICON;
 	}
+
+	@Override
+	public Bundle getExtras() {
+		return null;
+	}
+
+	@Override
+	public void setExtras(Bundle extras) {
+	}
+
+	@Override
+	public Class<? extends Activity> getTriggerEditor() {
+		return BootCompletedTriggerEditorActivity.class;
+	}
+
 }

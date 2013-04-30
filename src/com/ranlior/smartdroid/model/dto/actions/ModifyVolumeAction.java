@@ -6,6 +6,7 @@ package com.ranlior.smartdroid.model.dto.actions;
 import android.content.Context;
 import android.media.AudioManager;
 import android.util.Log;
+import android.view.View;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -20,8 +21,6 @@ public class ModifyVolumeAction extends Action {
 	private static final String DESCRIPTION = "Modifies audio volume of audio streams like alarm, DTMF, music, notification, ring, system and voice call";
 
 	private final String ICON = "ic_list_volume";
-
-
 
 	/**
 	 * Holds the audio stream.
@@ -177,6 +176,11 @@ public class ModifyVolumeAction extends Action {
 	@Override
 	public String getIconName() {
 		return ICON;
+	}
+
+	@Override
+	public View getChildView(Context context, View convertView) {
+		return convertView;
 	}
 
 }

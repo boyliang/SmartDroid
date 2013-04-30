@@ -9,9 +9,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 
 import com.ranlior.smartdroid.R;
-import com.ranlior.smartdroid.activities.MainActivity;
+import com.ranlior.smartdroid.activities.SplashScreen;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -24,7 +25,7 @@ public class NotificationAction extends Action {
 	private static final String NAME = "Notification";
 
 	private static final String DESCRIPTION = "Fires a notification";
-	
+
 	private final String ICON = "ic_list_notification";
 
 	public String getICON() {
@@ -160,7 +161,7 @@ public class NotificationAction extends Action {
 	public void perform(Context context) {
 		Log.d(TAG, "perform(Context context)");
 
-		Intent intent = new Intent(context, MainActivity.class);
+		Intent intent = new Intent(context, SplashScreen.class);
 
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -178,6 +179,11 @@ public class NotificationAction extends Action {
 	@Override
 	public String getIconName() {
 		return ICON;
+	}
+
+	@Override
+	public View getChildView(Context context, View convertView) {
+		return convertView;
 	}
 
 }

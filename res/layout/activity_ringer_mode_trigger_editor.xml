@@ -2,19 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/expandable_child_item_selector"
+    android:background="#555555"
     android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/save"
-        android:layout_width="57dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp"
-        android:gravity="center_horizontal"
-        android:text="SAVE"
-        android:textColor="#0099cc"
-        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"

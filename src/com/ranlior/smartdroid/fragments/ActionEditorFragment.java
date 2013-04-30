@@ -3,20 +3,13 @@
  */
 package com.ranlior.smartdroid.fragments;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.ActionMode;
@@ -260,43 +252,6 @@ public class ActionEditorFragment extends SherlockFragment {
 
 				listener.setActions(actionsAdapter.getActions());
 			}
-//			if (requestCode == 12 && data != null) {
-//				if (data.getData() != null) {
-//					Uri _uri = data.getData();
-//
-//					if (_uri != null) {
-//						// User had pick an image.
-//						Cursor cursor = hostingActivity.getContentResolver().query(_uri,
-//								new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
-//						cursor.moveToFirst();
-//
-//						// Link to the image
-//						final String imageFilePath = cursor.getString(0);
-//						cursor.close();
-//						Toast.makeText(hostingActivity, imageFilePath, Toast.LENGTH_LONG).show();
-//						
-//					}
-//				} else if (data.getExtras() != null) {
-//					//Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-//
-//					final String[] p1 = new String[] { MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATE_TAKEN };
-//
-//					Cursor c1 = hostingActivity.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, p1, null, null,
-//							p1[1] + " DESC");
-//
-//					if (c1.moveToFirst()) {
-//						String uristringpic = "content://media/external/images/media/" + c1.getInt(0);
-//						Uri newuri = Uri.parse(uristringpic);
-//						Log.i("TAG", "newuri   " + newuri);
-//						Toast.makeText(hostingActivity, uristringpic, Toast.LENGTH_LONG).show();
-//					
-//						
-//					}
-//					c1.close();
-//					
-//				}
-//
-//			}
 
 		}
 	}
@@ -325,6 +280,7 @@ public class ActionEditorFragment extends SherlockFragment {
 				List<Action> selectedActions = actionsAdapter.getSelected();
 				for (Action action : selectedActions) {
 					db.delete(action);
+					db.commit();
 					actionsAdapter.remove(action);
 				}
 				mode.finish();
@@ -342,36 +298,4 @@ public class ActionEditorFragment extends SherlockFragment {
 		}
 	};
 
-	private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
-
-        // Decode image size
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        ContentResolver cr = hostingActivity.getContentResolver();
-        BitmapFactory.decodeStream(cr.openInputStream(selectedImage), null, o);
-
-        // The new size we want to scale to
-        final int REQUIRED_SIZE = 140;
-
-        // Find the correct scale value. It should be the power of 2.
-        int width_tmp = o.outWidth, height_tmp = o.outHeight;
-        int scale = 1;
-        while (true) {
-            if (width_tmp / 2 < REQUIRED_SIZE
-               || height_tmp / 2 < REQUIRED_SIZE) {
-                break;
-            }
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
-        }
-
-        // Decode with inSampleSize
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        return BitmapFactory.decodeStream(cr.openInputStream(selectedImage), null, o2);
-
-    }
 }
-	
-

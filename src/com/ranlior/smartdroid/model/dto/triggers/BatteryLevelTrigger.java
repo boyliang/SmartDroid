@@ -5,6 +5,7 @@ package com.ranlior.smartdroid.model.dto.triggers;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,8 @@ import com.db4o.ext.DatabaseClosedException;
 import com.db4o.ext.DatabaseReadOnlyException;
 import com.db4o.ext.Db4oIOException;
 import com.db4o.query.Predicate;
+import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.activities.triggers.editors.BatteryLevelTriggerEditorActivity;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
@@ -29,10 +32,8 @@ public class BatteryLevelTrigger extends Trigger {
 	public static final String NAME = "Battery level state changed";
 
 	public static final String DESCRIPTION = "Trigged when the battery level state changes (low / okay)";
-	
-	private final String ICON = "ic_list_battery";
 
-
+	private static final int ICON = R.drawable.ic_list_battery;
 
 	/**
 	 * The contant representing battary level low.
@@ -126,8 +127,25 @@ public class BatteryLevelTrigger extends Trigger {
 	}
 
 	@Override
-	public String getIconName() {
+	public int getIconId() {
 		return ICON;
+	}
+
+	@Override
+	public Bundle getExtras() {
+		Bundle extras = new Bundle();
+		extras.putInt("wantedLevelState", wantedLevelState);
+		return extras;
+	}
+
+	@Override
+	public void setExtras(Bundle extras) {
+		setWantedLevelState(extras.getInt("wantedLevelState", -1));
+	}
+
+	@Override
+	public Class<? extends Activity> getTriggerEditor() {
+		return BatteryLevelTriggerEditorActivity.class;
 	}
 
 }

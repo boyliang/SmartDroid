@@ -5,7 +5,9 @@ package com.ranlior.smartdroid.model.dto.triggers;
 
 import java.util.UUID;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -90,6 +92,13 @@ public abstract class Trigger {
 	public void unregister(Context context) {
 	}
 	
-	public abstract String getIconName();
+	public abstract int getIconId();
+
+	public abstract Bundle getExtras();
+	
+	public abstract void setExtras(Bundle extras);
+	
+	public abstract Class<? extends Activity> getTriggerEditor();
+
 	
 }

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
+import android.view.View;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -21,8 +22,7 @@ public class StartAppAction extends Action {
 
 	private static final String DESCRIPTION = "Starts an application";
 
-	private final String ICON = "ic_list_application";	
-	
+	private final String ICON = "ic_list_application";
 
 	/**
 	 * Holds the application to start package.
@@ -83,6 +83,11 @@ public class StartAppAction extends Action {
 	@Override
 	public String getIconName() {
 		return ICON;
+	}
+
+	@Override
+	public View getChildView(Context context, View convertView) {
+		return convertView;
 	}
 
 }

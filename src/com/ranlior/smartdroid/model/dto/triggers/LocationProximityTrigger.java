@@ -6,6 +6,7 @@ package com.ranlior.smartdroid.model.dto.triggers;
 import java.util.List;
 import java.util.UUID;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,8 @@ import com.db4o.ext.DatabaseClosedException;
 import com.db4o.ext.DatabaseReadOnlyException;
 import com.db4o.ext.Db4oIOException;
 import com.db4o.query.Predicate;
+import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.activities.triggers.editors.LocationProximityTriggerEditorActivity;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.rules.Rule;
@@ -33,10 +36,8 @@ public class LocationProximityTrigger extends Trigger {
 	private static final String NAME = "Location proximity";
 
 	private static final String DESCRIPTION = "Trigged when entering and exiting a location";
-	
-	private final String ICON = "ic_list_location";
 
-
+	private static final int ICON = R.drawable.ic_list_location;
 
 	/**
 	 * Holds the latitude of the central point of the alert region.
@@ -49,9 +50,14 @@ public class LocationProximityTrigger extends Trigger {
 	private double longitude;
 
 	/**
+	 * Holds the proximity entering or exiting wanted state.
+	 */
+	private boolean isProximityEntering = true;
+
+	/**
 	 * Holds the radius of the central point of the alert region, in meters.
 	 */
-	private float radius = 0.0F;
+	private float radius = 200.0F;
 
 	/**
 	 * Holds time for this proximity alert, in milliseconds, or -1 to indicate
@@ -68,13 +74,15 @@ public class LocationProximityTrigger extends Trigger {
 	 * 
 	 * @param lat
 	 * @param lng
+	 * @param isProximityEntering
 	 * @param radius
 	 * @param expiration
 	 */
-	public LocationProximityTrigger(double lat, double lng, float radius, long expiration) {
+	public LocationProximityTrigger(double lat, double lng, boolean isProximityEntering, float radius, long expiration) {
 		super(NAME, DESCRIPTION);
 		this.latitude = lat;
 		this.longitude = lng;
+		this.isProximityEntering = isProximityEntering;
 		this.radius = radius;
 		this.expiration = expiration;
 	}
@@ -107,6 +115,21 @@ public class LocationProximityTrigger extends Trigger {
 	 */
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+
+	/**
+	 * @return the isProximityEntering
+	 */
+	public boolean isProximityEntering() {
+		return isProximityEntering;
+	}
+
+	/**
+	 * @param isProximityEntering
+	 *            the isProximityEntering to set
+	 */
+	public void setProximityEntering(boolean isProximityEntering) {
+		this.isProximityEntering = isProximityEntering;
 	}
 
 	/**
@@ -224,8 +247,33 @@ public class LocationProximityTrigger extends Trigger {
 	}
 
 	@Override
-	public String getIconName() {
+	public int getIconId() {
 		return ICON;
+	}
+
+	@Override
+	public Bundle getExtras() {
+		Bundle extras = new Bundle();
+		extras.putDouble("latitude", latitude);
+		extras.putDouble("longitude", longitude);
+		extras.putBoolean("isProximityEntering", isProximityEntering);
+		extras.putFloat("radius", radius);
+		extras.putLong("expiration", expiration);
+		return extras;
+	}
+
+	@Override
+	public void setExtras(Bundle extras) {
+		setLatitude(extras.getDouble("latitude"));
+		setLongitude(extras.getDouble("longitude"));
+		setProximityEntering(extras.getBoolean("isProximityEntering"));
+		setRadius(extras.getFloat("radius"));
+		setExpiration(extras.getLong("expiration"));
+	}
+
+	@Override
+	public Class<? extends Activity> getTriggerEditor() {
+		return LocationProximityTriggerEditorActivity.class;
 	}
 
 }

@@ -5,8 +5,13 @@ package com.ranlior.smartdroid.model.dto.actions;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RadioGroup;
+
+import com.ranlior.smartdroid.R;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -19,9 +24,8 @@ public class ChangeBluetoothStateAction extends Action {
 	private static final String NAME = "Change bluetooth state";
 
 	private static final String DESCRIPTION = "Changes bluetooth state (enabled / disabled)";
-	
+
 	private final String ICON = "ic_list_bluetooth";
-	
 
 	/**
 	 * Holds the wanted bluetooth state.
@@ -80,16 +84,14 @@ public class ChangeBluetoothStateAction extends Action {
 	public void perform(Context context) {
 		Log.d(TAG, "perform(Context context)");
 
-		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-		//XXX
-		
 		// Changes bluetooth state
-		if (mBluetoothAdapter != null) {
-			if (bluetoothState == BluetoothAdapter.STATE_ON && !mBluetoothAdapter.isEnabled()) {
-				mBluetoothAdapter.enable();
-			} else if (bluetoothState == BluetoothAdapter.STATE_OFF) {
-				mBluetoothAdapter.disable();
+		if (bluetoothAdapter != null) {
+			if (bluetoothState == BluetoothAdapter.STATE_ON && !bluetoothAdapter.isEnabled()) {
+				bluetoothAdapter.enable();
+			} else if (bluetoothState == BluetoothAdapter.STATE_OFF && bluetoothAdapter.isEnabled()) {
+				bluetoothAdapter.disable();
 			}
 		}
 	}
@@ -99,6 +101,27 @@ public class ChangeBluetoothStateAction extends Action {
 		return ICON;
 	}
 
-
+	@Override
+	public View getChildView(Context context, View convertView) {
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		convertView = inflater.inflate(R.layout.expand_bluetooth_action, null);
+		final RadioGroup rgBluetoothState = (RadioGroup) convertView.findViewById(R.id.rgBluetoothState);
+		convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int bluetoothState = BluetoothAdapter.STATE_OFF;
+				switch (rgBluetoothState.getCheckedRadioButtonId()) {
+				case R.id.rbBluetoothOn:
+					bluetoothState = BluetoothAdapter.STATE_ON;
+					break;
+				case R.id.rbBluetoothOff:
+					bluetoothState = BluetoothAdapter.STATE_OFF;
+					break;
+				}
+				setBluetoothState(bluetoothState);
+			}
+		});
+		return convertView;
+	}
 
 }

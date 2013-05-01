@@ -3,10 +3,14 @@
  */
 package com.ranlior.smartdroid.model.dto.actions;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+
+import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.activities.actions.editors.ModifyVolumeActionEditorActivity;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -20,7 +24,7 @@ public class ModifyVolumeAction extends Action {
 
 	private static final String DESCRIPTION = "Modifies audio volume of audio streams like alarm, DTMF, music, notification, ring, system and voice call";
 
-	private final String ICON = "ic_list_volume";
+	private static final int ICON = R.drawable.ic_list_volume;
 
 	/**
 	 * Holds the audio stream.
@@ -174,13 +178,29 @@ public class ModifyVolumeAction extends Action {
 	}
 
 	@Override
-	public String getIconName() {
+	public int getIconId() {
 		return ICON;
 	}
 
 	@Override
-	public View getChildView(Context context, View convertView) {
-		return convertView;
+	public Bundle getExtras() {
+		Bundle extras = new Bundle();
+		extras.putInt("audioStream", audioStream);
+		extras.putInt("volume", volume);
+		extras.putInt("flags", flags);
+		return extras;
+	}
+
+	@Override
+	public void setExtras(Bundle extras) {
+		setAudioStream(extras.getInt("audioStream"));
+		setVolume(extras.getInt("volume"));
+		setFlags(extras.getInt("flags"));
+	}
+
+	@Override
+	public Class<? extends Activity> getActionEditor() {
+		return ModifyVolumeActionEditorActivity.class;
 	}
 
 }

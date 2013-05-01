@@ -5,19 +5,16 @@ package com.ranlior.smartdroid.model.dto.actions;
 
 import java.io.IOException;
 
-import com.ranlior.smartdroid.R;
-
+import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.provider.MediaStore;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.TextView;
+
+import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.activities.actions.editors.SetWallpaperActionEditorActivity;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -31,14 +28,13 @@ public class SetWallpaperAction extends Action {
 
 	private static final String DESCRIPTION = "Changes wallpaper";
 
-	private final String ICON = "ic_list_wallpaper";
-
+	private static final int ICON = R.drawable.ic_list_wallpaper;
 
 	/**
 	 * Holds the wanted bitmap.
 	 */
 	private String bitmapFilePath = null;
-	
+
 	public SetWallpaperAction() {
 		super(NAME, DESCRIPTION);
 	}
@@ -87,37 +83,25 @@ public class SetWallpaperAction extends Action {
 	}
 
 	@Override
-	public String getIconName() {
+	public int getIconId() {
 		return ICON;
 	}
 
 	@Override
-	// FIXME: Doesn't work.
-	public View getChildView(Context context, View convertView) {
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		convertView = inflater.inflate(R.layout.expand_wallpaper_action, null);
-		final TextView tvFilePath = (TextView) convertView.findViewById(R.id.tvFilePath);
-		tvFilePath.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent pickIntent = new Intent();
-				pickIntent.setType("image/*");
-				pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-				Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				// FIXME: put in string.xml
-				String pickTitle = "Select or take a new Picture";
-				Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
-				chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { takePhotoIntent });
-				//fragment.startActivityForResult(chooserIntent, 12);
-			}
-		});
-		convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO take the path and store it
-			}
-		});
-		return convertView;
+	public Bundle getExtras() {
+		Bundle extras = new Bundle();
+		extras.putString("bitmapFilePath", bitmapFilePath);
+		return extras;
+	}
+
+	@Override
+	public void setExtras(Bundle extras) {
+		setBitmapFilePath(extras.getString("bitmapFilePath"));
+	}
+
+	@Override
+	public Class<? extends Activity> getActionEditor() {
+		return SetWallpaperActionEditorActivity.class;
 	}
 
 }

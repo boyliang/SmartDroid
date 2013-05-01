@@ -3,8 +3,10 @@
  */
 package com.ranlior.smartdroid.model.dto.actions;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.RadioGroup;
 
 import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.activities.actions.editors.ModifyRingerModeActionEditorActivity;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -25,7 +28,7 @@ public class ModifyRingerModeAction extends Action {
 
 	private static final String DESCRIPTION = "Modifies ringer mode (Normal / Silent / Vibrate)";
 
-	private final String ICON = "ic_list_volume";
+	private static final int ICON = R.drawable.ic_list_volume;
 
 	/**
 	 * Holds the wanted ringer mode.
@@ -46,7 +49,7 @@ public class ModifyRingerModeAction extends Action {
 	 * 
 	 * @see android.media.AudioManager
 	 */
-	private int ringerMode = AudioManager.RINGER_MODE_NORMAL;
+	private int wantedRingerMode = AudioManager.RINGER_MODE_NORMAL;
 
 	public ModifyRingerModeAction() {
 		super(NAME, DESCRIPTION);
@@ -62,22 +65,22 @@ public class ModifyRingerModeAction extends Action {
 	 */
 	public ModifyRingerModeAction(int ringerMode) {
 		super(NAME, DESCRIPTION);
-		this.ringerMode = ringerMode;
+		this.wantedRingerMode = ringerMode;
 	}
 
 	/**
-	 * @return the ringerMode
+	 * @return the wantedRingerMode
 	 */
-	public int getRingerMode() {
-		return ringerMode;
+	public int getWantedRingerMode() {
+		return wantedRingerMode;
 	}
 
 	/**
-	 * @param ringerMode
-	 *            the ringerMode to set
+	 * @param wantedRingerMode
+	 *            the wantedRingerMode to set
 	 */
-	public void setRingerMode(int ringerMode) {
-		this.ringerMode = ringerMode;
+	public void setWantedRingerMode(int wantedRingerMode) {
+		this.wantedRingerMode = wantedRingerMode;
 	}
 
 	@Override
@@ -87,12 +90,29 @@ public class ModifyRingerModeAction extends Action {
 		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
 		// Changes ringer mode settings
-		audioManager.setRingerMode(ringerMode);
+		audioManager.setRingerMode(wantedRingerMode);
 	}
 
 	@Override
-	public String getIconName() {
+	public int getIconId() {
 		return ICON;
+	}
+
+	@Override
+	public Bundle getExtras() {
+		Bundle extras = new Bundle();
+		extras.putInt("wantedRingerMode", wantedRingerMode);
+		return extras;
+	}
+
+	@Override
+	public void setExtras(Bundle extras) {
+		setWantedRingerMode(extras.getInt("wantedRingerMode"));
+	}
+
+	@Override
+	public Class<? extends Activity> getActionEditor() {
+		return ModifyRingerModeActionEditorActivity.class;
 	}
 
 	public View getChildView(Context context, View convertView) {
@@ -115,7 +135,7 @@ public class ModifyRingerModeAction extends Action {
 					ringerMode = AudioManager.RINGER_MODE_NORMAL;
 					break;
 				}
-				setRingerMode(ringerMode);
+				setWantedRingerMode(ringerMode);
 			}
 		});
 		return convertView;

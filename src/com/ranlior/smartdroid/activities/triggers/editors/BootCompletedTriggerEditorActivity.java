@@ -7,6 +7,10 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.ranlior.smartdroid.R;
 
+/**
+ * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
+ * 
+ */
 public class BootCompletedTriggerEditorActivity extends SherlockActivity {
 
 	private static final String TAG = BootCompletedTriggerEditorActivity.class.getSimpleName();

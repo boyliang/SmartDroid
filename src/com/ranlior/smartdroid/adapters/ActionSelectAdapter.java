@@ -17,23 +17,20 @@ import com.ranlior.smartdroid.model.dto.actions.Action;
 public class ActionSelectAdapter extends ArrayAdapter<Action> {
 
 	private static final String TAG = ActionSelectAdapter.class.getSimpleName();
-	
+
 	private int layoutResourceId = -1;
 
 	private List<Action> actions;
-	
-	private Context context;
-	
+
 	private LayoutInflater inflater;
-	
+
 	public ActionSelectAdapter(Context context, int layoutResourceId, List<Action> actions) {
 		super(context, layoutResourceId, actions);
-		
+
 		Log.d(TAG, "Constructor");
-		
-		this.context = context;
+
 		this.inflater = LayoutInflater.from(context);
-		this.layoutResourceId  = layoutResourceId;
+		this.layoutResourceId = layoutResourceId;
 		this.actions = actions;
 	}
 
@@ -51,12 +48,10 @@ public class ActionSelectAdapter extends ArrayAdapter<Action> {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
-		int resID = context.getResources().getIdentifier(action.getIconName() , "drawable", context.getPackageName());
-		
+
 		holder.tvTitle.setText(action.getName());
 		holder.tvDesc.setText(action.getDescription());
-		holder.ivIcon.setImageResource(resID);
+		holder.ivIcon.setImageResource(action.getIconId());
 
 		return convertView;
 	}
@@ -67,5 +62,4 @@ public class ActionSelectAdapter extends ArrayAdapter<Action> {
 		ImageView ivIcon;
 	}
 
-	
 }

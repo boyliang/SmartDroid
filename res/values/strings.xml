@@ -44,5 +44,12 @@
 
     <!-- All ActionEditorActivities -->
     <string name="save_action">Save Action</string>
+    <string name="title_activity_change_bluetooth_state_action_editor">ChangeBluetoothStateActionEditor</string>
+    <string name="title_activity_change_wifistate_action_editor">ChangeWIFIStateActionEditor</string>
+    <string name="title_activity_modify_ringer_mode_action_editor">ModifyRingerModeActionEditorActivity</string>
+    <string name="title_activity_modify_volume_action_editor">ModifyVolumeActionEditorActivity</string>
+    <string name="title_activity_notification_action_editor">NotificationActionEditorActivity</string>
+    <string name="title_activity_set_wallpaper_action_editor">SetWallpaperActionEditorActivity</string>
+    <string name="title_activity_start_app_action_editor_acivity">StartAppActionEditorAcivity</string>
 
 </resources>

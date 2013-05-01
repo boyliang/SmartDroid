@@ -55,8 +55,7 @@ public class TriggersAdapter extends ArrayAdapter<Trigger> {
 		holder.tvDesc.setText(triggers.get(position).getDescription());
 		holder.ivIcon.setImageResource(trigger.getIconId());
 
-		View view = convertView.findViewById(R.id.content);
-		view.setSelected(isTriggerSelected);
+		convertView.findViewById(R.id.content).setSelected(isTriggerSelected);
 
 		return convertView;
 	}

@@ -3,16 +3,18 @@
  */
 package com.ranlior.smartdroid.model.dto.actions;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.SplashScreen;
+import com.ranlior.smartdroid.activities.actions.editors.NotificationActionEditorActivity;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -26,11 +28,7 @@ public class NotificationAction extends Action {
 
 	private static final String DESCRIPTION = "Fires a notification";
 
-	private final String ICON = "ic_list_notification";
-
-	public String getICON() {
-		return ICON;
-	}
+	private static final int ICON = R.drawable.ic_list_notification;
 
 	/**
 	 * Holds the notification's title.
@@ -177,13 +175,31 @@ public class NotificationAction extends Action {
 	}
 
 	@Override
-	public String getIconName() {
+	public int getIconId() {
 		return ICON;
 	}
 
 	@Override
-	public View getChildView(Context context, View convertView) {
-		return convertView;
+	public Bundle getExtras() {
+		Bundle extras = new Bundle();
+		extras.putString("title", title);
+		extras.putString("text", text);
+		extras.putInt("defaults", defaults);
+		extras.putInt("flags", flags);
+		return extras;
+	}
+
+	@Override
+	public void setExtras(Bundle extras) {
+		setTitle(extras.getString("title"));
+		setText(extras.getString("text"));
+		setDefaults(extras.getInt("defaults"));
+		setFlags(extras.getInt("flags"));
+	}
+
+	@Override
+	public Class<? extends Activity> getActionEditor() {
+		return NotificationActionEditorActivity.class;
 	}
 
 }

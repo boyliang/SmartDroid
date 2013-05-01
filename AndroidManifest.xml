@@ -81,7 +81,7 @@
             android:label="@string/title_activity_battery_level_trigger_editor" >
         </activity>
         <activity
-            android:name="com.ranlior.smartdroid.BatteryPluggedTriggerEditorActivity"
+            android:name="com.ranlior.smartdroid.activities.triggers.editors.BatteryPluggedTriggerEditorActivity"
             android:label="@string/title_activity_battery_plugged_trigger_editor" >
         </activity>
         <activity
@@ -102,7 +102,34 @@
         </activity>
 
         <!-- Actions Editors Activities -->
-
+        <activity
+            android:name="com.ranlior.smartdroid.activities.actions.editors.ChangeBluetoothStateActionEditorActivity"
+            android:label="@string/title_activity_change_bluetooth_state_action_editor" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.actions.editors.ChangeWIFIStateActionEditorActivity"
+            android:label="@string/title_activity_change_wifistate_action_editor" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.actions.editors.ModifyRingerModeActionEditorActivity"
+            android:label="@string/title_activity_modify_ringer_mode_action_editor" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.actions.editors.ModifyVolumeActionEditorActivity"
+            android:label="@string/title_activity_modify_volume_action_editor" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.actions.editors.NotificationActionEditorActivity"
+            android:label="@string/title_activity_notification_action_editor" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.actions.editors.SetWallpaperActionEditorActivity"
+            android:label="@string/title_activity_set_wallpaper_action_editor" >
+        </activity>
+        <activity
+            android:name="com.ranlior.smartdroid.activities.actions.editors.StartAppActionEditorAcivity"
+            android:label="@string/title_activity_start_app_action_editor_acivity" >
+        </activity>
 
         <!-- Services -->
         <service android:name="com.ranlior.smartdroid.services.SysEventHandleIntentService" />
@@ -123,7 +150,7 @@
         </receiver>
 
         <!-- ContentProviders -->
-
+        
     </application>
 
 </manifest>

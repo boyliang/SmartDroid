@@ -199,7 +199,7 @@ public class TriggerEditorFragment extends SherlockFragment {
 			// If the container view isn't null,
 			// There is need for us to create the fragment view
 		} else {
-			View view = inflater.inflate(R.layout.fragment_expandable_list_triggers, null);
+			View view = inflater.inflate(R.layout.fragment_list, null);
 			lvTriggers = (ListView) view.findViewById(R.id.listView);
 			lvTriggers.setAdapter(triggersAdapter);
 			lvTriggers.setOnItemClickListener(new OnItemClickListener() {
@@ -280,7 +280,6 @@ public class TriggerEditorFragment extends SherlockFragment {
 						lvTriggers.setSelection(position);
 					}
 				}, 100L);
-			default:
 				break;
 			}
 		}

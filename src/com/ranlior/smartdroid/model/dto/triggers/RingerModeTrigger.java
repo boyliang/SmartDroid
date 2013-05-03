@@ -127,7 +127,7 @@ public class RingerModeTrigger extends Trigger {
 
 	@Override
 	public void setExtras(Bundle extras) {
-		setWantedRingerMode(extras.getInt("wantedRingerMode", -1));
+		setWantedRingerMode(extras.getInt("wantedRingerMode"));
 	}
 
 	@Override

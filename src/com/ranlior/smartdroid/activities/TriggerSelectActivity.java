@@ -18,7 +18,7 @@ import com.ranlior.smartdroid.model.dto.triggers.Trigger;
 
 public class TriggerSelectActivity extends SherlockListActivity {
 
-	private static final String TAG = "TriggerSelectActivity";
+	private static final String TAG = TriggerSelectActivity.class.getSimpleName();
 
 	private static final int ADD_TRIGGER_REQUEST_CODE = 1001;
 
@@ -27,9 +27,9 @@ public class TriggerSelectActivity extends SherlockListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_trigger_select);
-
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
+		
+		setContentView(R.layout.activity_trigger_select);
 
 		TriggerSelectAdapter triggerAdapter = new TriggerSelectAdapter(this, R.layout.trigger_list_item, SmartDroid.Triggers.LIST);
 		setListAdapter(triggerAdapter);

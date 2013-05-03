@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".NotificationActionEditorActivity" >
+
+    <EditText
+        android:id="@+id/etNotificationTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Title" />
+
+    <EditText
+        android:id="@+id/etNotificationText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etNotificationTitle"
+        android:layout_marginTop="10dp"
+        android:hint="Text" />
+
+    <RadioGroup
+        android:id="@+id/rgNotificationDefaults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etNotificationText"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp" >
+        
+        <RadioButton
+            android:id="@+id/rbNotificationAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ALL" />
+        
+        <RadioButton
+            android:id="@+id/rbNotificationLights"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LIGHTS" />
+        
+        <RadioButton
+            android:id="@+id/rbNotificationSound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SOUND" />
+        
+        <RadioButton
+            android:id="@+id/rbNotificationVibrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VIBRATE" />
+        
+    </RadioGroup>
+
+</RelativeLayout>

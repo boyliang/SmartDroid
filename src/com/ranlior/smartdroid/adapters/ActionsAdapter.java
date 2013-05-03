@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,13 +17,9 @@ import android.widget.TextView;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.model.dto.actions.Action;
 
-public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
+public class ActionsAdapter extends ArrayAdapter<Action> {
 
-	private static final String TAG = ActionExpandableListAdapter.class.getSimpleName();
-
-	private Context context = null;
-
-	private Fragment fragment = null;
+	private static final String TAG = ActionsAdapter.class.getSimpleName();
 
 	private List<Action> actions = null;
 
@@ -30,60 +27,23 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 
 	private LayoutInflater inflater = null;
 
-	public ActionExpandableListAdapter(Context context, Fragment fragment, List<Action> actions) {
+	public ActionsAdapter(Context context, int layoutResourceId, List<Action> actions) {
+		super(context, layoutResourceId, actions);
+		
 		Log.d(TAG, "Constructor");
 
-		this.context = context;
-		this.inflater = LayoutInflater.from(context);
-		this.fragment = fragment;
 		this.actions = actions;
+		this.inflater = LayoutInflater.from(context);
 	}
 
 	@Override
-	public Object getChild(int groupPosition, int childPosition) {
-		return null;
-	}
-
-	@Override
-	public long getChildId(int groupPosition, int childPosition) {
-		return 0;
-	}
-
-	@Override
-	public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-		Action action = actions.get(groupPosition);
-		return action.getChildView(context, convertView);
-	}
-
-	@Override
-	public int getChildrenCount(int groupPosition) {
-		return 1;
-	}
-
-	@Override
-	public int getGroupCount() {
-		return actions.size();
-	}
-
-	@Override
-	public Object getGroup(int groupPosition) {
-		return groupPosition;
-	}
-
-	@Override
-	public long getGroupId(int groupPosition) {
-		return groupPosition;
-	}
-
-	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		final ViewHolder holder;
-		final Action action = actions.get(groupPosition);
+		final Action action = actions.get(position);
 		boolean isActionSelected = (selectedActions != null) ? selectedActions.contains(action) : false;
 
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.action_list_item, null);
-			convertView.findViewById(R.id.content).setBackgroundResource(R.drawable.expandable_list_item_selector);
 			holder = new ViewHolder();
 			holder.tvTitle = (TextView) convertView.findViewById(R.id.title);
 			holder.tvDesc = (TextView) convertView.findViewById(R.id.description);
@@ -93,11 +53,9 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		int resID = context.getResources().getIdentifier(actions.get(groupPosition).getIconName(), "drawable", context.getPackageName());
-
 		holder.tvTitle.setText(action.getName());
 		holder.tvDesc.setText(action.getDescription());
-		holder.ivIcon.setImageResource(resID);
+		holder.ivIcon.setImageResource(action.getIconId());
 
 		convertView.findViewById(R.id.content).setSelected(isActionSelected);
 
@@ -109,29 +67,9 @@ public class ActionExpandableListAdapter extends BaseExpandableListAdapter {
 		TextView tvDesc;
 		ImageView ivIcon;
 	}
-
-	@Override
-	public boolean hasStableIds() {
-		return false;
-	}
-
-	@Override
-	public boolean isChildSelectable(int groupPosition, int childPosition) {
-		return true;
-	}
-
-	public void add(Action action) {
-		if (actions != null) {
-			actions.add(action);
-			notifyDataSetChanged();
-		}
-	}
-
-	public void remove(Action action) {
-		if (actions != null) {
-			actions.remove(action);
-			notifyDataSetChanged();
-		}
+	
+	public Action getAction(int position) {
+		return actions.get(position);
 	}
 
 	public List<Action> getActions() {

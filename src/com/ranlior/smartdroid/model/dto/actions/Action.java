@@ -5,8 +5,9 @@ package com.ranlior.smartdroid.model.dto.actions;
 
 import java.util.UUID;
 
+import android.app.Activity;
 import android.content.Context;
-import android.view.View;
+import android.os.Bundle;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -62,8 +63,12 @@ public abstract class Action {
 	 */
 	public abstract void perform(Context context);
 
-	public abstract String getIconName();
+	public abstract int getIconId();
 
-	public abstract View getChildView(Context context, View convertView);
+	public abstract Bundle getExtras();
+
+	public abstract void setExtras(Bundle extras);
+
+	public abstract Class<? extends Activity> getActionEditor();
 
 }

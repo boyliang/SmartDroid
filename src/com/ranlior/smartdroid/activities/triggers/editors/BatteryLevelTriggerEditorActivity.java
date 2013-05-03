@@ -7,15 +7,19 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.ranlior.smartdroid.R;
 
+/**
+ * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
+ * 
+ */
 public class BatteryLevelTriggerEditorActivity extends SherlockActivity {
-	
+
 	private static final String TAG = BatteryLevelTriggerEditorActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
-		
+
 		setContentView(R.layout.activity_battery_level_trigger_editor);
 	}
 

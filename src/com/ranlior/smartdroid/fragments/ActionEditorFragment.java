@@ -15,8 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.ActionMode;
@@ -28,7 +29,7 @@ import com.db4o.query.Predicate;
 import com.ranlior.smartdroid.R;
 import com.ranlior.smartdroid.activities.ActionSelectActivity;
 import com.ranlior.smartdroid.activities.RuleEditorActivity.State;
-import com.ranlior.smartdroid.adapters.ActionExpandableListAdapter;
+import com.ranlior.smartdroid.adapters.ActionsAdapter;
 import com.ranlior.smartdroid.config.SmartDroid;
 import com.ranlior.smartdroid.model.database.Db4oHelper;
 import com.ranlior.smartdroid.model.dto.actions.Action;
@@ -42,7 +43,9 @@ public class ActionEditorFragment extends SherlockFragment {
 
 	private static final String TAG = ActionEditorFragment.class.getSimpleName();
 
-	public static final int SELECT_ACTION_REQUEST_CODE = 1002;
+	private static final int ADD_ACTION_REQUEST_CODE = 1001;
+
+	protected static final int EDIT_ACTION_REQUEST_CODE = 1002;
 
 	private ObjectContainer db = null;
 
@@ -50,9 +53,9 @@ public class ActionEditorFragment extends SherlockFragment {
 
 	private UUID ruleUuId = null;
 
-	private ActionExpandableListAdapter actionsAdapter = null;
+	private ActionsAdapter actionsAdapter = null;
 
-	private ExpandableListView elvActions = null;
+	private ListView lvActions = null;
 
 	private Listener listener = null;
 
@@ -160,7 +163,7 @@ public class ActionEditorFragment extends SherlockFragment {
 			break;
 		}
 
-		actionsAdapter = new ActionExpandableListAdapter(hostingActivity, this, actions);
+		actionsAdapter = new ActionsAdapter(hostingActivity, R.layout.action_list_item, actions);
 	}
 
 	@Override
@@ -178,7 +181,7 @@ public class ActionEditorFragment extends SherlockFragment {
 		switch (item.getItemId()) {
 		case R.id.addAction:
 			Intent intent = new Intent(hostingActivity, ActionSelectActivity.class);
-			startActivityForResult(intent, SELECT_ACTION_REQUEST_CODE);
+			startActivityForResult(intent, ADD_ACTION_REQUEST_CODE);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -196,10 +199,23 @@ public class ActionEditorFragment extends SherlockFragment {
 			// If the container view isn't null,
 			// There is need for us to create the fragment view
 		} else {
-			View view = inflater.inflate(R.layout.fragment_expandable_list_actions, null);
-			elvActions = (ExpandableListView) view.findViewById(R.id.expandableListView);
-			elvActions.setAdapter(actionsAdapter);
-			elvActions.setOnItemLongClickListener(new OnItemLongClickListener() {
+			View view = inflater.inflate(R.layout.fragment_list, null);
+			lvActions = (ListView) view.findViewById(R.id.listView);
+			lvActions.setAdapter(actionsAdapter);
+			lvActions.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					Action action = actionsAdapter.getAction(position);
+					Log.d(TAG, "Action clicked position: " + position);
+					Class<? extends Activity> actionEditorClass = action.getActionEditor();
+					Intent intent = new Intent(hostingActivity, actionEditorClass);
+					// FIXME: search google not position
+					intent.putExtra("position", position);
+					intent.putExtras(action.getExtras());
+					startActivityForResult(intent, EDIT_ACTION_REQUEST_CODE);
+				}
+			});
+			lvActions.setOnItemLongClickListener(new OnItemLongClickListener() {
 				@Override
 				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 					if (actionMode == null) {
@@ -211,8 +227,8 @@ public class ActionEditorFragment extends SherlockFragment {
 			});
 
 			View emptyView = inflater.inflate(R.layout.empty_action_list, null);
-			((ViewGroup) elvActions.getParent()).addView(emptyView);
-			elvActions.setEmptyView(emptyView);
+			((ViewGroup) lvActions.getParent()).addView(emptyView);
+			lvActions.setEmptyView(emptyView);
 
 			return view;
 		}
@@ -222,11 +238,13 @@ public class ActionEditorFragment extends SherlockFragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(TAG, "onActivityResult(int requestCode, int resultCode, Intent data)");
 
+		Action action = null;
+
 		if (resultCode == hostingActivity.RESULT_OK) {
-			if (requestCode == SELECT_ACTION_REQUEST_CODE) {
+			switch (requestCode) {
+			case ADD_ACTION_REQUEST_CODE:
 				String actionClassName = data.getStringExtra(SmartDroid.Extra.EXTRA_ACTION_CLASS_NAME);
-				Log.d(TAG, "actionClassName: " + actionClassName);
-				Action action = null;
+				Log.d(TAG, "Added Action: " + actionClassName);
 
 				try {
 					action = (Action) Class.forName(SmartDroid.Actions.PACKAGE + "." + actionClassName).newInstance();
@@ -241,16 +259,28 @@ public class ActionEditorFragment extends SherlockFragment {
 				}
 
 				actionsAdapter.add(action);
-				elvActions.postDelayed(new Runnable() {
+
+				lvActions.postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						elvActions.setSelection(actionsAdapter.getGroupCount() - 1);
+						lvActions.setSelection(actionsAdapter.getCount() - 1);
 					}
 				}, 100L);
-				elvActions.expandGroup(actionsAdapter.getGroupCount() - 1);
-				actionsAdapter.notifyDataSetChanged();
 
 				listener.setActions(actionsAdapter.getActions());
+				break;
+			case EDIT_ACTION_REQUEST_CODE:
+				final int position = data.getIntExtra("position", -1);
+				Log.d(TAG, "Edited Action in position: " + position);
+				action = actionsAdapter.getAction(position);
+				action.setExtras(data.getExtras());
+				lvActions.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						lvActions.setSelection(position);
+					}
+				}, 100L);
+				break;
 			}
 
 		}

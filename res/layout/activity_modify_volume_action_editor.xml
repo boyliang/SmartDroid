@@ -1,0 +1,163 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".ModifyVolumeActionEditorActivity" >
+
+    <TextView
+        android:id="@+id/tvAlarmLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ALARM:" />
+
+    <TextView
+        android:id="@+id/tvAlarmVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tvAlarmLabel"
+        android:layout_alignParentRight="true"
+        android:text="" />
+
+    <SeekBar
+        android:id="@+id/sbAlarmVolume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvAlarmLabel" />
+
+    <TextView
+        android:id="@+id/tvDTMFLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sbAlarmVolume"
+        android:layout_marginTop="5dp"
+        android:text="DTMF:" />
+
+    <TextView
+        android:id="@+id/tvDTMFVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tvDTMFLabel"
+        android:layout_alignParentRight="true"
+        android:text="" />
+
+    <SeekBar
+        android:id="@+id/sbDTMFVolume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDTMFLabel" />
+
+    <TextView
+        android:id="@+id/tvMusicLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sbDTMFVolume"
+        android:layout_marginTop="5dp"
+        android:text="MUSIC:" />
+
+    <TextView
+        android:id="@+id/tvMusicVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tvMusicLabel"
+        android:layout_alignParentRight="true"
+        android:text="" />
+
+    <SeekBar
+        android:id="@+id/sbMusicVolume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvMusicLabel" />
+
+    <TextView
+        android:id="@+id/tvNotificationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sbMusicVolume"
+        android:layout_marginTop="5dp"
+        android:text="NOTIFICATION:" />
+
+    <TextView
+        android:id="@+id/tvNotificationVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tvNotificationLabel"
+        android:layout_alignParentRight="true"
+        android:text="" />
+
+    <SeekBar
+        android:id="@+id/sbNotificationVolume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvNotificationLabel" />
+
+    <TextView
+        android:id="@+id/tvRingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sbNotificationVolume"
+        android:layout_marginTop="5dp"
+        android:text="RING:" />
+
+    <TextView
+        android:id="@+id/tvRingVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tvRingLabel"
+        android:layout_alignParentRight="true"
+        android:text="" />
+
+    <SeekBar
+        android:id="@+id/sbRingVolume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvRingLabel" />
+
+    <TextView
+        android:id="@+id/tvSystemLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sbRingVolume"
+        android:layout_marginTop="5dp"
+        android:text="SYSTEM:" />
+
+    <TextView
+        android:id="@+id/tvSystemVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tvSystemLabel"
+        android:layout_alignParentRight="true"
+        android:text="" />
+
+    <SeekBar
+        android:id="@+id/sbSystemVolume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvSystemLabel" />
+
+    <TextView
+        android:id="@+id/tvVoiceCallLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sbSystemVolume"
+        android:layout_marginTop="5dp"
+        android:text="VOICE CALL:" />
+
+    <TextView
+        android:id="@+id/tvVoiceCallVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tvVoiceCallLabel"
+        android:layout_alignParentRight="true"
+        android:text="" />
+
+    <SeekBar
+        android:id="@+id/sbVoiceCallVolume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvVoiceCallLabel" />
+
+</RelativeLayout>

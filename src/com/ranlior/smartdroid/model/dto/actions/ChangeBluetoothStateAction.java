@@ -3,15 +3,14 @@
  */
 package com.ranlior.smartdroid.model.dto.actions;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.RadioGroup;
 
 import com.ranlior.smartdroid.R;
+import com.ranlior.smartdroid.activities.actions.editors.ChangeBluetoothStateActionEditorActivity;
 
 /**
  * @author Ran Haveshush Email: ran.haveshush.shenkar@gmail.com
@@ -25,7 +24,7 @@ public class ChangeBluetoothStateAction extends Action {
 
 	private static final String DESCRIPTION = "Changes bluetooth state (enabled / disabled)";
 
-	private final String ICON = "ic_list_bluetooth";
+	private static final int ICON = R.drawable.ic_list_bluetooth;
 
 	/**
 	 * Holds the wanted bluetooth state.
@@ -41,7 +40,7 @@ public class ChangeBluetoothStateAction extends Action {
 	 * 
 	 * @see android.bluetooth.BluetoothAdapter
 	 */
-	private int bluetoothState = BluetoothAdapter.STATE_OFF;
+	private int wantedBluetoothState = BluetoothAdapter.STATE_OFF;
 
 	public ChangeBluetoothStateAction() {
 		super(NAME, DESCRIPTION);
@@ -55,22 +54,22 @@ public class ChangeBluetoothStateAction extends Action {
 	 */
 	public ChangeBluetoothStateAction(int bluetoothState) {
 		super(NAME, DESCRIPTION);
-		this.bluetoothState = bluetoothState;
+		this.wantedBluetoothState = bluetoothState;
 	}
 
 	/**
-	 * @return the bluetoothState
+	 * @return the wantedBluetoothState
 	 */
-	public int getBluetoothState() {
-		return bluetoothState;
+	public int getWantedBluetoothState() {
+		return wantedBluetoothState;
 	}
 
 	/**
-	 * @param bluetoothState
-	 *            the bluetoothState to set
+	 * @param wantedBluetoothState
+	 *            the wantedBluetoothState to set
 	 */
-	public void setBluetoothState(int bluetoothState) {
-		this.bluetoothState = bluetoothState;
+	public void setWantedBluetoothState(int wantedBluetoothState) {
+		this.wantedBluetoothState = wantedBluetoothState;
 	}
 
 	/*
@@ -88,40 +87,34 @@ public class ChangeBluetoothStateAction extends Action {
 
 		// Changes bluetooth state
 		if (bluetoothAdapter != null) {
-			if (bluetoothState == BluetoothAdapter.STATE_ON && !bluetoothAdapter.isEnabled()) {
+			if (wantedBluetoothState == BluetoothAdapter.STATE_ON && !bluetoothAdapter.isEnabled()) {
 				bluetoothAdapter.enable();
-			} else if (bluetoothState == BluetoothAdapter.STATE_OFF && bluetoothAdapter.isEnabled()) {
+			} else if (wantedBluetoothState == BluetoothAdapter.STATE_OFF && bluetoothAdapter.isEnabled()) {
 				bluetoothAdapter.disable();
 			}
 		}
 	}
 
 	@Override
-	public String getIconName() {
+	public int getIconId() {
 		return ICON;
 	}
 
 	@Override
-	public View getChildView(Context context, View convertView) {
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		convertView = inflater.inflate(R.layout.expand_bluetooth_action, null);
-		final RadioGroup rgBluetoothState = (RadioGroup) convertView.findViewById(R.id.rgBluetoothState);
-		convertView.findViewById(R.id.save).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				int bluetoothState = BluetoothAdapter.STATE_OFF;
-				switch (rgBluetoothState.getCheckedRadioButtonId()) {
-				case R.id.rbBluetoothOn:
-					bluetoothState = BluetoothAdapter.STATE_ON;
-					break;
-				case R.id.rbBluetoothOff:
-					bluetoothState = BluetoothAdapter.STATE_OFF;
-					break;
-				}
-				setBluetoothState(bluetoothState);
-			}
-		});
-		return convertView;
+	public Bundle getExtras() {
+		Bundle extras = new Bundle();
+		extras.putInt("wantedBluetoothState", wantedBluetoothState);
+		return extras;
+	}
+
+	@Override
+	public void setExtras(Bundle extras) {
+		setWantedBluetoothState(extras.getInt("wantedBluetoothState"));
+	}
+
+	@Override
+	public Class<? extends Activity> getActionEditor() {
+		return ChangeBluetoothStateActionEditorActivity.class;
 	}
 
 }

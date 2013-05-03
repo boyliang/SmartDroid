@@ -3,7 +3,8 @@ package com.ranlior.smartdroid.activities.actions.editors;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import com.ranlior.smartdroid.R;
 
@@ -13,7 +14,13 @@ import com.ranlior.smartdroid.R;
  */
 public class NotificationActionEditorActivity extends Activity {
 
-	private static final String TAG = NotificationActionEditorActivity.class.getCanonicalName();
+	private static final String TAG = NotificationActionEditorActivity.class.getSimpleName();
+	
+	private EditText etNotificationTitle = null;
+	
+	private RadioGroup rgNotificationDefaults = null;
+	
+	private EditText etNotificationText = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,12 +28,12 @@ public class NotificationActionEditorActivity extends Activity {
 		Log.d(TAG, "onCreate(Bundle savedInstanceState)");
 
 		setContentView(R.layout.activity_notification_action_editor);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_action_editor_menu, menu);
-		return true;
+		
+		etNotificationTitle = (EditText) findViewById(R.id.etNotificationTitle);
+		etNotificationText = (EditText) findViewById(R.id.etNotificationText);
+		rgNotificationDefaults = (RadioGroup) findViewById(R.id.rgNotificationDefaults);
+		
+		
 	}
 
 }

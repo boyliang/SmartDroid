@@ -43,9 +43,10 @@ public class NotificationAction extends Action {
 	/**
 	 * Integer represents the notification use defaults.
 	 * 
-	 * Use all: Notification.DEFAULT_ALL Use lights: Notification.DEFAULT_LIGHTS
-	 * Use sound: Notification.DEFAULT_SOUND Use vibrate:
-	 * Notification.DEFAULT_VIBRATE
+	 * Use all: Notification.DEFAULT_ALL
+	 * Use lights: Notification.DEFAULT_LIGHTS
+	 * Use sound: Notification.DEFAULT_SOUND
+	 * Use vibrate: Notification.DEFAULT_VIBRATE
 	 * 
 	 * For notification defaults info:
 	 * 
